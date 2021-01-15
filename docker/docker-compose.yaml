@@ -1,0 +1,19 @@
+version: '3.1'
+
+services:
+
+  postgres:
+    container_name: denovo-linkedin-postgres
+    image: postgres:13.1
+    restart: always
+    networks:
+      denovo-linkedin-network:
+    ports:
+      - "5432:5493"
+    environment:
+      POSTGRES_DB: denovo_linkedin
+      POSTGRES_USER: dataox
+      POSTGRES_PASSWORD: pdHMf3kN
+
+networks:
+  denovo-linkedin-network:

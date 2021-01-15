@@ -1,1 +1,28 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://[HOST]:5493/denovo_linkedin
+    username: dataox
+    password: pdHMf3kN
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: none
 
+app:
+  search:
+    retry-attempts: 5
+    concurrency-restriction: 100
+    user-agent: 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36'
+    required-results-count: 5
+  notification:
+    telegram:
+      bot-token: '1267422790:AAHiQcyTkqpPphUMP5SPNVWaXu1XXxJLtTQ'
+      channel-id: -1001201576524
+      enabled: true
+  captcha:
+    anti-captcha:
+      token: 8e16ca55a47276b5afc6375bf7ee2bff
+  proxy:
+    operia:
+      key: 06931f4c8ef70f72
