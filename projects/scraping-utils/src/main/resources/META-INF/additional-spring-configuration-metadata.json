@@ -1,0 +1,59 @@
+{
+  "properties": [
+    {
+      "name": "app.search.retry-attempts",
+      "type": "java.lang.Integer",
+      "description": "Max retry attempts count for Google scraping."
+    },
+    {
+      "name": "app.search.concurrency-restriction",
+      "type": "java.lang.Integer",
+      "description": "Max simultaneously running threads."
+    },
+    {
+      "name": "app.search.user-agent",
+      "type": "java.lang.String",
+      "description": "Default User-Agent header for the search."
+    },
+    {
+      "name": "app.search.required-results-count",
+      "type": "java.lang.Integer",
+      "description": "Max results count to collect on Google Search page."
+    },
+    {
+      "name": "app.notification.telegram.bot-token",
+      "type": "java.lang.String",
+      "description": "Bot token for Telegram notifications."
+    },
+    {
+      "name": "app.notification.telegram.channel-id",
+      "type": "java.lang.String",
+      "description": "Channel ID for Telegram notifications."
+    },
+    {
+      "name": "app.notification.telegram.enabled",
+      "type": "java.lang.Boolean",
+      "description": "Switch for enabling/disabling Telegram notifications."
+    },
+    {
+      "name": "app.captcha.anti-captcha.token",
+      "type": "java.lang.String",
+      "description": "Token for the Anti-Captcha account."
+    },
+    {
+      "name": "app.proxy.operia.key",
+      "type": "java.lang.String",
+      "description": "Token for the Operia proxy service."
+    },
+    {
+      "name": "app.chromedriver.path",
+      "type": "java.lang.String",
+      "description": "Path to chromedriver executable."
+    },
+    {
+      "name": "app.chromedriver.options.headless",
+      "type": "java.lang.Boolean",
+      "description": "Headless mode switch for chromedriver."
+    }
+  ]
+}
