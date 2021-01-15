@@ -163,3 +163,10 @@ gradle-app.setting
 **/build/
 
 # End of https://www.toptal.com/developers/gitignore/api/java,maven,intellij,gradle
+
+
+**/.idea
+.mvn/
+mvnw
+mvnw.cmd
+**/*.iml
