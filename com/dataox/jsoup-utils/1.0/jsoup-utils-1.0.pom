@@ -15,15 +15,10 @@
     </properties>
 
     <distributionManagement>
-       <!-- <repository>
+        <repository>
             <id>internal.repo</id>
             <name>Internal Repository</name>
             <url>file://${project.build.directory}/scraping-utils-repository</url>
-        </repository>-->
-        <repository>
-            <id>github-pgs</id>
-            <name>GitHub yevhenii-filatov Apache Maven Packages</name>
-            <url>https://maven.pkg.github.com/yevhenii-filatov/denovo-linkedin/</url>
         </repository>
     </distributionManagement>
 
