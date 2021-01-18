@@ -63,7 +63,7 @@
                 <artifactId>site-maven-plugin</artifactId>
                 <version>0.11</version>
                 <configuration>
-                    <message>Jsoup utility artifact v${project.version}</message>
+                    <message>Selenium utility artifact v${project.version}</message>
                     <noJekyll>true</noJekyll>
                     <outputDirectory>${project.build.directory}/scraping-utils-repository</outputDirectory>
                     <branch>refs/heads/scraping-utils-repository</branch>
