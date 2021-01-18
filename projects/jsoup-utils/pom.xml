@@ -14,18 +14,29 @@
         <github.global.server>github</github.global.server>
     </properties>
 
-    <distributionManagement>
-       <!-- <repository>
+    <packaging>pom</packaging>
+    <!-- ... -->
+    <profiles>
+        <profile>
+            <id>github</id>
+            <distributionManagement>
+                <repository>
+                    <id>github</id>
+                    <name>GitHub Packages</name>
+                    <url>https://maven.pkg.github.com/yevhenii-filatov/denovo-linkedin</url>
+                </repository>
+            </distributionManagement>
+        </profile>
+    </profiles>
+    <!-- ... -->
+
+    <!--<distributionManagement>
+        <repository>
             <id>internal.repo</id>
             <name>Internal Repository</name>
             <url>file://${project.build.directory}/scraping-utils-repository</url>
-        </repository>-->
-        <repository>
-            <id>github-pgs</id>
-            <name>GitHub yevhenii-filatov Apache Maven Packages</name>
-            <url>https://maven.pkg.github.com/yevhenii-filatov/denovo-linkedin/</url>
         </repository>
-    </distributionManagement>
+    </distributionManagement>-->
 
     <dependencies>
         <dependency>
@@ -41,7 +52,7 @@
         </dependency>
     </dependencies>
 
-    <build>
+    <!--<build>
         <plugins>
             <plugin>
                 <artifactId>maven-deploy-plugin</artifactId>
@@ -77,5 +88,5 @@
                 </executions>
             </plugin>
         </plugins>
-    </build>
+    </build>-->
 </project>
