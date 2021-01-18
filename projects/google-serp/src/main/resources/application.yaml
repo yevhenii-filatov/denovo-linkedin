@@ -26,3 +26,7 @@ app:
   proxy:
     operia:
       key: 06931f4c8ef70f72
+  chromedriver:
+    path: [ PATH TO CHROMEDRIVER EXECUTABLE ]
+    options:
+      headless: true

@@ -4,7 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = {
+		"com.dataoxx.scrapingutils",
+		"com.dataox.googleserp"
+})
 @ConfigurationPropertiesScan("com.dataox.googleserp.configuration")
 public class GoogleSerpApplication {
 
