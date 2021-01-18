@@ -14,22 +14,6 @@
         <github.global.server>github</github.global.server>
     </properties>
 
-    <packaging>pom</packaging>
-    <!-- ... -->
-    <profiles>
-        <profile>
-            <id>github</id>
-            <distributionManagement>
-                <repository>
-                    <id>github</id>
-                    <name>GitHub Packages</name>
-                    <url>https://maven.pkg.github.com/yevhenii-filatov/denovo-linkedin</url>
-                </repository>
-            </distributionManagement>
-        </profile>
-    </profiles>
-    <!-- ... -->
-
     <distributionManagement>
         <repository>
             <id>internal.repo</id>
