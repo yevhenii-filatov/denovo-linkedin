@@ -62,6 +62,7 @@
                     <noJekyll>true</noJekyll>
                     <outputDirectory>${project.build.directory}/scraping-utils-repository</outputDirectory>
                     <branch>refs/heads/scraping-utils-repository</branch>
+                    <merge>true</merge>
                     <includes>
                         <include>**/*</include>
                     </includes>
