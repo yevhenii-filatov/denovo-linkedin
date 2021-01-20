@@ -1,0 +1,24 @@
+{
+  "properties": [
+    {
+      "name": "app.notifications.telegram.bot-token",
+      "type": "java.lang.String",
+      "description": "Token for telegram notifications."
+    },
+    {
+      "name": "app.notifications.telegram.chat-id",
+      "type": "java.lang.String",
+      "description": "chat-id for telegram notifications."
+    },
+    {
+      "name": "app.notifications.slack-token",
+      "type": "java.lang.String",
+      "description": "Token for slack notifications."
+    },
+    {
+      "name": "app.notifications.slack.notifications-channel",
+      "type": "java.lang.String",
+      "description": "Channel name for slack notifications."
+    }
+  ]
+}
