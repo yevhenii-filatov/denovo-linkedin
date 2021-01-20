@@ -51,7 +51,8 @@ public class SimpleOkHttpTemplate implements OkHttpTemplate {
             if (!response.isSuccessful()) {
                 log.error("REQUEST FAILED - {}", url);
                 log.error("STATUS CODE: {}", response.code());
-                log.error("RESPONSE: {}", response.message());
+                log.error("RESPONSE MESSAGE: {}", response.message());
+                log.error("RESPONSE BODY: {}", body.string());
                 throw new IOException(response.message(), new IOException(request.method() + " " + request.url() + ": " + response.code()));
             }
             log.info("SUCCESS: {}", url);

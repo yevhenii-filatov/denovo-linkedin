@@ -1,0 +1,10 @@
+INSERT INTO initial_data (first_name, last_name, firm_name, searched, no_results) VALUES ('Keshav', 'Dimri', 'Sidley Austin LLP', false, false);
+INSERT INTO initial_data (first_name, last_name, firm_name, searched, no_results) VALUES ('Chris', 'Campbell', 'King & Spalding', false, false);
+INSERT INTO initial_data (first_name, last_name, firm_name, searched, no_results) VALUES ('David', 'Maysilles', 'King & Spalding', false, false);
+INSERT INTO initial_data (first_name, last_name, firm_name, searched, no_results) VALUES ('Beth', 'Berg', 'Sidley Austin LLP', false, false);
+INSERT INTO initial_data (first_name, last_name, firm_name, searched, no_results) VALUES ('Robert', 'Eckinger', 'Adams and Reese LLP', false, false);
+INSERT INTO initial_data (first_name, last_name, firm_name, searched, no_results) VALUES ('Phyllis', 'Sumner', 'King & Spalding', false, false);
+INSERT INTO initial_data (first_name, last_name, firm_name, searched, no_results) VALUES ('Heather', 'Vanderpool', 'King & Spalding', false, false);
+INSERT INTO initial_data (first_name, last_name, firm_name, searched, no_results) VALUES ('Samuel', 'Hipps', 'King & Spalding', false, false);
+INSERT INTO initial_data (first_name, last_name, firm_name, searched, no_results) VALUES ('Achim', 'Döser', 'King & Spalding', false, false);
+INSERT INTO initial_data (first_name, last_name, firm_name, searched, no_results) VALUES ('Rob', 'Breunig', 'Adams and Reese LLP', false, false);

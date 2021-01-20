@@ -11,7 +11,7 @@ spring:
 
 app:
   search:
-    retry-attempts: 5
+    retry-attempts: 10
     concurrency-restriction: 100
     user-agent: 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36'
     required-results-count: 5
@@ -20,13 +20,6 @@ app:
       bot-token: '1267422790:AAHiQcyTkqpPphUMP5SPNVWaXu1XXxJLtTQ'
       channel-id: -1001201576524
       enabled: true
-  captcha:
-    anti-captcha:
-      token: 8e16ca55a47276b5afc6375bf7ee2bff
   proxy:
     operia:
       key: 06931f4c8ef70f72
-  chromedriver:
-    path: [ PATH TO CHROMEDRIVER EXECUTABLE ]
-    options:
-      headless: true
