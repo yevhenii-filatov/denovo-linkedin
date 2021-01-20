@@ -1,0 +1,5 @@
+images:
+  directory:
+    path: images/
+server:
+  port: 8084
