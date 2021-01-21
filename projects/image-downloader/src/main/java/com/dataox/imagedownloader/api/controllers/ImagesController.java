@@ -22,7 +22,7 @@ public class ImagesController {
         imageService.saveImage(imageCredentials);
     }
 
-    @GetMapping(value = "/show/one/{imageName}", produces = MediaType.IMAGE_PNG_VALUE)
+    @GetMapping(value = "/show/one/{imageName}", produces = {MediaType.IMAGE_PNG_VALUE,MediaType.APPLICATION_JSON_VALUE})
     public byte[] showOneImage(@PathVariable("imageName") String imageName) throws IOException {
         return imageService.getOneImageAsBytes(imageName);
     }
