@@ -17,5 +17,6 @@ public class CreateCaptchaTaskRequest {
         private String type;
         private String websiteURL;
         private String websiteKey;
+        private String websitePublicKey;
     }
 }

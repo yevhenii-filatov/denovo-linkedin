@@ -1,0 +1,9 @@
+{
+  "properties": [
+    {
+      "name": "app.captcha.anti-captcha.token",
+      "type": "java.lang.String",
+      "description": "Token for https://anti-captcha.com/ service."
+    }
+  ]
+}
