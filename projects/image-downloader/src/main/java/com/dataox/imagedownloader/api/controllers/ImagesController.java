@@ -1,11 +1,9 @@
 package com.dataox.imagedownloader.api.controllers;
 
 import com.dataox.imagedownloader.api.dto.ImageCredentials;
-import com.dataox.imagedownloader.services.ImageReader;
-import com.dataox.imagedownloader.services.ImageSaver;
+import com.dataox.imagedownloader.services.ImageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -13,42 +11,30 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 
 @RestController
-@RequestMapping("api/v1/image")
+@RequestMapping("/api/v1/image")
 @RequiredArgsConstructor
 public class ImagesController {
-    private final ImageSaver imageSaver;
-    private final ImageReader imageReader;
+    private final ImageService imageService;
 
     @PostMapping("/save")
     @ResponseStatus(HttpStatus.CREATED)
     public void saveImage(@RequestBody ImageCredentials imageCredentials) throws IOException {
-        imageSaver.saveImage(imageCredentials);
+        imageService.saveImage(imageCredentials);
     }
 
-    @GetMapping(value = "/show/one",produces = MediaType.IMAGE_JPEG_VALUE)
-    public byte[] showOneImage(@RequestParam String imageName) throws IOException {
-        return imageReader.getOneImage(imageName);
+    @GetMapping(value = "/show/one/{imageName}", produces = MediaType.IMAGE_PNG_VALUE)
+    public byte[] showOneImage(@PathVariable("imageName") String imageName) throws IOException {
+        return imageService.getOneImageAsBytes(imageName);
     }
 
-    @GetMapping(value = "/get/one")
-    public HttpEntity<byte[]> getOneImage(@RequestParam String imageName) throws IOException {
-        byte[] imageBytes = imageReader.getOneImage(imageName);
-        HttpHeaders header = new HttpHeaders();
-        header.setContentType(MediaType.IMAGE_PNG);
-        header.set(HttpHeaders.CONTENT_DISPOSITION,
-                "attachment; filename=" + imageName);
-        header.setContentLength(imageBytes.length);
-        return new HttpEntity<>(imageBytes, header);
+    @GetMapping(value = "/get/one/{imageName}")
+    public HttpEntity<byte[]> getOneImage(@PathVariable String imageName) throws IOException {
+        return imageService.getOneImage(imageName);
     }
 
     @GetMapping("/get/all")
     public HttpEntity<byte[]> getAllImagesAsZip() throws IOException {
-        byte[] allImagesAsZip = imageReader.getAllImagesAsZip();
-        HttpHeaders header = new HttpHeaders();
-        header.setContentType(MediaType.MULTIPART_FORM_DATA);
-        header.set(HttpHeaders.CONTENT_DISPOSITION,
-                "attachment; filename=" + "AllImages.zip");
-        header.setContentLength(allImagesAsZip.length);
-        return new HttpEntity<>(allImagesAsZip, header);
+        return imageService.getAllImageAsZip();
     }
+
 }

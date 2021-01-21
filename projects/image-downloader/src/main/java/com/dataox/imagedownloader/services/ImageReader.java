@@ -15,6 +15,8 @@ import java.io.IOException;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import static org.apache.commons.lang3.StringUtils.appendIfMissing;
+
 @Service
 @Slf4j
 public class ImageReader {
@@ -23,12 +25,17 @@ public class ImageReader {
     private String imagesDirectoryPath;
 
     public byte[] getOneImage(String imageName) throws IOException {
+        imageName = appendIfMissing(imageName, ".png");
         File file = new File(imagesDirectoryPath.concat(imageName));
-        if (!file.exists()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Requested image '" + imageName + "' was not found");
-        }
+        checkIfFileExist(file);
         log.info("Found one image: {}", imageName);
         return FileUtils.readFileToByteArray(file);
+    }
+
+    private void checkIfFileExist(File file) {
+        if (!file.exists()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Requested image '" + file.getName() + "' is not present");
+        }
     }
 
     public byte[] getAllImagesAsZip() throws IOException {

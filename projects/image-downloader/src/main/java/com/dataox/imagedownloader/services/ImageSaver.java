@@ -18,6 +18,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLConnection;
 
+import static org.apache.commons.lang3.StringUtils.appendIfMissing;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -42,16 +44,24 @@ public class ImageSaver {
     }
 
     private void saveImage(byte[] imageBytes, String fileName) throws IOException {
-        File image = new File(imagesDirectoryPath.concat(fileName).concat(".png"));
+        createFolderIfNotExist();
+        String imageName = appendIfMissing(imagesDirectoryPath.concat(fileName), ".png");
+        File image = new File(imageName);
         InputStream byteInputStream = new ByteArrayInputStream(imageBytes);
         BufferedImage bufferedImage = ImageIO.read(byteInputStream);
         ImageIO.write(bufferedImage, "png", image);
     }
 
+    private void createFolderIfNotExist() {
+        File file = new File(imagesDirectoryPath);
+        if (!file.exists())
+            file.mkdirs();
+    }
+
     private void checkIfImageValid(byte[] imageBytes, ImageCredentials imageCredentials) throws IOException {
         String contentType = URLConnection.guessContentTypeFromStream(new ByteArrayInputStream(imageBytes));
         if (!contentType.contains("image")) {
-            throw new FileIsNotAnImageException("Downloaded file is not a valid image: " + imageCredentials.getUrl() + " " + imageCredentials.getFileName());
+            throw new FileIsNotAnImageException("Downloaded file is not a valid image: " + imageCredentials.getUrl() + ", " + imageCredentials.getFileName());
         }
     }
 }
