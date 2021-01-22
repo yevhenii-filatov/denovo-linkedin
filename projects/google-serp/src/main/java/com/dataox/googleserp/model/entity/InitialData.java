@@ -26,6 +26,9 @@ public class InitialData {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "denovo_id")
+    private Long denovoId;
+
     @Column(name = "updated_at")
     private Instant updatedAt;
 

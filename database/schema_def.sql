@@ -3,8 +3,8 @@ create table if not exists search_metadata
     id                 bigserial not null
         constraint search_metadata_pk
             primary key,
-    query_url          varchar   not null,
-    search_page_source text      not null
+    query_url          varchar,
+    search_page_source text
 );
 
 create table if not exists initial_data
@@ -12,6 +12,7 @@ create table if not exists initial_data
     id                 bigserial    not null
         constraint initial_data_pk
             primary key,
+    denovo_id          bigint       not null,
     updated_at         timestamp    null,
     first_name         varchar(255) not null,
     last_name          varchar(255) not null,
@@ -23,7 +24,7 @@ create table if not exists initial_data
             references search_metadata (id)
             on delete cascade on update cascade
 );
-create index initial_data_search_metadata_idx on initial_data(search_metadata_id);
+create index initial_data_search_metadata_idx on initial_data (search_metadata_id);
 
 create table if not exists search_result
 (
@@ -36,18 +37,22 @@ create table if not exists search_result
     description            varchar(255),
     initial_data_record_id bigint    not null
         constraint search_result_initial_data_fk
-            references initial_data(id)
+            references initial_data (id)
             on delete cascade on update cascade
 );
-create index search_result_initial_data_fk on search_result(initial_data_record_id);
+create index search_result_initial_data_fk on search_result (initial_data_record_id);
 
 create table if not exists linkedin_profile
 (
-    id          bigserial not null
+    id               bigserial not null
         constraint linkedin_profile_pk primary key,
-    created_at  timestamp not null,
-    updated_at  timestamp not null,
-    profile_url varchar   not null
+    search_result_id bigint    not null,
+    created_at       timestamp not null,
+    updated_at       timestamp not null,
+    profile_url      varchar   not null,
+    foreign key (search_result_id)
+        references search_result (id)
+        on delete cascade on update cascade
 );
 
 
