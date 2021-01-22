@@ -29,16 +29,20 @@ public class ImageSaver {
     private String imagesDirectoryPath;
     private final ImageDownloader imageDownloader;
 
-    public void saveImage(ImageCredentials imageCredentials) throws IOException {
+    public void saveImage(ImageCredentials imageCredentials)  {
         log.info("Started saving image {}, {}", imageCredentials.getUrl(), imageCredentials.getFileName());
         try {
             byte[] imageBytes = imageDownloader.downloadImage(imageCredentials.getUrl());
             checkIfImageValid(imageBytes, imageCredentials);
             saveImage(imageBytes, imageCredentials.getFileName());
         } catch (EmptyBodyException e) {
-            throw new ResponseStatusException(HttpStatus.NO_CONTENT, e.getClass() + " " + e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (FileIsNotAnImageException e) {
-            throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, e.getClass() + " " + e.getMessage());
+            throw new ResponseStatusException(HttpStatus.UNSUPPORTED_MEDIA_TYPE, e.getMessage());
+        } catch (IllegalArgumentException e) {
+            throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, e.getMessage());
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
         log.info("Finished saving image {}, {}", imageCredentials.getUrl(), imageCredentials.getFileName());
     }

@@ -24,12 +24,16 @@ public class ImageReader {
     @Value("${images.directory.path}")
     private String imagesDirectoryPath;
 
-    public byte[] getOneImage(String imageName) throws IOException {
+    public byte[] getOneImage(String imageName) {
         imageName = appendIfMissing(imageName, ".png");
         File file = new File(imagesDirectoryPath.concat(imageName));
         checkIfFileExist(file);
         log.info("Found one image: {}", imageName);
-        return FileUtils.readFileToByteArray(file);
+        try {
+            return FileUtils.readFileToByteArray(file);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
     }
 
     private void checkIfFileExist(File file) {
@@ -38,7 +42,7 @@ public class ImageReader {
         }
     }
 
-    public byte[] getAllImagesAsZip() throws IOException {
+    public byte[] getAllImagesAsZip()  {
         log.info("Started creating zip with all images");
         File dir = new File(imagesDirectoryPath);
         File[] imagesArray = dir.listFiles();
@@ -46,15 +50,23 @@ public class ImageReader {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Images directory is empty or not present");
         ByteArrayOutputStream bo = new ByteArrayOutputStream();
         ZipOutputStream zipOut = new ZipOutputStream(bo);
-        for (File image : imagesArray) {
-            if (!image.isFile()) continue;
-            ZipEntry zipEntry = new ZipEntry(image.getName());
-            zipOut.putNextEntry(zipEntry);
-            zipOut.write(IOUtils.toByteArray(new FileInputStream(image)));
-            zipOut.closeEntry();
-        }
-        zipOut.close();
+        buildZIP(imagesArray, zipOut);
         log.info("Finished creating zip with all images");
         return bo.toByteArray();
+    }
+
+    private void buildZIP(File[] imagesArray, ZipOutputStream zipOut) {
+        try {
+            for (File image : imagesArray) {
+                if (!image.isFile()) continue;
+                ZipEntry zipEntry = new ZipEntry(image.getName());
+                zipOut.putNextEntry(zipEntry);
+                zipOut.write(IOUtils.toByteArray(new FileInputStream(image)));
+                zipOut.closeEntry();
+            }
+            zipOut.close();
+        } catch (IOException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
     }
 }

@@ -1,8 +1,6 @@
 package com.dataox.imagedownloader.exceptions;
 
-import java.io.IOException;
-
-public class FileIsNotAnImageException extends IOException {
+public class FileIsNotAnImageException extends RuntimeException {
 
     public FileIsNotAnImageException(String message) {
         super(message);

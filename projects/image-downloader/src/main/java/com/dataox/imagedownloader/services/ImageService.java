@@ -7,28 +7,26 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
-
 @Service
 @RequiredArgsConstructor
 public class ImageService {
     private final ImageSaver imageSaver;
     private final ImageReader imageReader;
 
-    public void saveImage(ImageCredentials imageCredentials) throws IOException {
+    public void saveImage(ImageCredentials imageCredentials) {
         imageSaver.saveImage(imageCredentials);
     }
 
-    public byte[] getOneImageAsBytes(String imageName) throws IOException {
+    public byte[] getOneImageAsBytes(String imageName) {
         return imageReader.getOneImage(imageName);
     }
 
-    public HttpEntity<byte[]> getOneImage(String imageName) throws IOException {
+    public HttpEntity<byte[]> getOneImage(String imageName) {
         byte[] imageBytes = getOneImageAsBytes(imageName);
         return convertToHttpEntity(imageName, imageBytes, MediaType.IMAGE_PNG);
     }
 
-    public HttpEntity<byte[]> getAllImageAsZip() throws IOException {
+    public HttpEntity<byte[]> getAllImageAsZip()   {
         byte[] allImagesAsZip = imageReader.getAllImagesAsZip();
         return convertToHttpEntity("AllImages.zip", allImagesAsZip, MediaType.MULTIPART_FORM_DATA);
     }
