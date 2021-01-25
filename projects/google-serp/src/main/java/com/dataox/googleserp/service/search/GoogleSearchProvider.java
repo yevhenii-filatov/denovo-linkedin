@@ -3,10 +3,10 @@ package com.dataox.googleserp.service.search;
 import com.dataox.googleserp.configuration.properties.ProxyProperties;
 import com.dataox.googleserp.configuration.properties.SearchProperties;
 import com.dataox.googleserp.model.search.SearchQuery;
-import com.dataox.googleserp.service.notification.NotificationService;
 import com.dataox.googleserp.service.parsing.GoogleSearchResultHtmlParser;
 import com.dataox.googleserp.service.parsing.SearchResultParser;
 import com.dataox.googleserp.util.BeanUtils;
+import com.dataox.notificationservice.service.NotificationsService;
 import com.dataox.okhttputils.OkHttpTemplate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +29,7 @@ import java.nio.charset.StandardCharsets;
 public class GoogleSearchProvider extends AbstractSearchProvider<Element> {
     private static final String OPERIA_ENDPOINT_TEMPLATE = "https://run.operia.io/%s/?ua=%s&url=%s";
     private static final String GOOGLE_SEARCH_URL_TEMPLATE = "https://google.com/search?hl=en&q=%s";
-    private final NotificationService notificationService;
+    private final NotificationsService notificationService;
     private final OkHttpTemplate okHttpTemplate;
     private final ProxyProperties proxyProperties;
     private final SearchProperties searchProperties;
@@ -47,7 +47,7 @@ public class GoogleSearchProvider extends AbstractSearchProvider<Element> {
                         e.getClass().getName(),
                         e.getMessage()
                 );
-                notificationService.send(errorMessage);
+                notificationService.sendInternal(errorMessage);
                 return null;
             }
             log.error("SCRAPING ATTEMPT #{} FAILED FOR URL {}", currentAttempt, queryUrl);

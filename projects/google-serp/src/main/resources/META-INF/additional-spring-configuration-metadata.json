@@ -21,21 +21,6 @@
       "description": "Max results count to collect on Google Search page."
     },
     {
-      "name": "app.notification.telegram.bot-token",
-      "type": "java.lang.String",
-      "description": "Bot token for Telegram notifications."
-    },
-    {
-      "name": "app.notification.telegram.channel-id",
-      "type": "java.lang.String",
-      "description": "Channel ID for Telegram notifications."
-    },
-    {
-      "name": "app.notification.telegram.enabled",
-      "type": "java.lang.Boolean",
-      "description": "Switch for enabling/disabling Telegram notifications."
-    },
-    {
       "name": "app.captcha.anti-captcha.token",
       "type": "java.lang.String",
       "description": "Token for the Anti-Captcha account."
@@ -44,6 +29,22 @@
       "name": "app.proxy.operia.key",
       "type": "java.lang.String",
       "description": "Token for the Operia proxy service."
+    },
+    {
+      "name": "app.scheduling.search.not.searched.data",
+      "type": "java.lang.String",
+      "description": "Cron for starting search for not searched initial data."
+    },
+    {
+      "name": "app.scheduling.enabled",
+      "type": "java.lang.String",
+      "description": "Enable scheduling search for not searched initial data.",
+      "defaultValue": true
+    },
+    {
+      "name": "app.search.minutes-for-one-task",
+      "type": "java.lang.String",
+      "description": "Time in minutes allotted for one search task to be done."
     }
   ]
 }

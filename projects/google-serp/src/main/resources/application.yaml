@@ -11,15 +11,20 @@ spring:
 
 app:
   search:
+    minutes-for-one-task: 10
     retry-attempts: 10
     concurrency-restriction: 100
     user-agent: 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36'
     required-results-count: 5
-  notification:
+  notifications:
     telegram:
       bot-token: '1267422790:AAHiQcyTkqpPphUMP5SPNVWaXu1XXxJLtTQ'
-      channel-id: -1001201576524
+      chat-id: -1001201576524
       enabled: true
   proxy:
     operia:
       key: 06931f4c8ef70f72
+  scheduling:
+    enabled: false
+    search:
+      not.searched.data: "0 * * * * *"

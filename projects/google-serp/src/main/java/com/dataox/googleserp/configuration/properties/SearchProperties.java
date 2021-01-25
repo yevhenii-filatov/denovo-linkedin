@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ConfigurationProperties(prefix = "app.search")
 public class SearchProperties {
+    private Long minutesForOneTask;
     private Integer retryAttempts;
     private Integer concurrencyRestriction;
     private String userAgent;
