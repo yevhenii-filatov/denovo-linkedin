@@ -42,7 +42,6 @@ public class SearchProfileWithGoogleTask implements Runnable {
         initialData.getSearchResults().addAll(results);
         initialData.setUpdatedAt(Instant.now());
         initialDataRepository.save(initialData);
-        System.out.println();
     }
 
     private SearchQuery prepareQuery() {
