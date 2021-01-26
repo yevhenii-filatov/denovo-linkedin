@@ -1,6 +1,7 @@
 package com.dataox.googleserp.service.run;
 
 import com.dataox.googleserp.configuration.properties.SearchProperties;
+import com.dataox.googleserp.exceptions.SearchException;
 import com.dataox.googleserp.model.entity.InitialData;
 import com.dataox.googleserp.model.entity.SearchResult;
 import com.dataox.googleserp.repository.InitialDataRepository;
@@ -12,6 +13,7 @@ import org.awaitility.Awaitility;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
@@ -28,34 +30,36 @@ public class SearchStarter {
     private final SearchResultRepository searchResultRepository;
     private final SearchProperties searchProperties;
 
-    public void startSearchWithInitialData(List<InitialData> initialData) {
-        List<Long> denovoIdsToSearch = extractDenovoIds(initialData);
-        List<SearchProfileWithGoogleTask> searchProfileWithGoogleTasks = createSearchProfileWithGoogleTasks(initialData);
-
-        List<? extends Future<?>> futureList = submitTasks(searchProfileWithGoogleTasks);
-        log.info("Started search for denovoIds: {}", denovoIdsToSearch);
-        waitUntilTasksIsDone(searchProfileWithGoogleTasks, futureList);
-        List<Long> searchResultsIds = getResultsIdsByInitialData(initialData);
-        searchResultSender.sendSearchResultIdsToLoadBalancer(searchResultsIds);
-    }
-
     public void startSearchWithDenovoIds(List<Long> denovoIds) {
         List<InitialData> initialData = initialDataRepository.findAllByDenovoIdInAndSearchedFalse(denovoIds);
         if (initialData.isEmpty()) {
             log.warn("Can't start search with DenovoIds. Already searched: {}", denovoIds);
-            return;
+            throw new SearchException("Can't start search with DenovoIds. Already searched: {}");
         }
-        startSearchWithInitialData(initialData);
+        CompletableFuture.runAsync(() -> {
+            startSearchWithInitialData(initialData);
+            List<Long> searchResultsIds = getResultsIdsByInitialData(initialData);
+            searchResultSender.sendSearchResultIdsToLoadBalancer(searchResultsIds);
+        });
     }
 
     public void startSearchForNotSearchedInitialData() {
         List<InitialData> notSearchedInitialData = initialDataRepository.findAllBySearchedFalse();
         if (notSearchedInitialData.isEmpty()) {
             log.warn("Not searched data is not present in database!");
-            return;
+            throw new SearchException("Not searched data is not present in database!");
         }
         log.info("Staring search for not searched initial data");
-        startSearchWithInitialData(notSearchedInitialData);
+        CompletableFuture.runAsync(() -> startSearchWithInitialData(notSearchedInitialData));
+    }
+
+    private void startSearchWithInitialData(List<InitialData> initialData) {
+        List<Long> denovoIdsToSearch = extractDenovoIds(initialData);
+        List<SearchProfileWithGoogleTask> searchProfileWithGoogleTasks = createSearchProfileWithGoogleTasks(initialData);
+
+        List<? extends Future<?>> futureList = submitTasks(searchProfileWithGoogleTasks);
+        log.info("Started search for denovoIds: {}", denovoIdsToSearch);
+        waitUntilTasksIsDone(searchProfileWithGoogleTasks, futureList);
     }
 
     private List<? extends Future<?>> submitTasks(List<SearchProfileWithGoogleTask> searchProfileWithGoogleTasks) {
