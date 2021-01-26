@@ -7,6 +7,7 @@ import com.dataox.googleserp.model.entity.SearchResult;
 import com.dataox.googleserp.repository.InitialDataRepository;
 import com.dataox.googleserp.repository.SearchResultRepository;
 import com.dataox.googleserp.service.sending.SearchResultSender;
+import com.dataox.notificationservice.service.NotificationsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.awaitility.Awaitility;
@@ -19,6 +20,8 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+import static com.dataox.googleserp.util.NotificationUtils.createErrorMessage;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -29,36 +32,44 @@ public class SearchStarter {
     private final InitialDataRepository initialDataRepository;
     private final SearchResultRepository searchResultRepository;
     private final SearchProperties searchProperties;
+    private final NotificationsService notificationsService;
 
     public void startSearchWithDenovoIds(List<Long> denovoIds) {
         List<InitialData> initialData = initialDataRepository.findAllByDenovoIdInAndSearchedFalse(denovoIds);
         if (initialData.isEmpty()) {
-            log.warn("Can't start search with DenovoIds. Already searched: {}", denovoIds);
+            log.error("Can't start search with DenovoIds. Already searched: {}", denovoIds);
             throw new SearchException("Can't start search with DenovoIds. Already searched: {}");
         }
         CompletableFuture.runAsync(() -> {
             startSearchWithInitialData(initialData);
             List<Long> searchResultsIds = getResultsIdsByInitialData(initialData);
             searchResultSender.sendSearchResultIdsToLoadBalancer(searchResultsIds);
+        }).exceptionally(throwable -> {
+            notificationsService.sendInternal(createErrorMessage(throwable));
+            return null;
         });
     }
 
     public void startSearchForNotSearchedInitialData() {
         List<InitialData> notSearchedInitialData = initialDataRepository.findAllBySearchedFalse();
         if (notSearchedInitialData.isEmpty()) {
-            log.warn("Not searched data is not present in database!");
+            log.error("Not searched data is not present in database!");
             throw new SearchException("Not searched data is not present in database!");
         }
         log.info("Staring search for not searched initial data");
-        CompletableFuture.runAsync(() -> startSearchWithInitialData(notSearchedInitialData));
+        CompletableFuture.runAsync(() -> startSearchWithInitialData(notSearchedInitialData))
+                .exceptionally(throwable -> {
+                    notificationsService.sendInternal(createErrorMessage(throwable));
+                    return null;
+                });
     }
 
-    private void startSearchWithInitialData(List<InitialData> initialData) {
+    private synchronized void startSearchWithInitialData(List<InitialData> initialData) {
         List<Long> denovoIdsToSearch = extractDenovoIds(initialData);
         List<SearchProfileWithGoogleTask> searchProfileWithGoogleTasks = createSearchProfileWithGoogleTasks(initialData);
 
+        log.info("Starting search for denovoIds: {}", denovoIdsToSearch);
         List<? extends Future<?>> futureList = submitTasks(searchProfileWithGoogleTasks);
-        log.info("Started search for denovoIds: {}", denovoIdsToSearch);
         waitUntilTasksIsDone(searchProfileWithGoogleTasks, futureList);
     }
 
@@ -71,7 +82,13 @@ public class SearchStarter {
     private void waitUntilTasksIsDone(List<SearchProfileWithGoogleTask> searchProfileWithGoogleTasks,
                                       List<? extends Future<?>> futureList) {
         long minutesToWait = searchProfileWithGoogleTasks.size() * searchProperties.getMinutesForOneTask();
-        Awaitility.await().atMost(minutesToWait, TimeUnit.MINUTES).until(() -> futureList.stream().allMatch(Future::isDone));
+        try {
+            Awaitility.await().atMost(minutesToWait, TimeUnit.MINUTES).until(() -> futureList.stream().allMatch(Future::isDone));
+        } catch (Exception e) {
+//            futureList.forEach(future -> future.cancel(false));
+//            log.error("Canceled all tasks in the batch");
+            throw e;
+        }
     }
 
     private List<SearchProfileWithGoogleTask> createSearchProfileWithGoogleTasks(List<InitialData> initialData) {
