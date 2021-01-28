@@ -4,6 +4,7 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -30,6 +31,13 @@ public final class WebDriverUtils {
             field.sendKeys(String.valueOf(symbol));
             CommonUtils.randomSleep(100, 500);
         }
+    }
+
+    public static WebElement findElementBy(WebDriver webDriver, By by) {
+        List<WebElement> elements = webDriver.findElements(by);
+        return elements.isEmpty()
+                ? null
+                : elements.get(0);
     }
 
     public static void executeJavascript(WebDriver webDriver, String script, Object... args) {

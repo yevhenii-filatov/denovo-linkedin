@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
+import java.sql.Timestamp;
 import java.time.Instant;
 
 /**
@@ -18,8 +19,8 @@ public class GetCaptchaTaskResultResponse {
     private Solution solution;
     private String cost;
     private String ip;
-    private Instant createTime;
-    private Instant endTime;
+    private Timestamp createTime;
+    private Timestamp endTime;
     private Integer solveCount;
 
     @Data
@@ -27,5 +28,8 @@ public class GetCaptchaTaskResultResponse {
     public static class Solution {
         @JsonProperty("gRecaptchaResponse")
         private String gRecaptchaResponse;
+
+        @JsonProperty("token")
+        private String token;
     }
 }
