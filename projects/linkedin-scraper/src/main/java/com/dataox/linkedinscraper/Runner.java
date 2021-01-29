@@ -19,7 +19,8 @@ public class Runner implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        CollectedProfileSourcesDTO scrape = profileScraper.scrape("https://www.linkedin.com/in/carly-savar-b99b537/");
+        CollectedProfileSourcesDTO scrape = profileScraper.scrape("https://www.linkedin.com/in/alexander-demchenko/");
+//        CollectedProfileSourcesDTO scrape = profileScraper.scrape("https://www.linkedin.com/in/carly-savar-b99b537/");
         System.out.println(scrape);
     }
 }

@@ -1,10 +1,12 @@
 package com.dataox.linkedinscraper.scraping.scrapers;
 
-import com.dataox.WebDriverUtils;
 import lombok.Getter;
 import lombok.Setter;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+
+import static com.dataox.WebDriverUtils.findElementBy;
+import static com.dataox.WebDriverUtils.getElementHtml;
 
 /**
  * @author Dmitriy Lysko
@@ -18,6 +20,6 @@ public class HeaderSectionScraper implements Scraper<String> {
 
     @Override
     public String scrape(WebDriver webDriver) {
-        return WebDriverUtils.findElementBy(webDriver, HEADER_SELECTOR).getAttribute("outerHTML");
+        return getElementHtml(findElementBy(webDriver, HEADER_SELECTOR));
     }
 }
