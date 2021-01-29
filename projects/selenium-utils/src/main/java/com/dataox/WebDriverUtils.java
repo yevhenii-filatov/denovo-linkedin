@@ -82,7 +82,7 @@ public final class WebDriverUtils {
         scrollTo(webDriver, y);
     }
 
-    private static void scrollTo(WebDriver webDriver, int y) {
+    public static void scrollTo(WebDriver webDriver, int y) {
         int amountOfSteps = 10;
         int step = y / amountOfSteps;
         int counter = 0;
@@ -90,6 +90,10 @@ public final class WebDriverUtils {
             WebDriverUtils.executeJavascript(webDriver, String.format("scrollTo(0,%d);", counter += step));
             CommonUtils.randomSleep(400, 800);
         }
+    }
+
+    public static String getElementHtml(WebElement webElement) {
+        return webElement.getAttribute("outerHTML");
     }
 
     public static void removeAttribute(WebDriver webDriver, String cssSelector, String attribute) {
