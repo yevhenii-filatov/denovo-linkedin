@@ -72,6 +72,26 @@ public final class WebDriverUtils {
         executeJavascript(webDriver, String.format("window.scrollBy(0, %d)", stepPx));
     }
 
+    public void scrollToElement(WebDriver webDriver, WebElement webElement, int topPanelSize) {
+        int y = webElement.getLocation().getY() - topPanelSize;
+        scrollTo(webDriver, y);
+    }
+
+    public void scrollToElement(WebDriver webDriver, WebElement webElement) {
+        int y = webElement.getLocation().getY();
+        scrollTo(webDriver, y);
+    }
+
+    private void scrollTo(WebDriver webDriver, int y) {
+        int amountOfSteps = 10;
+        int step = y / amountOfSteps;
+        int counter = 0;
+        for (int i = 0; i < amountOfSteps; i++) {
+            WebDriverUtils.executeJavascript(webDriver, String.format("scrollTo(0,%d);", counter += step));
+            CommonUtils.randomSleep(400, 800);
+        }
+    }
+
     public static void removeAttribute(WebDriver webDriver, String cssSelector, String attribute) {
         String script = String.format("document.querySelector('%s').removeAttribute('%s');", cssSelector, attribute);
         executeJavascript(webDriver, script);
