@@ -12,16 +12,16 @@ import java.util.Map;
  * @since 28/01/2021
  */
 @Data
-@FieldDefaults(makeFinal = true,level = AccessLevel.PRIVATE)
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class CollectedProfileSourcesDTO {
     String headerSectionSource;
     String aboutSectionSource;
-    String educationsSource;
     String experiencesSource;
+    String educationsSource;
     String recommendationsSource;
     String skillsSource;
     String licenseSource;
     String volunteersSource;
     Map<String,String> interestsSources;
-    List<String> activitiesSources;
+    Map<String,String> urlAndActivitiesSources;
 }

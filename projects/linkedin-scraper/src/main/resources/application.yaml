@@ -1,1 +1,4 @@
-
+app:
+  captcha:
+    anti-captcha:
+      token: 983073955c13b2e5c6895eaf9d2b8490

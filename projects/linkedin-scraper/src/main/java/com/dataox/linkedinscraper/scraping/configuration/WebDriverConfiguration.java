@@ -18,7 +18,7 @@ public class WebDriverConfiguration {
     @Bean
     public WebDriver webDriver() {
         WebDriver webDriver = new ChromeDriver(createChromeOptions());
-        webDriver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+        webDriver.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
         webDriver.manage().timeouts().pageLoadTimeout(60, TimeUnit.SECONDS);
         return webDriver;
     }
@@ -29,6 +29,8 @@ public class WebDriverConfiguration {
         chromeOptions.addArguments("--whitelisted-ips=''");
         chromeOptions.addArguments("start-maximized");
         chromeOptions.addArguments("--no-sandbox");
+        chromeOptions.addArguments("--proxy-server=http://5.189.151.227:24079");
+//        chromeOptions.addArguments("--proxy-server=http://34.122.76.79:8888");
         chromeOptions.setExperimentalOption("excludeSwitches", new String[]{"enable-automation"});
         return chromeOptions;
     }
