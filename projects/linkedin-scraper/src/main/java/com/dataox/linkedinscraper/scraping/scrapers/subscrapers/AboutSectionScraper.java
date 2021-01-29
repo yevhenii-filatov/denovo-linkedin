@@ -1,5 +1,6 @@
-package com.dataox.linkedinscraper.scraping.scrapers;
+package com.dataox.linkedinscraper.scraping.scrapers.subscrapers;
 
+import com.dataox.linkedinscraper.scraping.scrapers.Scraper;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;

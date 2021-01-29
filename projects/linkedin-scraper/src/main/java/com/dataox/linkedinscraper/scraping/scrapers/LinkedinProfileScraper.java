@@ -1,5 +1,6 @@
 package com.dataox.linkedinscraper.scraping.scrapers;
 
+import com.dataox.linkedinscraper.scraping.scrapers.subscrapers.*;
 import com.dataox.linkedinscraper.scraping.service.login.LoginService;
 import org.openqa.selenium.WebDriver;
 import org.springframework.stereotype.Service;
