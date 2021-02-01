@@ -88,8 +88,9 @@ public final class WebDriverUtils {
         int counter = 0;
         Long scrollY = getScrollY(webDriver);
         for (int i = 0; i < amountOfSteps; i++) {
+            counter += step;
             if (scrollY < counter)
-                executeJavascript(webDriver, String.format("scrollTo(0,%d);", counter += step));
+                executeJavascript(webDriver, String.format("scrollTo(0,%d);", counter));
             CommonUtils.randomSleep(150, 250);
         }
     }
