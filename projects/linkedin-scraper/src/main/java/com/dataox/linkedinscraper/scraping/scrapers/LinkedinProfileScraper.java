@@ -1,8 +1,11 @@
 package com.dataox.linkedinscraper.scraping.scrapers;
 
+import com.dataox.linkedinscraper.dto.CollectedProfileSourcesDTO;
 import com.dataox.linkedinscraper.scraping.scrapers.subscrapers.*;
 import com.dataox.linkedinscraper.scraping.service.login.LoginService;
+import lombok.RequiredArgsConstructor;
 import org.openqa.selenium.WebDriver;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -11,60 +14,39 @@ import java.util.Map;
  * @author Dmitriy Lysko
  * @since 29/01/2021
  */
+@Primary
 @Service
-public class LinkedinProfileScraper extends AbstractLinkedinProfileScraper {
+@RequiredArgsConstructor
+public class LinkedinProfileScraper {
 
-    public LinkedinProfileScraper(LoginService loginService, WebDriver webDriver) {
-        super(loginService, webDriver);
-    }
+    private static final String LINKEDIN_LOGIN_PAGE_URL = "https://www.linkedin.com/";
+    private final LoginService loginService;
+    private final AboutSectionScraper aboutSectionScraper;
+    private final ActivitiesScraper activitiesScraper;
+    private final EducationScraper educationScraper;
+    private final ExperienceScraper experienceScraper;
+    private final HeaderSectionScraper headerSectionScraper;
+    private final InterestsScraper interestsScraper;
+    private final LicenseScraper licenseScraper;
+    private final RecommendationsScraper recommendationsScraper;
+    private final SkillsScraper skillsScraper;
+    private final VolunteersScraper volunteersScraper;
 
-    @Override
-    public String scrapeHeaderSection(WebDriver webDriver) {
-        return new HeaderSectionScraper().scrape(webDriver);
-    }
-
-    @Override
-    public String scrapeAboutSection(WebDriver webDriver) {
-        return new AboutSectionScraper().scrape(webDriver);
-    }
-
-    @Override
-    public String scrapeExperienceSection(WebDriver webDriver) {
-        return new ExperienceScraper().scrape(webDriver);
-    }
-
-    @Override
-    public String scrapeEducationSection(WebDriver webDriver) {
-        return new EducationScraper().scrape(webDriver);
-    }
-
-    @Override
-    public String scrapeRecommendationsSection(WebDriver webDriver) {
-        return new RecommendationsScraper().scrape(webDriver);
-    }
-
-    @Override
-    public String scrapeSkillsSection(WebDriver webDriver) {
-        return new SkillsScraper().scrape(webDriver);
-    }
-
-    @Override
-    public String scrapeLicenseSection(WebDriver webDriver) {
-        return new LicenseScraper().scrape(webDriver);
-    }
-
-    @Override
-    public String scrapeVolunteersSection(WebDriver webDriver) {
-        return new VolunteersScraper().scrape(webDriver);
-    }
-
-    @Override
-    public Map<String, String> scrapeInterestsSources(WebDriver webDriver) {
-        return new InterestsScraper().scrape(webDriver);
-    }
-
-    @Override
-    public Map<String, String> scrapeActivitiesSection(WebDriver webDriver) {
-        return new ActivitiesScraper().scrape(webDriver);
+    public CollectedProfileSourcesDTO scrape(WebDriver webDriver, String profileUrl) {
+        webDriver.get(LINKEDIN_LOGIN_PAGE_URL);
+        loginService.performLogin(webDriver);
+        webDriver.get(profileUrl);
+        CollectedProfileSourcesDTO profileSourcesDTO = new CollectedProfileSourcesDTO();
+        profileSourcesDTO.setHeaderSectionSource(headerSectionScraper.scrape(webDriver));
+        profileSourcesDTO.setAboutSectionSource(aboutSectionScraper.scrape(webDriver));
+        profileSourcesDTO.setExperiencesSource(experienceScraper.scrape(webDriver));
+        profileSourcesDTO.setEducationsSource(educationScraper.scrape(webDriver));
+        profileSourcesDTO.setLicenseSource(licenseScraper.scrape(webDriver));
+        profileSourcesDTO.setVolunteersSource(volunteersScraper.scrape(webDriver));
+        profileSourcesDTO.setSkillsSource(skillsScraper.scrape(webDriver));
+        profileSourcesDTO.setRecommendationsSource(recommendationsScraper.scrape(webDriver));
+        profileSourcesDTO.setInterestsSources(interestsScraper.scrape(webDriver));
+        profileSourcesDTO.setUrlAndActivitiesSources(activitiesScraper.scrape(webDriver));
+        return profileSourcesDTO;
     }
 }

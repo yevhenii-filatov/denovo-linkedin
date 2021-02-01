@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.springframework.stereotype.Service;
 
 import static com.dataox.WebDriverUtils.findElementBy;
 import static com.dataox.WebDriverUtils.getElementHtml;
@@ -13,6 +14,7 @@ import static com.dataox.WebDriverUtils.getElementHtml;
  * @author Dmitriy Lysko
  * @since 29/01/2021
  */
+@Service
 public class HeaderSectionScraper implements Scraper<String> {
 
     private final By HEADER_SELECTOR = By.xpath("//section[contains(@class,'pv-top-card')]");
