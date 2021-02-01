@@ -13,8 +13,6 @@ import static com.dataox.WebDriverUtils.getElementHtml;
  * @author Dmitriy Lysko
  * @since 29/01/2021
  */
-@Getter
-@Setter
 public class HeaderSectionScraper implements Scraper<String> {
 
     private final By HEADER_SELECTOR = By.xpath("//section[contains(@class,'pv-top-card')]");
