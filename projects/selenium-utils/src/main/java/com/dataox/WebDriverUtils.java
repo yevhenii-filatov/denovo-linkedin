@@ -7,6 +7,8 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.util.List;
 import java.util.Optional;
 
+import static com.dataox.WebDriverUtils.ScrollingDirection.*;
+
 /**
  * @author Yevhenii Filatov
  * @since 11/26/20
@@ -60,21 +62,22 @@ public final class WebDriverUtils {
     }
 
     public static void randomScroll(WebDriver webDriver) {
-        ScrollingDirection direction = ScrollingDirection.random();
+        ScrollingDirection direction = random();
         long step = CommonUtils.randomLong(250, 400);
         scroll(webDriver, direction, step);
     }
 
     public static void scroll(WebDriver webDriver, ScrollingDirection direction, long stepPx) {
-        if (direction == ScrollingDirection.UP) {
+        if (direction == UP) {
             stepPx *= -1;
         }
         executeJavascript(webDriver, String.format("window.scrollBy(0, %d)", stepPx));
     }
 
     public static void scrollToElement(WebDriver webDriver, WebElement webElement, int topPanelSize) {
-        int y = webElement.getLocation().getY() - topPanelSize;
-        scrollTo(webDriver, y);
+        int currentScrollY = webElement.getLocation().getY();
+        currentScrollY = getScrollY(webDriver) > currentScrollY ? currentScrollY - topPanelSize : currentScrollY + topPanelSize;
+        scrollTo(webDriver, currentScrollY);
     }
 
     public static void scrollToElement(WebDriver webDriver, WebElement webElement) {
@@ -82,15 +85,13 @@ public final class WebDriverUtils {
         scrollTo(webDriver, y);
     }
 
-    public static void scrollTo(WebDriver webDriver, int y) {
+    public static void scrollTo(WebDriver webDriver, int desiredScrollY) {
         int amountOfSteps = 25;
-        int step = y / amountOfSteps;
-        int counter = 0;
-        Long scrollY = getScrollY(webDriver);
+        int step = desiredScrollY / amountOfSteps;
+        Long currentScrollY = getScrollY(webDriver);
+        ScrollingDirection scrollingDirection = currentScrollY > desiredScrollY ? UP : DOWN;
         for (int i = 0; i < amountOfSteps; i++) {
-            counter += step;
-            if (scrollY < counter)
-                executeJavascript(webDriver, String.format("scrollTo(0,%d);", counter));
+            scroll(webDriver, scrollingDirection, step);
             CommonUtils.randomSleep(150, 250);
         }
     }
