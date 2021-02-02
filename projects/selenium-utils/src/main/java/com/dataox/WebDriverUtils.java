@@ -87,8 +87,8 @@ public final class WebDriverUtils {
 
     public static void scrollTo(WebDriver webDriver, int desiredScrollY) {
         int amountOfSteps = 25;
-        int step = desiredScrollY / amountOfSteps;
         Long currentScrollY = getScrollY(webDriver);
+        int step = (int) (Math.abs((desiredScrollY - currentScrollY)) / amountOfSteps);
         ScrollingDirection scrollingDirection = currentScrollY > desiredScrollY ? UP : DOWN;
         for (int i = 0; i < amountOfSteps; i++) {
             scroll(webDriver, scrollingDirection, step);
