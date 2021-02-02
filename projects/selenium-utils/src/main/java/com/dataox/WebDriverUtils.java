@@ -74,10 +74,10 @@ public final class WebDriverUtils {
         executeJavascript(webDriver, String.format("window.scrollBy(0, %d)", stepPx));
     }
 
-    public static void scrollToElement(WebDriver webDriver, WebElement webElement, int topPanelSize) {
-        int currentScrollY = webElement.getLocation().getY();
-        currentScrollY = getScrollY(webDriver) > currentScrollY ? currentScrollY + topPanelSize : currentScrollY - topPanelSize;
-        scrollTo(webDriver, currentScrollY);
+    public static void scrollToElement(WebDriver webDriver, WebElement webElement, int topPanelHeight) {
+        int elementY = webElement.getLocation().getY();
+        elementY -=topPanelHeight;
+        scrollTo(webDriver, elementY);
     }
 
     public static void scrollToElement(WebDriver webDriver, WebElement webElement) {
