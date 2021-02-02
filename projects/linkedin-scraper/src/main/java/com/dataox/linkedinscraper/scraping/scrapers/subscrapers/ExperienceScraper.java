@@ -29,7 +29,7 @@ public class ExperienceScraper implements Scraper<String> {
     public String scrape(WebDriver webDriver) {
         randomSleep(2000, 5000);
         WebElement experienceSection = findElementBy(webDriver, EXPERIENCE_SECTION);
-        scrollToElement(webDriver, experienceSection, 200);
+        scrollToElement(webDriver, experienceSection, 400);
         Actions actions = new Actions(webDriver);
         while (nonNull(findElementBy(webDriver, SHOW_MORE_EXPERIENCES_BUTTON))) {
             scrollToAndClickSeeMoreExperiencesButton(webDriver, actions);
@@ -42,7 +42,7 @@ public class ExperienceScraper implements Scraper<String> {
 
     private void scrollToAndClickSeeMoreExperiencesButton(WebDriver webDriver, Actions actions) {
         WebElement showMoreExperiencesButton = findElementBy(webDriver, SHOW_MORE_EXPERIENCES_BUTTON);
-        scrollToElement(webDriver, showMoreExperiencesButton, 450);
+        scrollToElement(webDriver, showMoreExperiencesButton, 200);
         actions.moveToElement(showMoreExperiencesButton).pause(randomLong(1500, 2500)).click().perform();
     }
 
