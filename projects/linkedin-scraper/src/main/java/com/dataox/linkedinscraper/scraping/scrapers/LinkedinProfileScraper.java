@@ -8,8 +8,6 @@ import org.openqa.selenium.WebDriver;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
-import java.util.Map;
-
 /**
  * @author Dmitriy Lysko
  * @since 29/01/2021
@@ -29,7 +27,8 @@ public class LinkedinProfileScraper {
     private final InterestsScraper interestsScraper;
     private final LicenseScraper licenseScraper;
     private final RecommendationsScraper recommendationsScraper;
-    private final SkillsScraper skillsScraper;
+    private final AllSkillsScraper allSkillsScraper;
+    private final SkillsWithEndorsementsScraper skillsWithEndorsementsScraper;
     private final VolunteersScraper volunteersScraper;
 
     public CollectedProfileSourcesDTO scrape(WebDriver webDriver, String profileUrl) {
@@ -37,13 +36,14 @@ public class LinkedinProfileScraper {
         loginService.performLogin(webDriver);
         webDriver.get(profileUrl);
         CollectedProfileSourcesDTO profileSourcesDTO = new CollectedProfileSourcesDTO();
-        profileSourcesDTO.setHeaderSectionSource(headerSectionScraper.scrape(webDriver));
-        profileSourcesDTO.setAboutSectionSource(aboutSectionScraper.scrape(webDriver));
-        profileSourcesDTO.setExperiencesSource(experienceScraper.scrape(webDriver));
-        profileSourcesDTO.setEducationsSource(educationScraper.scrape(webDriver));
-        profileSourcesDTO.setLicenseSource(licenseScraper.scrape(webDriver));
-        profileSourcesDTO.setVolunteersSource(volunteersScraper.scrape(webDriver));
-        profileSourcesDTO.setSkillsSource(skillsScraper.scrape(webDriver));
+//        profileSourcesDTO.setHeaderSectionSource(headerSectionScraper.scrape(webDriver));
+//        profileSourcesDTO.setAboutSectionSource(aboutSectionScraper.scrape(webDriver));
+//        profileSourcesDTO.setExperiencesSource(experienceScraper.scrape(webDriver));
+//        profileSourcesDTO.setEducationsSource(educationScraper.scrape(webDriver));
+//        profileSourcesDTO.setLicenseSource(licenseScraper.scrape(webDriver));
+//        profileSourcesDTO.setVolunteersSource(volunteersScraper.scrape(webDriver));
+//        profileSourcesDTO.setSkillsWithEndorsementsSource(skillsWithEndorsementsScraper.scrape(webDriver));
+//        profileSourcesDTO.setAllSkillsSource(allSkillsScraper.scrape(webDriver));
         profileSourcesDTO.setRecommendationsSource(recommendationsScraper.scrape(webDriver));
         profileSourcesDTO.setInterestsSources(interestsScraper.scrape(webDriver));
         profileSourcesDTO.setUrlAndActivitiesSources(activitiesScraper.scrape(webDriver));

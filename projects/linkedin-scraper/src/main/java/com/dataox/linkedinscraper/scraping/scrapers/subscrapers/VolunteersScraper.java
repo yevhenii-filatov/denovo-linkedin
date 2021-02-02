@@ -1,7 +1,5 @@
 package com.dataox.linkedinscraper.scraping.scrapers.subscrapers;
 
-import com.dataox.CommonUtils;
-import com.dataox.WebDriverUtils;
 import com.dataox.linkedinscraper.scraping.scrapers.Scraper;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -29,7 +27,7 @@ public class VolunteersScraper implements Scraper<String> {
         scrollToElement(webDriver, volunteersSection, 300);
         randomSleep(2000, 5000);
         while (nonNull(findElementBy(webDriver, SHOW_MORE_EXPERIENCE))) {
-            scrollToShowMoreButtonAndClickIfPresent(webDriver);
+            scrollToShowMoreButtonAndClick(webDriver);
             randomSleep(3500, 5500);
         }
         randomSleep(1250, 3000);
@@ -37,7 +35,7 @@ public class VolunteersScraper implements Scraper<String> {
         return getElementHtml(volunteersSection);
     }
 
-    private void scrollToShowMoreButtonAndClickIfPresent(WebDriver webDriver) {
+    private void scrollToShowMoreButtonAndClick(WebDriver webDriver) {
         WebElement showMoreExperienceButton = findElementBy(webDriver, SHOW_MORE_EXPERIENCE);
         scrollToElement(webDriver, showMoreExperienceButton, 300);
         new Actions(webDriver).moveToElement(showMoreExperienceButton).pause(randomLong(1000, 1500)).click().perform();

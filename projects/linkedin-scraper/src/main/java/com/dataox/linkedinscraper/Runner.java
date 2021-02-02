@@ -24,12 +24,14 @@ public class Runner implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
         ChromeDriverLauncher chromeDriverLauncher = new ChromeDriverLauncher(chromeOptions);
-//        CollectedProfileSourcesDTO scrape = profileScraper.scrape("https://www.linkedin.com/in/alexander-demchenko/");
-//        CollectedProfileSourcesDTO scrape = profileScraper.scrape("https://www.linkedin.com/in/carly-savar-b99b537/");
         CollectedProfileSourcesDTO scrape;
         try (chromeDriverLauncher) {
-            scrape = profileScraper.scrape(chromeDriverLauncher.getWebDriver(), "https://www.linkedin.com/in/shelly-d-e-collins-3884482b/");
+         scrape = profileScraper.scrape(chromeDriverLauncher.getWebDriver(), "https://www.linkedin.com/in/alexander-demchenko/");
+//            scrape = profileScraper.scrape(chromeDriverLauncher.getWebDriver(), "https://www.linkedin.com/in/carly-savar-b99b537/");
+//         scrape = profileScraper.scrape("https://www.linkedin.com/in/dmitriy-lysko-607130160/");
+//         scrape = profileScraper.scrape("https://www.linkedin.com/in/duquene-mercier-pierre-108812196/");
 //            scrape = profileScraper.scrape(chromeDriverLauncher.getWebDriver(), "https://www.linkedin.com/in/pin-chun-liu-021a5695/");
+//            scrape = profileScraper.scrape(chromeDriverLauncher.getWebDriver(), "https://www.linkedin.com/in/shelly-d-e-collins-3884482b/");
         }
         System.out.println(scrape);
     }

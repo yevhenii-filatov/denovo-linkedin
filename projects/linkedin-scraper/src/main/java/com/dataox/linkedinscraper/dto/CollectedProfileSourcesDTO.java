@@ -18,8 +18,9 @@ public class CollectedProfileSourcesDTO {
     String aboutSectionSource;
     String experiencesSource;
     String educationsSource;
-    String recommendationsSource;
-    String skillsSource;
+    Map<String, String> recommendationsSource;
+    List<String> skillsWithEndorsementsSource;
+    String allSkillsSource;
     String licenseSource;
     String volunteersSource;
     Map<String,String> interestsSources;
