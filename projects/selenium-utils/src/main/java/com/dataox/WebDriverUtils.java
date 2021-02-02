@@ -76,7 +76,7 @@ public final class WebDriverUtils {
 
     public static void scrollToElement(WebDriver webDriver, WebElement webElement, int topPanelSize) {
         int currentScrollY = webElement.getLocation().getY();
-        currentScrollY = getScrollY(webDriver) > currentScrollY ? currentScrollY - topPanelSize : currentScrollY + topPanelSize;
+        currentScrollY = getScrollY(webDriver) > currentScrollY ? currentScrollY + topPanelSize : currentScrollY - topPanelSize;
         scrollTo(webDriver, currentScrollY);
     }
 
