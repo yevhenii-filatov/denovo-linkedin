@@ -48,7 +48,7 @@ public class ExperienceScraper implements Scraper<String> {
 
     private void clickAllSeeMoreButtons(WebDriver webDriver, Actions actions) {
         WebElement firstButton = webDriver.findElements(SEE_MORE_BUTTON).get(0);
-        scrollToElement(webDriver,firstButton,200);
+        scrollToElement(webDriver,firstButton,500);
         for (WebElement seeMoreButton : webDriver.findElements(SEE_MORE_BUTTON)) {
             scrollToElement(webDriver, seeMoreButton, 500);
             actions.moveToElement(seeMoreButton).pause(randomLong(1000, 2000)).click().perform();

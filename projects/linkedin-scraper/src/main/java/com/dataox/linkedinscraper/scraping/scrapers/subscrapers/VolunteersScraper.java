@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import static com.dataox.CommonUtils.*;
 import static com.dataox.WebDriverUtils.*;
+import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 /**
@@ -24,6 +25,8 @@ public class VolunteersScraper implements Scraper<String> {
     @Override
     public String scrape(WebDriver webDriver) {
         WebElement volunteersSection = findElementBy(webDriver, VOLUNTEERS_SECTION);
+        if (isNull(volunteersSection))
+            return "";
         scrollToElement(webDriver, volunteersSection, 300);
         randomSleep(2000, 5000);
         while (nonNull(findElementBy(webDriver, SHOW_MORE_EXPERIENCE))) {
