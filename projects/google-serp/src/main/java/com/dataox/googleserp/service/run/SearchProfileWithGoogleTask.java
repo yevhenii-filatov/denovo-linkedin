@@ -15,7 +15,6 @@ import java.util.Objects;
 
 import static com.dataox.googleserp.util.GoogleSearchParameters.prepareParameter;
 
-
 /**
  * @author Yevhenii Filatov
  * @since 12/24/20

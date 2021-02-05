@@ -11,7 +11,7 @@ spring:
 
 app:
   search:
-    minutes-for-one-task: 10
+    tasks-timeout:
     retry-attempts: 10
     concurrency-restriction: 100
     user-agent: 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36'
@@ -23,7 +23,7 @@ app:
       enabled: true
   proxy:
     operia:
-      key: 06931f4c8ef70f72
+      key: [ OPERIA_KEY ]
   scheduling:
     enabled: false
     search:

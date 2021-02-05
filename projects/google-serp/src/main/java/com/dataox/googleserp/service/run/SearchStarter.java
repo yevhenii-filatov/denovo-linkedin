@@ -13,14 +13,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.awaitility.Awaitility;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
+import java.util.Set;
+import java.util.concurrent.*;
 import java.util.stream.Collectors;
 
 import static com.dataox.googleserp.util.NotificationUtils.createErrorMessage;
+import static com.dataox.googleserp.util.NotificationUtils.createSearchFailedMessage;
 
 @Slf4j
 @Service
@@ -33,12 +34,14 @@ public class SearchStarter {
     private final SearchResultRepository searchResultRepository;
     private final SearchProperties searchProperties;
     private final NotificationsService notificationsService;
+    private static final String ALREADY_SEARCHED_ERROR_MESSAGE = "Can't start search with DenovoIds. Already searched";
+    private static final String NO_DATA_TO_SEARCH_ERROR_MESSAGE = "Not searched data is not present in database!";
 
     public void startSearchWithDenovoIds(List<Long> denovoIds) {
         List<InitialData> initialData = initialDataRepository.findAllByDenovoIdInAndSearchedFalse(denovoIds);
         if (initialData.isEmpty()) {
-            log.error("Can't start search with DenovoIds. Already searched: {}", denovoIds);
-            throw new SearchException("Can't start search with DenovoIds. Already searched: {}");
+            log.error(ALREADY_SEARCHED_ERROR_MESSAGE + " {}", denovoIds);
+            throw new SearchException(ALREADY_SEARCHED_ERROR_MESSAGE);
         }
         CompletableFuture.runAsync(() -> {
             startSearchWithInitialData(initialData);
@@ -53,10 +56,9 @@ public class SearchStarter {
     public void startSearchForNotSearchedInitialData() {
         List<InitialData> notSearchedInitialData = initialDataRepository.findAllBySearchedFalse();
         if (notSearchedInitialData.isEmpty()) {
-            log.error("Not searched data is not present in database!");
-            throw new SearchException("Not searched data is not present in database!");
+            log.error(NO_DATA_TO_SEARCH_ERROR_MESSAGE);
+            throw new SearchException(NO_DATA_TO_SEARCH_ERROR_MESSAGE);
         }
-        log.info("Staring search for not searched initial data");
         CompletableFuture.runAsync(() -> startSearchWithInitialData(notSearchedInitialData))
                 .exceptionally(throwable -> {
                     notificationsService.sendInternal(createErrorMessage(throwable));
@@ -70,7 +72,13 @@ public class SearchStarter {
 
         log.info("Starting search for denovoIds: {}", denovoIdsToSearch);
         List<? extends Future<?>> futureList = submitTasks(searchProfileWithGoogleTasks);
-        waitUntilTasksIsDone(searchProfileWithGoogleTasks, futureList);
+        try {
+            waitUntilTasksIsDone(searchProfileWithGoogleTasks, futureList);
+            sendExceptionsInternalIfPresent(futureList);
+        } catch (Exception e) {
+            log.error("Failed to search for denovoIds: {}", denovoIdsToSearch);
+            notificationsService.sendInternal(createSearchFailedMessage(e, denovoIdsToSearch));
+        }
     }
 
     private List<? extends Future<?>> submitTasks(List<SearchProfileWithGoogleTask> searchProfileWithGoogleTasks) {
@@ -81,14 +89,35 @@ public class SearchStarter {
 
     private void waitUntilTasksIsDone(List<SearchProfileWithGoogleTask> searchProfileWithGoogleTasks,
                                       List<? extends Future<?>> futureList) {
-        long minutesToWait = searchProfileWithGoogleTasks.size() * searchProperties.getMinutesForOneTask();
+        int tasksAmount = Math.max(searchProfileWithGoogleTasks.size(), 100);
+        long minutesToWait = (tasksAmount / searchProperties.getConcurrencyRestriction()) * searchProperties.getTasksTimeOut();
         try {
             Awaitility.await().atMost(minutesToWait, TimeUnit.MINUTES).until(() -> futureList.stream().allMatch(Future::isDone));
         } catch (Exception e) {
-//            futureList.forEach(future -> future.cancel(false));
-//            log.error("Canceled all tasks in the batch");
+            futureList.forEach(future -> future.cancel(true));
+            log.error("Canceled all tasks in the batch");
             throw e;
         }
+    }
+
+    private void sendExceptionsInternalIfPresent(List<? extends Future<?>> futureList) {
+        List<Throwable> exceptions = collectExceptionsFromTasks(futureList);
+        if (!exceptions.isEmpty())
+            notificationsService.sendInternal(createErrorMessage(exceptions));
+    }
+
+    private List<Throwable> collectExceptionsFromTasks(List<? extends Future<?>> futureList) {
+        Set<Class<? extends Throwable>> exceptionsClasses = new HashSet<>();
+        List<Throwable> exceptions = new ArrayList<>();
+        for (Future<?> future : futureList) {
+            try {
+                future.get();
+            } catch (InterruptedException | ExecutionException e) {
+                if (exceptionsClasses.add(e.getCause().getClass()))
+                    exceptions.add(e);
+            }
+        }
+        return exceptions;
     }
 
     private List<SearchProfileWithGoogleTask> createSearchProfileWithGoogleTasks(List<InitialData> initialData) {

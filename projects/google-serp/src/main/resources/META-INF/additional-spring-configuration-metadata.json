@@ -37,14 +37,14 @@
     },
     {
       "name": "app.scheduling.enabled",
-      "type": "java.lang.String",
+      "type": "java.lang.Boolean",
       "description": "Enable scheduling search for not searched initial data.",
-      "defaultValue": true
+      "defaultValue": false
     },
     {
-      "name": "app.search.minutes-for-one-task",
-      "type": "java.lang.String",
-      "description": "Time in minutes allotted for one search task to be done."
+      "name": "app.search.tasks-timeout",
+      "type": "java.lang.Long",
+      "description": "Time in minutes allotted for amount of tasks defined in 'concurrency-restriction' property to complete."
     }
   ]
 }

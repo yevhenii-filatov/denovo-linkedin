@@ -6,6 +6,7 @@ import com.dataox.googleserp.model.search.SearchQuery;
 import com.dataox.googleserp.service.parsing.GoogleSearchResultHtmlParser;
 import com.dataox.googleserp.service.parsing.SearchResultParser;
 import com.dataox.googleserp.util.BeanUtils;
+import com.dataox.googleserp.util.NotificationUtils;
 import com.dataox.notificationservice.service.NotificationsService;
 import com.dataox.okhttputils.OkHttpTemplate;
 import lombok.RequiredArgsConstructor;
@@ -42,12 +43,7 @@ public class GoogleSearchProvider extends AbstractSearchProvider<Element> {
             return Jsoup.parse(pageSource, queryUrl);
         } catch (IOException e) {
             if (currentAttempt >= searchProperties.getRetryAttempts()) {
-                String errorMessage = String.format("FAILED TO FETCH URL %s%nEXCEPTION TYPE: %s%nDESCRIPTION: %s%n",
-                        queryUrl,
-                        e.getClass().getName(),
-                        e.getMessage()
-                );
-                notificationService.sendInternal(errorMessage);
+                notificationService.sendInternal(NotificationUtils.createSearchErrorMessage(e, queryUrl));
                 return null;
             }
             log.error("SCRAPING ATTEMPT #{} FAILED FOR URL {}", currentAttempt, queryUrl);
