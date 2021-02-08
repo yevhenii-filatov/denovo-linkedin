@@ -14,6 +14,10 @@ public final class NotificationUtils {
     private static final String newLineCharacter = UriEncoder.encode("\n");
 
     public static String createErrorMessage(Throwable e) {
+        return "Error occurred while starting search: ".concat(newLineCharacter).concat(errorToString(e));
+    }
+
+    private static String errorToString(Throwable e) {
         String errorName = "Exception class name: " + e.getClass().getName();
         String errorMessage = "Exception message: " + e.getMessage();
         return String.join(newLineCharacter, errorName, errorMessage);
