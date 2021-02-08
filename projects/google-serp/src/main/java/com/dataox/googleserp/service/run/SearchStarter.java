@@ -38,32 +38,46 @@ public class SearchStarter {
     private static final String NO_DATA_TO_SEARCH_ERROR_MESSAGE = "Not searched data is not present in database!";
 
     public void startSearchWithDenovoIds(List<Long> denovoIds) {
-        List<InitialData> initialData = initialDataRepository.findAllByDenovoIdInAndSearchedFalse(denovoIds);
-        if (initialData.isEmpty()) {
-            log.error(ALREADY_SEARCHED_ERROR_MESSAGE + " {}", denovoIds);
-            throw new SearchException(ALREADY_SEARCHED_ERROR_MESSAGE);
+        try {
+            List<InitialData> initialData = initialDataRepository.findAllByDenovoIdInAndSearchedFalse(denovoIds);
+            if (initialData.isEmpty()) {
+                log.error(ALREADY_SEARCHED_ERROR_MESSAGE + " {}", denovoIds);
+                throw new SearchException(ALREADY_SEARCHED_ERROR_MESSAGE);
+            }
+            CompletableFuture.runAsync(() -> {
+                startSearchWithInitialData(initialData);
+                List<Long> searchResultsIds = getResultsIdsByInitialData(initialData);
+                searchResultSender.sendSearchResultIdsToLoadBalancer(searchResultsIds);
+            }).exceptionally(throwable -> {
+                notificationsService.sendInternal(createErrorMessage(throwable));
+                return null;
+            });
+        } catch (SearchException e) {
+            throw e;
+        } catch (Exception e) {
+            notificationsService.sendInternal(createErrorMessage(e));
+            throw e;
         }
-        CompletableFuture.runAsync(() -> {
-            startSearchWithInitialData(initialData);
-            List<Long> searchResultsIds = getResultsIdsByInitialData(initialData);
-            searchResultSender.sendSearchResultIdsToLoadBalancer(searchResultsIds);
-        }).exceptionally(throwable -> {
-            notificationsService.sendInternal(createErrorMessage(throwable));
-            return null;
-        });
     }
 
     public void startSearchForNotSearchedInitialData() {
-        List<InitialData> notSearchedInitialData = initialDataRepository.findAllBySearchedFalse();
-        if (notSearchedInitialData.isEmpty()) {
-            log.error(NO_DATA_TO_SEARCH_ERROR_MESSAGE);
-            throw new SearchException(NO_DATA_TO_SEARCH_ERROR_MESSAGE);
+        try {
+            List<InitialData> notSearchedInitialData = initialDataRepository.findAllBySearchedFalse();
+            if (notSearchedInitialData.isEmpty()) {
+                log.error(NO_DATA_TO_SEARCH_ERROR_MESSAGE);
+                throw new SearchException(NO_DATA_TO_SEARCH_ERROR_MESSAGE);
+            }
+            CompletableFuture.runAsync(() -> startSearchWithInitialData(notSearchedInitialData))
+                    .exceptionally(throwable -> {
+                        notificationsService.sendInternal(createErrorMessage(throwable));
+                        return null;
+                    });
+        } catch (SearchException e) {
+            throw e;
+        } catch (Exception e) {
+            notificationsService.sendInternal(createErrorMessage(e));
+            throw e;
         }
-        CompletableFuture.runAsync(() -> startSearchWithInitialData(notSearchedInitialData))
-                .exceptionally(throwable -> {
-                    notificationsService.sendInternal(createErrorMessage(throwable));
-                    return null;
-                });
     }
 
     private synchronized void startSearchWithInitialData(List<InitialData> initialData) {

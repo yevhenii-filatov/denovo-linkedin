@@ -39,4 +39,9 @@ public class SearchController {
     public ResponseEntity<String> handleStartSearchException(SearchException e) {
         return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(e.getMessage());
     }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<String> handleException(Exception e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to start search: ".concat(e.getMessage()));
+    }
 }
