@@ -33,7 +33,7 @@ public class ExperienceScraper implements Scraper<String> {
         Actions actions = new Actions(webDriver);
         while (nonNull(findElementBy(webDriver, SHOW_MORE_EXPERIENCES_BUTTON))) {
             scrollToAndClickSeeMoreExperiencesButton(webDriver, actions);
-            randomSleep(2500, 4500);
+            randomSleep(6000, 10000);
         }
         clickAllSeeMoreButtons(webDriver, actions);
         experienceSection = findElementBy(webDriver, EXPERIENCE_SECTION);

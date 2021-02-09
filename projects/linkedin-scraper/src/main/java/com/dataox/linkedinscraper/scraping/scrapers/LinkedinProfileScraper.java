@@ -24,12 +24,13 @@ public class LinkedinProfileScraper {
     private final EducationScraper educationScraper;
     private final ExperienceScraper experienceScraper;
     private final HeaderSectionScraper headerSectionScraper;
-    private final InterestsScraper interestsScraper;
     private final LicenseScraper licenseScraper;
     private final RecommendationsScraper recommendationsScraper;
     private final AllSkillsScraper allSkillsScraper;
     private final SkillsWithEndorsementsScraper skillsWithEndorsementsScraper;
     private final VolunteersScraper volunteersScraper;
+    private final InterestsScraper interestsScraper;
+    private final AccomplishmentsScraper accomplishmentsScraper;
 
     public CollectedProfileSourcesDTO scrape(WebDriver webDriver, String profileUrl) {
         webDriver.get(LINKEDIN_LOGIN_PAGE_URL);
@@ -44,6 +45,7 @@ public class LinkedinProfileScraper {
         profileSourcesDTO.setVolunteersSource(volunteersScraper.scrape(webDriver));
         profileSourcesDTO.setSkillsWithEndorsementsSource(skillsWithEndorsementsScraper.scrape(webDriver));
         profileSourcesDTO.setAllSkillsSource(allSkillsScraper.scrape(webDriver));
+        profileSourcesDTO.setAccomplishmentsSources(accomplishmentsScraper.scrape(webDriver));
         profileSourcesDTO.setRecommendationsSource(recommendationsScraper.scrape(webDriver));
         profileSourcesDTO.setInterestsSources(interestsScraper.scrape(webDriver));
         profileSourcesDTO.setUrlAndActivitiesSources(activitiesScraper.scrape(webDriver));

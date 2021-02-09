@@ -39,8 +39,7 @@ public class RecommendationsScraper implements Scraper<Map<String, String>> {
         WebElement recommendationSection = findElementBy(webDriver, RECOMMENDATION_SECTION);
         if (isNull(recommendationSection))
             return Collections.emptyMap();
-        else
-            scrollToElement(webDriver, recommendationSection, 450);
+        scrollToElement(webDriver, recommendationSection, 450);
 
         Map<String, String> recommendations = new HashMap<>();
         if (isNull(findElementBy(webDriver, ZERO_RECEIVED_RECOMMENDATIONS)))
