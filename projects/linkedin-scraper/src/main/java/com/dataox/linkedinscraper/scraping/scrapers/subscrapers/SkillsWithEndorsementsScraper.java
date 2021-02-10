@@ -43,10 +43,10 @@ public class SkillsWithEndorsementsScraper implements Scraper<Map<String, List<S
         WebElement showMoreSkillsButton = findElementBy(webDriver, SHOW_MORE_SKILLS);
         if (nonNull(showMoreSkillsButton))
             scrollToAndClickOnElement(webDriver, showMoreSkillsButton);
-        WebElement firstSkill = webDriver.findElements(SKILLS_WITH_ENDORSEMENTS).get(0);
-        if (isNull(firstSkill))
+        List<WebElement> skillsWithEndorsements = webDriver.findElements(SKILLS_WITH_ENDORSEMENTS);
+        if (skillsWithEndorsements.isEmpty())
             return Collections.emptyMap();
-        scrollToElement(webDriver, firstSkill, 400);
+        scrollToElement(webDriver, skillsWithEndorsements.get(0), 400);
         return collectSkillsSources(webDriver, wait);
     }
 

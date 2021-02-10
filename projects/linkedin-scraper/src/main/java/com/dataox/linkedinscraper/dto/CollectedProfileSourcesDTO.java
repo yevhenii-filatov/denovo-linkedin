@@ -25,5 +25,5 @@ public class CollectedProfileSourcesDTO {
     Map<String, List<String>> skillsWithEndorsementsSource;
     Map<String, String> recommendationsSource;
     Map<String, String> interestsSources;
-    Map<String, String> urlAndActivitiesSources;
+    Map<String, String> postUrlAndActivitySource;
 }

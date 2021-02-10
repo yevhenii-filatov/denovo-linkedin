@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import static com.dataox.CommonUtils.randomLong;
 import static com.dataox.CommonUtils.randomSleep;
 import static com.dataox.WebDriverUtils.*;
+import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 /**
@@ -25,6 +26,8 @@ public class LicenseScraper implements Scraper<String> {
     @Override
     public String scrape(WebDriver webDriver) {
         WebElement certificatesSection = findElementBy(webDriver, CERTIFICATES_SECTION);
+        if (isNull(certificatesSection))
+            return "";
         scrollToElement(webDriver, certificatesSection, 300);
         randomSleep(2000, 5000);
         while (nonNull(findElementBy(webDriver, SHOW_MORE_CERTIFICATES))) {
