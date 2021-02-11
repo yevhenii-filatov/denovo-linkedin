@@ -51,11 +51,8 @@ public class InterestsScraper implements Scraper<Map<String, String>> {
         Map<String, String> groupAndInterestSource = new HashMap<>();
         WebDriverWait wait = new WebDriverWait(webDriver, 45);
         Actions actions = new Actions(webDriver);
-        WebElement seeAllButton = findElementBy(webDriver, SEE_ALL_BUTTON);
-        scrollToElement(webDriver, seeAllButton, 450);
-        randomSleep(2500, 4500);
-        actions.moveToElement(seeAllButton).pause(randomLong(2500, 4500)).click().perform();
-        wait.until(ExpectedConditions.presenceOfElementLocated(POPUP_INTERESTS_WINDOW));
+
+        clickSeeAllButton(webDriver, wait, actions);
         for (WebElement tab : webDriver.findElements(TAB_LIST)) {
             actions.moveToElement(tab).pause(randomLong(1500, 4000)).click().perform();
             randomSleep(1500, 4000);
@@ -66,5 +63,13 @@ public class InterestsScraper implements Scraper<Map<String, String>> {
         }
         actions.moveToElement(findElementBy(webDriver, CLOSE_POPUP_BUTTON)).pause(randomLong(1500, 4000)).click().perform();
         return groupAndInterestSource;
+    }
+
+    private void clickSeeAllButton(WebDriver webDriver, WebDriverWait wait, Actions actions) {
+        WebElement seeAllButton = findElementBy(webDriver, SEE_ALL_BUTTON);
+        scrollToElement(webDriver, seeAllButton, 450);
+        randomSleep(2500, 4500);
+        actions.moveToElement(seeAllButton).pause(randomLong(2500, 4500)).click().perform();
+        wait.until(ExpectedConditions.presenceOfElementLocated(POPUP_INTERESTS_WINDOW));
     }
 }
