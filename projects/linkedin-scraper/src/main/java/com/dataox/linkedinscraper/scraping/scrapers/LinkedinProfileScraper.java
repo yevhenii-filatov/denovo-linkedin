@@ -38,6 +38,7 @@ public class LinkedinProfileScraper {
         webDriver.get(profileUrl);
         CollectedProfileSourcesDTO profileSourcesDTO = new CollectedProfileSourcesDTO();
         profileSourcesDTO.setHeaderSectionSource(headerSectionScraper.scrape(webDriver));
+        profileSourcesDTO.setProfilePhotosUrl(headerSectionScraper.scrapeProfilePhotoUrl(webDriver));
         profileSourcesDTO.setAboutSectionSource(aboutSectionScraper.scrape(webDriver));
         profileSourcesDTO.setExperiencesSource(experienceScraper.scrape(webDriver));
         profileSourcesDTO.setEducationsSource(educationScraper.scrape(webDriver));

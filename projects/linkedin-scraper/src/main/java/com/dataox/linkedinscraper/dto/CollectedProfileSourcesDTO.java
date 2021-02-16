@@ -14,6 +14,7 @@ import java.util.Map;
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CollectedProfileSourcesDTO {
+    String profilePhotosUrl;
     String headerSectionSource;
     String aboutSectionSource;
     String experiencesSource;
