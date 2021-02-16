@@ -46,8 +46,8 @@ public class LinkedinProfileScraper {
         profileSourcesDTO.setVolunteersSource(volunteersScraper.scrape(webDriver));
         profileSourcesDTO.setSkillsWithEndorsementsSource(skillsWithEndorsementsScraper.scrape(webDriver));
         profileSourcesDTO.setAllSkillsSource(allSkillsScraper.scrape(webDriver));
-        profileSourcesDTO.setAccomplishmentsSources(accomplishmentsScraper.scrape(webDriver));
         profileSourcesDTO.setRecommendationsSource(recommendationsScraper.scrape(webDriver));
+        profileSourcesDTO.setAccomplishmentsSources(accomplishmentsScraper.scrape(webDriver));
         profileSourcesDTO.setInterestsSources(interestsScraper.scrape(webDriver));
         profileSourcesDTO.setPostUrlAndActivitySource(activitiesScraper.scrape(webDriver));
         return profileSourcesDTO;
