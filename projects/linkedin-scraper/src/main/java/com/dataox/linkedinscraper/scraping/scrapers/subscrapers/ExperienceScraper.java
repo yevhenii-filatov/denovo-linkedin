@@ -44,18 +44,21 @@ public class ExperienceScraper implements Scraper<String> {
 
     private void clickAllShowMoreRolesButtons(WebDriver webDriver, Actions actions) {
         List<WebElement> showMoreRoles = webDriver.findElements(SHOW_MORE_ROLES_BUTTON);
-        if (!showMoreRoles.isEmpty())
+        while (!showMoreRoles.isEmpty()) {
             for (WebElement showMoreRole : showMoreRoles) {
                 scrollToElement(webDriver, showMoreRole, 450);
                 actions.moveToElement(showMoreRole).pause(randomLong(2000, 3000)).click().perform();
-                randomSleep(1500,3000);
+                randomSleep(4000, 6000);
             }
+            showMoreRoles = webDriver.findElements(SHOW_MORE_ROLES_BUTTON);
+        }
     }
 
     private void scrollToAndClickSeeMoreExperiencesButton(WebDriver webDriver, Actions actions) {
         WebElement showMoreExperiencesButton = findElementBy(webDriver, SHOW_MORE_EXPERIENCES_BUTTON);
-        scrollToElement(webDriver, showMoreExperiencesButton, 200);
+        scrollToElement(webDriver, showMoreExperiencesButton, 400);
         actions.moveToElement(showMoreExperiencesButton).pause(randomLong(1500, 2500)).click().perform();
+        randomSleep(2500, 5000);
     }
 
     private void clickAllSeeMoreButtons(WebDriver webDriver, Actions actions) {
@@ -64,7 +67,7 @@ public class ExperienceScraper implements Scraper<String> {
             for (WebElement seeMoreButton : seeMoreButtons) {
                 scrollToElement(webDriver, seeMoreButton, 500);
                 actions.moveToElement(seeMoreButton).pause(randomLong(1000, 2000)).click().perform();
-                randomSleep(1500,3000);
+                randomSleep(1500, 3000);
             }
     }
 

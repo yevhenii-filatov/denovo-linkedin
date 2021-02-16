@@ -21,7 +21,7 @@ import static java.util.Objects.nonNull;
 public class EducationScraper implements Scraper<String> {
 
     private static final By EDUCATION_SECTION = By.xpath("//section[@id='education-section']");
-    private static final By SHOW_MORE_EDUCATIONS_BUTTON = By.xpath("//section[@id='education-section']//button[starts-with(text(),'Show ')]");
+    private static final By SHOW_MORE_EDUCATIONS_BUTTON = By.xpath("//section[@id='education-section']//button[contains(text(),'more education')]");
 
     @Override
     public String scrape(WebDriver webDriver) {
