@@ -43,6 +43,6 @@ public final class CommonUtils {
     }
 
     public static long randomLong(int min, int max) {
-        return new Random().nextInt(max - min + 1);
+        return new Random().nextInt(max - min) + min;
     }
 }

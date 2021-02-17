@@ -1,6 +1,7 @@
 package com.dataox;
 
 import org.openqa.selenium.*;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -118,6 +119,10 @@ public final class WebDriverUtils {
     public static void deleteDataFromTextFieldWithKeyboard(WebElement element) {
         element.sendKeys(Keys.CONTROL, "a");
         element.sendKeys(Keys.DELETE);
+    }
+
+    public static void clickOnElement(WebElement elementToClick, Actions actions,Long pause) {
+        actions.moveToElement(elementToClick).pause(pause).click().perform();
     }
 
     public enum ScrollingDirection {
