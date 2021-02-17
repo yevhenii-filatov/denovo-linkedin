@@ -17,7 +17,8 @@ public enum LinkedinError implements Error {
     PROFILE_IS_NOT_AVAILABLE("24", "Profile is not available", false),
     PAGE_NOT_FOUND("25", "Page not found", false),
     OOPS_ITS_NOT_YOU_ITS_US("26", "Unexpected error on Linkedin side", false),
-    DONT_HAVE_ACCESS_TO_PROFILE("27", "The profiles of members who are outside your network have limited visibility", false);
+    DONT_HAVE_ACCESS_TO_PROFILE("27", "The profiles of members who are outside your network have limited visibility", false),
+    ISNT_QUITE_RIGHT("28","We noticed unusual activity from your account.",false);
 
     String code;
     String message;

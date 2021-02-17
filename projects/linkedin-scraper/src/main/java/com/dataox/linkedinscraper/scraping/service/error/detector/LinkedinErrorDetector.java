@@ -18,6 +18,7 @@ public class LinkedinErrorDetector {
     private static final By EMAIL_VERIFICATION_FORM_SELECTOR = By.xpath("//h2[contains(text(),'code we sent to your email')]");
     private static final By RESTRICTION_HEADING_SELECTOR = By.xpath("//h1[contains(text(),'restricted your account temporarily')]");
     private static final By BAN_HEADING_SELECTOR = By.xpath("//h1[contains(text(),'Your account has been restricted')]");
+    private static final By ISNT_QUITE_RIGHT = By.xpath("//main/h1[text()='Something isn’t quite right']");
 
     public LinkedinError detect(WebDriver webDriver) {
         if (banDetected(webDriver)) {
@@ -43,7 +44,13 @@ public class LinkedinErrorDetector {
         }
         if (dontHaveAccessToThisProfile(webDriver))
             return LinkedinError.DONT_HAVE_ACCESS_TO_PROFILE;
+        if(isntQuiteRight(webDriver))
+            return LinkedinError.ISNT_QUITE_RIGHT;
         return LinkedinError.NO_ERRORS;
+    }
+
+    private boolean isntQuiteRight(WebDriver webDriver) {
+        return Objects.nonNull(WebDriverUtils.findElementBy(webDriver, ISNT_QUITE_RIGHT));
     }
 
     private boolean dontHaveAccessToThisProfile(WebDriver webDriver) {

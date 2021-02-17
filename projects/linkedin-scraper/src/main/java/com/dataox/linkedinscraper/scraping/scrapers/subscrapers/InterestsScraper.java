@@ -3,6 +3,7 @@ package com.dataox.linkedinscraper.scraping.scrapers.subscrapers;
 import com.dataox.linkedinscraper.dto.types.InterestsType;
 import com.dataox.linkedinscraper.scraping.scrapers.Scraper;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -54,14 +55,14 @@ public class InterestsScraper implements Scraper<Map<String, String>> {
 
         clickSeeAllButton(webDriver, wait, actions);
         for (WebElement tab : webDriver.findElements(TAB_LIST)) {
-            actions.moveToElement(tab).pause(randomLong(1500, 4000)).click().perform();
+            clickOnElement(tab,actions,randomLong(750,1500));
             randomSleep(1500, 4000);
             WebElement interestsPopup = findElementBy(webDriver, POPUP_INTERESTS_WINDOW);
             String group = tab.getText();
             groupAndInterestSource.put(group, getElementHtml(interestsPopup));
             randomSleep(1500, 4000);
         }
-        actions.moveToElement(findElementBy(webDriver, CLOSE_POPUP_BUTTON)).pause(randomLong(1500, 4000)).click().perform();
+        clickOnElement(findElementBy(webDriver, CLOSE_POPUP_BUTTON),actions,randomLong(750,1500));
         return groupAndInterestSource;
     }
 
@@ -69,7 +70,7 @@ public class InterestsScraper implements Scraper<Map<String, String>> {
         WebElement seeAllButton = findElementBy(webDriver, SEE_ALL_BUTTON);
         scrollToElement(webDriver, seeAllButton, 450);
         randomSleep(2500, 4500);
-        actions.moveToElement(seeAllButton).pause(randomLong(2500, 4500)).click().perform();
+        clickOnElement(seeAllButton,actions,randomLong(750,1500));
         wait.until(ExpectedConditions.presenceOfElementLocated(POPUP_INTERESTS_WINDOW));
     }
 }

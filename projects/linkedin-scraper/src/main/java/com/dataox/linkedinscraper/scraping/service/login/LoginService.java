@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.stereotype.Service;
@@ -16,7 +17,9 @@ import org.springframework.stereotype.Service;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
+import static com.dataox.CommonUtils.randomLong;
 import static com.dataox.WebDriverUtils.*;
+import static java.util.Objects.nonNull;
 
 /**
  * @author Dmitriy Lysko
@@ -34,19 +37,27 @@ public class LoginService {
     private static final By PASSWORD_INPUT_FIELD = By.xpath("//input[@autocomplete='current-password']");
     private static final By SUBMIT_BUTTON = By.xpath("//button[@class='sign-in-form__submit-button'][@type='submit']");
     private static final By PROFILE_SECTION = By.xpath("//div[contains(@class,'artdeco-card overflow-hidden')]");
+    private static final By CAPTCHA_FORM = By.cssSelector("form#captcha-challenge");
 
     public void performLogin(WebDriver webDriver) {
         log.info("Performing login to linkedin with user credentials: {}", accountCredentials);
         WebDriverWait wait = new WebDriverWait(webDriver, 60);
         fillFieldsAndSubmitForm(webDriver);
         LinkedinError linkedinError = errorDetector.detect(webDriver);
-        if (linkedinError.isCritical()) {
+        if (linkedinError != LinkedinError.NO_ERRORS) {
             //send internal error notification
             log.error("Can't login into account. Error occurred {}", linkedinError);
         }
-        captchaSolver.solve(webDriver);
+        solveCaptcha(webDriver);
         wait.until(ExpectedConditions.presenceOfElementLocated(PROFILE_SECTION));
         System.out.println("d");
+    }
+
+    private void solveCaptcha(WebDriver webDriver) {
+        captchaSolver.solve(webDriver);
+        WebElement captchaForm = findElementBy(webDriver, CAPTCHA_FORM);
+        if (nonNull(captchaForm))
+            captchaForm.submit();
     }
 
     private void fillFieldsAndSubmitForm(WebDriver webDriver) {
@@ -54,6 +65,6 @@ public class LoginService {
         WebElement passwordInputField = webDriver.findElement(PASSWORD_INPUT_FIELD);
         enterDataIntoTextFieldWithKeyboard(loginInputField, accountCredentials.getLogin());
         enterDataIntoTextFieldWithKeyboard(passwordInputField, accountCredentials.getPassword());
-        webDriver.findElement(SUBMIT_BUTTON).click();
+        clickOnElement(webDriver.findElement(SUBMIT_BUTTON), new Actions(webDriver), randomLong(1500, 2500));
     }
 }

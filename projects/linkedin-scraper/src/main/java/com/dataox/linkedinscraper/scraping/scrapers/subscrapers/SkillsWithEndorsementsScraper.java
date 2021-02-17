@@ -24,7 +24,7 @@ import static java.util.Objects.nonNull;
 @Service
 public class SkillsWithEndorsementsScraper implements Scraper<Map<String, List<String>>> {
 
-    private static final int SCROLL_STEP = 100;
+    private static final int SCROLL_STEP = 500;
     private static final String TOP_CATEGORY_NAME = "Top";
     private static final By SKILLS_POPUP_WINDOW = By.xpath("//div[@role='dialog']");
     private static final By CLOSE_POPUP_SKILLS_WINDOW_BUTTON = By.xpath("//div[@role='dialog']/button[@aria-label='Dismiss']");
@@ -87,22 +87,24 @@ public class SkillsWithEndorsementsScraper implements Scraper<Map<String, List<S
         scrollToAndClickOnElement(webDriver, endorsementButton);
         wait.until(ExpectedConditions.elementToBeClickable(CLOSE_POPUP_SKILLS_WINDOW_BUTTON));
         sources.add(getElementHtml(findElementBy(webDriver, SKILLS_POPUP_WINDOW)));
-        randomSleep(4500, 6500);
+        randomSleep(1500, 2000);
         scrollToTheBottomOfPopUp(webDriver);
         WebElement closeButton = findElementBy(webDriver, CLOSE_POPUP_SKILLS_WINDOW_BUTTON);
         new Actions(webDriver).moveToElement(closeButton).pause(randomLong(1000, 1500)).click().perform();
-        randomSleep(2500, 4500);
+        randomSleep(750, 1500);
     }
 
     private void scrollToTheBottomOfPopUp(WebDriver webDriver) {
         int desiredScrollY = 0;
         WebElement scrollingArea = findElementBy(webDriver, By.xpath(POPUP_SCROLLING_AREA));
-        Long currentScroll = getCurrentScrollYInElement(webDriver, scrollingArea);
-        while (desiredScrollY == currentScroll) {
+        Long beforeScroll;
+        Long afterScroll;
+        do {
+            beforeScroll = getCurrentScrollYInElement(webDriver, scrollingArea);
             executeJavascript(webDriver, "arguments[0].scrollTop=arguments[1]", scrollingArea, desiredScrollY += SCROLL_STEP);
-            currentScroll = getCurrentScrollYInElement(webDriver, scrollingArea);
-            randomSleep(3500, 5500);
-        }
+            afterScroll = getCurrentScrollYInElement(webDriver, scrollingArea);
+            randomSleep(750, 1500);
+        } while (!beforeScroll.equals(afterScroll));
     }
 
     private Long getCurrentScrollYInElement(WebDriver webDriver, WebElement scrollingArea) {
@@ -112,7 +114,7 @@ public class SkillsWithEndorsementsScraper implements Scraper<Map<String, List<S
 
     private void scrollToAndClickOnElement(WebDriver webDriver, WebElement webElement) {
         scrollToElement(webDriver, webElement, 400);
-        new Actions(webDriver).moveToElement(webElement).pause(randomLong(1000, 2500)).click().perform();
-        randomSleep(1500, 3500);
+        new Actions(webDriver).moveToElement(webElement).pause(randomLong(750, 1500)).click().perform();
+        randomSleep(750, 2000);
     }
 }
