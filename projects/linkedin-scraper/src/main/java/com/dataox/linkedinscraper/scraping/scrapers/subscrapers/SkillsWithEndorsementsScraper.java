@@ -2,6 +2,7 @@ package com.dataox.linkedinscraper.scraping.scrapers.subscrapers;
 
 import com.dataox.linkedinscraper.scraping.scrapers.Scraper;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -14,7 +15,6 @@ import java.util.*;
 import static com.dataox.CommonUtils.randomLong;
 import static com.dataox.CommonUtils.randomSleep;
 import static com.dataox.WebDriverUtils.*;
-import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 /**
@@ -24,6 +24,7 @@ import static java.util.Objects.nonNull;
 @Service
 public class SkillsWithEndorsementsScraper implements Scraper<Map<String, List<String>>> {
 
+    private static final int SCROLL_STEP = 100;
     private static final String TOP_CATEGORY_NAME = "Top";
     private static final By SKILLS_POPUP_WINDOW = By.xpath("//div[@role='dialog']");
     private static final By CLOSE_POPUP_SKILLS_WINDOW_BUTTON = By.xpath("//div[@role='dialog']/button[@aria-label='Dismiss']");
@@ -36,6 +37,7 @@ public class SkillsWithEndorsementsScraper implements Scraper<Map<String, List<S
             "//ol/li//a[@data-control-name='skills_endorsement_full_list']/span[contains(@class,'pv-skill-category-entity__endorsement-count')]");
     private static final By SHOW_MORE_SKILLS = By.xpath("//section[contains(@class,'pv-profile-section pv-skill-categories-section')]" +
             "//button[@data-control-name='skill_details']");
+    private static final String POPUP_SCROLLING_AREA = "//div[@data-test-modal]//div[@class='artdeco-modal__content ember-view']";
 
     @Override
     public Map<String, List<String>> scrape(WebDriver webDriver) {
@@ -86,9 +88,26 @@ public class SkillsWithEndorsementsScraper implements Scraper<Map<String, List<S
         wait.until(ExpectedConditions.elementToBeClickable(CLOSE_POPUP_SKILLS_WINDOW_BUTTON));
         sources.add(getElementHtml(findElementBy(webDriver, SKILLS_POPUP_WINDOW)));
         randomSleep(4500, 6500);
+        scrollToTheBottomOfPopUp(webDriver);
         WebElement closeButton = findElementBy(webDriver, CLOSE_POPUP_SKILLS_WINDOW_BUTTON);
         new Actions(webDriver).moveToElement(closeButton).pause(randomLong(1000, 1500)).click().perform();
         randomSleep(2500, 4500);
+    }
+
+    private void scrollToTheBottomOfPopUp(WebDriver webDriver) {
+        int desiredScrollY = 0;
+        WebElement scrollingArea = findElementBy(webDriver, By.xpath(POPUP_SCROLLING_AREA));
+        Long currentScroll = getCurrentScrollYInElement(webDriver, scrollingArea);
+        while (desiredScrollY == currentScroll) {
+            executeJavascript(webDriver, "arguments[0].scrollTop=arguments[1]", scrollingArea, desiredScrollY += SCROLL_STEP);
+            currentScroll = getCurrentScrollYInElement(webDriver, scrollingArea);
+            randomSleep(3500, 5500);
+        }
+    }
+
+    private Long getCurrentScrollYInElement(WebDriver webDriver, WebElement scrollingArea) {
+        JavascriptExecutor js = (JavascriptExecutor) webDriver;
+        return (Long) js.executeScript("return arguments[0].scrollTop", scrollingArea);
     }
 
     private void scrollToAndClickOnElement(WebDriver webDriver, WebElement webElement) {
