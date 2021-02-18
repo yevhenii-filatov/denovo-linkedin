@@ -43,14 +43,19 @@ public class LoginService {
         log.info("Performing login to linkedin with user credentials: {}", accountCredentials);
         WebDriverWait wait = new WebDriverWait(webDriver, 60);
         fillFieldsAndSubmitForm(webDriver);
+        checkForErrors(webDriver);
+        solveCaptcha(webDriver);
+        checkForErrors(webDriver);
+        wait.until(ExpectedConditions.presenceOfElementLocated(PROFILE_SECTION));
+        System.out.println("d");
+    }
+
+    private void checkForErrors(WebDriver webDriver) {
         LinkedinError linkedinError = errorDetector.detect(webDriver);
         if (linkedinError != LinkedinError.NO_ERRORS) {
             //send internal error notification
             log.error("Can't login into account. Error occurred {}", linkedinError);
         }
-        solveCaptcha(webDriver);
-        wait.until(ExpectedConditions.presenceOfElementLocated(PROFILE_SECTION));
-        System.out.println("d");
     }
 
     private void solveCaptcha(WebDriver webDriver) {

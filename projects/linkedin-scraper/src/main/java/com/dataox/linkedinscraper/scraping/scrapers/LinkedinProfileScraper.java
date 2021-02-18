@@ -17,8 +17,6 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class LinkedinProfileScraper {
 
-    private static final String LINKEDIN_LOGIN_PAGE_URL = "https://www.linkedin.com/";
-    private final LoginService loginService;
     private final AboutSectionScraper aboutSectionScraper;
     private final ActivitiesScraper activitiesScraper;
     private final EducationScraper educationScraper;
@@ -33,15 +31,13 @@ public class LinkedinProfileScraper {
     private final AccomplishmentsScraper accomplishmentsScraper;
 
     public CollectedProfileSourcesDTO scrape(WebDriver webDriver, String profileUrl) {
-        webDriver.get(LINKEDIN_LOGIN_PAGE_URL);
-        loginService.performLogin(webDriver);
         webDriver.get(profileUrl);
         CollectedProfileSourcesDTO profileSourcesDTO = new CollectedProfileSourcesDTO();
         profileSourcesDTO.setHeaderSectionSource(headerSectionScraper.scrape(webDriver));
         profileSourcesDTO.setProfilePhotosUrl(headerSectionScraper.scrapeProfilePhotoUrl(webDriver));
         profileSourcesDTO.setAboutSectionSource(aboutSectionScraper.scrape(webDriver));
-//        profileSourcesDTO.setExperiencesSource(experienceScraper.scrape(webDriver));
-//        profileSourcesDTO.setEducationsSource(educationScraper.scrape(webDriver));
+        profileSourcesDTO.setExperiencesSource(experienceScraper.scrape(webDriver));
+        profileSourcesDTO.setEducationsSource(educationScraper.scrape(webDriver));
         profileSourcesDTO.setLicenseSource(licenseScraper.scrape(webDriver));
         profileSourcesDTO.setVolunteersSource(volunteersScraper.scrape(webDriver));
         profileSourcesDTO.setSkillsWithEndorsementsSource(skillsWithEndorsementsScraper.scrape(webDriver));

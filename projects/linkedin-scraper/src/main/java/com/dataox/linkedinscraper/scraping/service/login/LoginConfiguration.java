@@ -26,7 +26,7 @@ public class LoginConfiguration {
 
     private AccountCredentials getAccountCredentialsFromLoadBalancer() {
         //perform request to load balancer for user credentials
-        return new AccountCredentials("tatianashlenskova@outlook.com", "hsf7hddv64cjfFDD");
+        return new AccountCredentials("taykhal@mail.ru", "1QYOFqJ5Nw");
     }
 
     @PreDestroy

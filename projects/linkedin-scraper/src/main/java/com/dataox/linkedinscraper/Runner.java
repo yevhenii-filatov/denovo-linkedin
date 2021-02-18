@@ -3,6 +3,7 @@ package com.dataox.linkedinscraper;
 import com.dataox.ChromeDriverLauncher;
 import com.dataox.linkedinscraper.dto.CollectedProfileSourcesDTO;
 import com.dataox.linkedinscraper.scraping.scrapers.LinkedinProfileScraper;
+import com.dataox.linkedinscraper.scraping.service.login.LoginService;
 import lombok.RequiredArgsConstructor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -18,6 +19,8 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class Runner implements ApplicationRunner {
 
+    private static final String LINKEDIN_LOGIN_PAGE_URL = "https://www.linkedin.com/";
+    private final LoginService loginService;
     private final LinkedinProfileScraper profileScraper;
     private final ChromeOptions chromeOptions;
 
@@ -26,8 +29,11 @@ public class Runner implements ApplicationRunner {
         ChromeDriverLauncher chromeDriverLauncher = new ChromeDriverLauncher(chromeOptions);
         CollectedProfileSourcesDTO scrape;
         try (chromeDriverLauncher) {
-//            scrape = profileScraper.scrape(chromeDriverLauncher.getWebDriver(), "https://www.linkedin.com/in/alexander-demchenko/");
-            scrape = profileScraper.scrape(chromeDriverLauncher.getWebDriver(), "https://www.linkedin.com/in/carly-savar-b99b537/");
+            WebDriver webDriver = chromeDriverLauncher.getWebDriver();
+            webDriver.get(LINKEDIN_LOGIN_PAGE_URL);
+            loginService.performLogin(webDriver);
+            scrape = profileScraper.scrape(chromeDriverLauncher.getWebDriver(), "https://www.linkedin.com/in/alexander-demchenko/");
+//            scrape = profileScraper.scrape(chromeDriverLauncher.getWebDriver(), "https://www.linkedin.com/in/carly-savar-b99b537/");
 //            scrape = profileScraper.scrape(chromeDriverLauncher.getWebDriver(), "https://www.linkedin.com/in/dmitriy-lysko-607130160/");
 //            scrape = profileScraper.scrape(chromeDriverLauncher.getWebDriver(), "https://www.linkedin.com/in/duquene-mercier-pierre-108812196/");
 //            scrape = profileScraper.scrape(chromeDriverLauncher.getWebDriver(), "https://www.linkedin.com/in/pin-chun-liu-021a5695/");
