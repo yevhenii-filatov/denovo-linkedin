@@ -18,6 +18,7 @@ import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static com.dataox.CommonUtils.randomLong;
@@ -37,7 +38,6 @@ public class ActivitiesScraper implements Scraper<Map<String, String>> {
 
     private final ScraperProperties scraperProperties;
     private static final By EMPTY_ACTIVITIES = By.xpath("//h1[text()='Nothing to see for now']");
-    private static final By PROFILE_SECTION = By.xpath("//div[contains(@class,'artdeco-card overflow-hidden')]");
     private static final By ACTIVITY_POSTS = By.xpath("//div[contains(@class,'pv-recent-activity-detail__feed-container')]/div");
     private static final By SEE_ALL_ACTIVITIES_BUTTON = By.xpath("//section[contains(@class,'pv-recent-activity-section-v2')]" +
             "/a/span[text()='See all activity'][1]");
@@ -64,31 +64,35 @@ public class ActivitiesScraper implements Scraper<Map<String, String>> {
     private Map<String, String> collectActivities(WebDriver webDriver, Actions action, WebDriverWait wait) {
         Map<String, String> urlAndActivityPost = new HashMap<>();
         WebElement currentPost;
+
         for (int i = 0; i < scraperProperties.getActivitiesAmount(); i++) {
-            currentPost = webDriver.findElements(ACTIVITY_POSTS).get(i);
+            List<WebElement> posts = webDriver.findElements(ACTIVITY_POSTS);
+            if (posts.size()-1 < i)
+                return urlAndActivityPost;
+            currentPost = posts.get(i);
             scrollToElement(webDriver, currentPost, 100);
-            WebElement postMenu = currentPost.findElement(POSTS_MENU_BUTTON);
-            clickElement(action, postMenu);
-            randomSleep(1500, 2500);
-            wait.until(ExpectedConditions.presenceOfElementLocated(COPY_LINK_BUTTON));
-            WebElement copyLinkButton = currentPost.findElement(COPY_LINK_BUTTON);
-            clickElement(action, copyLinkButton);
-            String postUrl = getPostUrl();
+            String postUrl = getPostUrl(action, wait, currentPost);
             urlAndActivityPost.put(postUrl, getElementHtml(currentPost));
+            randomSleep(1500, 2500);
         }
         return urlAndActivityPost;
     }
 
-    private void clickElement(Actions action, WebElement postMenu) {
-        action.moveToElement(postMenu).pause(randomLong(2500, 4500)).click().perform();
+    private String getPostUrl(Actions action, WebDriverWait wait, WebElement currentPost) {
+        WebElement postMenu = currentPost.findElement(POSTS_MENU_BUTTON);
+        clickOnElement(postMenu, action, randomLong(750, 1500));
+        wait.until(ExpectedConditions.presenceOfElementLocated(COPY_LINK_BUTTON));
+        WebElement copyLinkButton = currentPost.findElement(COPY_LINK_BUTTON);
+        clickOnElement(copyLinkButton, action, randomLong(750, 1500));
+        return fetchPostUrlFromClipboard();
     }
 
     private void scrollToAndClickOnElement(WebDriver webDriver, WebElement seeAllButton, Actions action) {
         scrollToElement(webDriver, seeAllButton, 450);
-        clickElement(action, seeAllButton);
+        clickOnElement(seeAllButton, action, randomLong(750, 1500));
     }
 
-    private String getPostUrl() {
+    private String fetchPostUrlFromClipboard() {
         try {
             return (String) Toolkit.getDefaultToolkit()
                     .getSystemClipboard().getData(DataFlavor.stringFlavor);
