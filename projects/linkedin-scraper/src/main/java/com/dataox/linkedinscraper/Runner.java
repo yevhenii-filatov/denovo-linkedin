@@ -32,8 +32,8 @@ public class Runner implements ApplicationRunner {
             WebDriver webDriver = chromeDriverLauncher.getWebDriver();
             webDriver.get(LINKEDIN_LOGIN_PAGE_URL);
             loginService.performLogin(webDriver);
-            scrape = profileScraper.scrape(chromeDriverLauncher.getWebDriver(), "https://www.linkedin.com/in/alexander-demchenko/");
-//            scrape = profileScraper.scrape(chromeDriverLauncher.getWebDriver(), "https://www.linkedin.com/in/carly-savar-b99b537/");
+//            scrape = profileScraper.scrape(chromeDriverLauncher.getWebDriver(), "https://www.linkedin.com/in/alexander-demchenko/");
+            scrape = profileScraper.scrape(chromeDriverLauncher.getWebDriver(), "https://www.linkedin.com/in/carly-savar-b99b537/");
 //            scrape = profileScraper.scrape(chromeDriverLauncher.getWebDriver(), "https://www.linkedin.com/in/dmitriy-lysko-607130160/");
 //            scrape = profileScraper.scrape(chromeDriverLauncher.getWebDriver(), "https://www.linkedin.com/in/duquene-mercier-pierre-108812196/");
 //            scrape = profileScraper.scrape(chromeDriverLauncher.getWebDriver(), "https://www.linkedin.com/in/pin-chun-liu-021a5695/");

@@ -41,57 +41,63 @@ public class SkillsWithEndorsementsScraper implements Scraper<Map<String, List<S
 
     @Override
     public Map<String, List<String>> scrape(WebDriver webDriver) {
+        Actions actions = new Actions(webDriver);
         WebDriverWait wait = new WebDriverWait(webDriver, 30);
         WebElement showMoreSkillsButton = findElementBy(webDriver, SHOW_MORE_SKILLS);
         if (nonNull(showMoreSkillsButton))
-            scrollToAndClickOnElement(webDriver, showMoreSkillsButton);
+            scrollToAndClickOnElement(webDriver, actions, showMoreSkillsButton);
         List<WebElement> skillsWithEndorsements = webDriver.findElements(SKILLS_WITH_ENDORSEMENTS);
         if (skillsWithEndorsements.isEmpty())
             return Collections.emptyMap();
         scrollToElement(webDriver, skillsWithEndorsements.get(0), 400);
-        return collectSkillsSources(webDriver, wait);
+        return collectSkillsSources(webDriver, wait, actions);
     }
 
-    private Map<String, List<String>> collectSkillsSources(WebDriver webDriver, WebDriverWait wait) {
+    private Map<String, List<String>> collectSkillsSources(WebDriver webDriver, WebDriverWait wait, Actions actions) {
         Map<String, List<String>> skillsSources = new HashMap<>();
-        skillsSources.putAll(collectTopCategory(webDriver, wait));
-        skillsSources.putAll(collectOtherCategories(webDriver, wait));
+        skillsSources.putAll(collectTopCategory(webDriver, wait, actions));
+        skillsSources.putAll(collectOtherCategories(webDriver, wait, actions));
         return skillsSources;
     }
 
-    private Map<String, ? extends List<String>> collectTopCategory(WebDriver webDriver, WebDriverWait wait) {
+    private Map<String, ? extends List<String>> collectTopCategory(WebDriver webDriver, WebDriverWait wait, Actions actions) {
         Map<String, List<String>> topCategorySkills = new HashMap<>();
         List<String> sources = new ArrayList<>();
         for (WebElement endorsementButton : webDriver.findElements(TOP_CATEGORY_ENDORSEMENTS_BUTTONS)) {
-            collectEndorsementsSource(webDriver, wait, sources, endorsementButton);
+            sources.addAll(collectEndorsementsSource(webDriver, wait, endorsementButton, actions));
         }
         topCategorySkills.put(TOP_CATEGORY_NAME, sources);
         return topCategorySkills;
     }
 
-    private Map<String, ? extends List<String>> collectOtherCategories(WebDriver webDriver, WebDriverWait wait) {
+    private Map<String, ? extends List<String>> collectOtherCategories(WebDriver webDriver, WebDriverWait wait, Actions actions) {
         Map<String, List<String>> skillsByCategories = new HashMap<>();
         String category;
         for (WebElement skillCategorySection : webDriver.findElements(SKILLS_CATEGORY_SECTIONS)) {
             category = skillCategorySection.findElement(CATEGORY_NAME).getText();
             List<String> sources = new ArrayList<>();
             for (WebElement endorsementsButton : skillCategorySection.findElements(ENDORSEMENTS_IN_CATEGORY_BUTTON)) {
-                collectEndorsementsSource(webDriver, wait, sources, endorsementsButton);
+                sources.addAll(collectEndorsementsSource(webDriver, wait, endorsementsButton, actions));
             }
             skillsByCategories.put(category, sources);
         }
         return skillsByCategories;
     }
 
-    private void collectEndorsementsSource(WebDriver webDriver, WebDriverWait wait, List<String> sources, WebElement endorsementButton) {
-        scrollToAndClickOnElement(webDriver, endorsementButton);
+    private List<String> collectEndorsementsSource(WebDriver webDriver,
+                                                   WebDriverWait wait,
+                                                   WebElement endorsementButton,
+                                                   Actions actions) {
+        List<String> sources = new ArrayList<>();
+        scrollToAndClickOnElement(webDriver, actions, endorsementButton);
         wait.until(ExpectedConditions.elementToBeClickable(CLOSE_POPUP_SKILLS_WINDOW_BUTTON));
         sources.add(getElementHtml(findElementBy(webDriver, SKILLS_POPUP_WINDOW)));
         randomSleep(1500, 2000);
         scrollToTheBottomOfPopUp(webDriver);
         WebElement closeButton = findElementBy(webDriver, CLOSE_POPUP_SKILLS_WINDOW_BUTTON);
-        new Actions(webDriver).moveToElement(closeButton).pause(randomLong(1000, 1500)).click().perform();
+        clickOnElement(closeButton, actions, randomLong(750, 1500));
         randomSleep(750, 1500);
+        return sources;
     }
 
     private void scrollToTheBottomOfPopUp(WebDriver webDriver) {
@@ -112,9 +118,4 @@ public class SkillsWithEndorsementsScraper implements Scraper<Map<String, List<S
         return (Long) js.executeScript("return arguments[0].scrollTop", scrollingArea);
     }
 
-    private void scrollToAndClickOnElement(WebDriver webDriver, WebElement webElement) {
-        scrollToElement(webDriver, webElement, 400);
-        new Actions(webDriver).moveToElement(webElement).pause(randomLong(750, 1500)).click().perform();
-        randomSleep(750, 2000);
-    }
 }

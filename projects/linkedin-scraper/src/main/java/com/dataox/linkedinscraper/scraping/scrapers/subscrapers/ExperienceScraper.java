@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static com.dataox.CommonUtils.randomLong;
 import static com.dataox.CommonUtils.randomSleep;
 import static com.dataox.WebDriverUtils.*;
 import static java.util.Objects.isNull;
@@ -36,7 +35,8 @@ public class ExperienceScraper implements Scraper<String> {
         scrollToElement(webDriver, experienceSection, 400);
         Actions actions = new Actions(webDriver);
         while (nonNull(findElementBy(webDriver, SHOW_MORE_EXPERIENCES_BUTTON))) {
-            scrollToAndClickSeeMoreExperiencesButton(webDriver, actions);
+            WebElement showMoreExperiencesButton = findElementBy(webDriver, SHOW_MORE_EXPERIENCES_BUTTON);
+            scrollToAndClickOnElement(webDriver, actions, showMoreExperiencesButton);
             randomSleep(4000, 6000);
         }
         clickAllShowMoreRolesButtons(webDriver, actions);
@@ -49,27 +49,18 @@ public class ExperienceScraper implements Scraper<String> {
         List<WebElement> showMoreRoles = webDriver.findElements(SHOW_MORE_ROLES_BUTTON);
         while (!showMoreRoles.isEmpty()) {
             for (WebElement showMoreRole : showMoreRoles) {
-                scrollToElement(webDriver, showMoreRole, 450);
-                clickOnElement(showMoreRole, actions, randomLong(750, 1500));
+                scrollToAndClickOnElement(webDriver, actions, showMoreRole);
                 randomSleep(4000, 6000);
             }
             showMoreRoles = webDriver.findElements(SHOW_MORE_ROLES_BUTTON);
         }
     }
 
-    private void scrollToAndClickSeeMoreExperiencesButton(WebDriver webDriver, Actions actions) {
-        WebElement showMoreExperiencesButton = findElementBy(webDriver, SHOW_MORE_EXPERIENCES_BUTTON);
-        scrollToElement(webDriver, showMoreExperiencesButton, 400);
-        clickOnElement(showMoreExperiencesButton, actions, randomLong(750, 1500));
-        randomSleep(2500, 5000);
-    }
-
     private void clickAllSeeMoreButtons(WebDriver webDriver, Actions actions) {
         List<WebElement> seeMoreButtons = webDriver.findElements(SEE_MORE_BUTTON);
         if (!seeMoreButtons.isEmpty())
             for (WebElement seeMoreButton : seeMoreButtons) {
-                scrollToElement(webDriver, seeMoreButton, 500);
-                clickOnElement(seeMoreButton, actions, randomLong(750, 1500));
+                scrollToAndClickOnElement(webDriver, actions, seeMoreButton);
                 randomSleep(1500, 3000);
             }
     }

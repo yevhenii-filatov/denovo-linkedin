@@ -32,16 +32,13 @@ public class LicenseScraper implements Scraper<String> {
         randomSleep(2000, 5000);
         while (nonNull(findElementBy(webDriver, SHOW_MORE_CERTIFICATES))) {
             Actions actions = new Actions(webDriver);
-            scrollToAndClickShowMoreCertificates(webDriver, actions);
+            WebElement showMoreButton = findElementBy(webDriver, SHOW_MORE_CERTIFICATES);
+            scrollToAndClickOnElement(webDriver,actions,showMoreButton);
             randomSleep(2500, 5000);
         }
         certificatesSection = findElementBy(webDriver, CERTIFICATES_SECTION);
         return getElementHtml(certificatesSection);
     }
 
-    private void scrollToAndClickShowMoreCertificates(WebDriver webDriver, Actions actions) {
-        WebElement showMoreButton = findElementBy(webDriver, SHOW_MORE_CERTIFICATES);
-        scrollToElement(webDriver, showMoreButton, 300);
-        clickOnElement(showMoreButton, actions, randomLong(750, 1500));
-    }
+
 }

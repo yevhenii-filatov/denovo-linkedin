@@ -28,8 +28,8 @@ public class AllSkillsScraper implements Scraper<String> {
     public String scrape(WebDriver webDriver) {
         WebElement showMoreSkillsButton = findElementBy(webDriver, SHOW_MORE_SKILLS);
         if (nonNull(showMoreSkillsButton)) {
-            scrollToElement(webDriver, showMoreSkillsButton, 200);
-            new Actions(webDriver).moveToElement(showMoreSkillsButton).pause(randomLong(1500, 2000)).click().perform();
+            Actions actions = new Actions(webDriver);
+            scrollToAndClickOnElement(webDriver,actions,showMoreSkillsButton);
         }
         WebElement skillsSection = findElementBy(webDriver, SKILLS_SECTION);
         if (isNull(skillsSection))

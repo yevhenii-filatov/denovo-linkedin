@@ -7,7 +7,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.springframework.stereotype.Service;
 
-import static com.dataox.CommonUtils.*;
+import static com.dataox.CommonUtils.randomSleep;
 import static com.dataox.WebDriverUtils.*;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
@@ -31,7 +31,8 @@ public class VolunteersScraper implements Scraper<String> {
         randomSleep(2000, 5000);
         while (nonNull(findElementBy(webDriver, SHOW_MORE_EXPERIENCE))) {
             Actions actions = new Actions(webDriver);
-            scrollToShowMoreButtonAndClick(webDriver, actions);
+            WebElement showMoreExperienceButton = findElementBy(webDriver, SHOW_MORE_EXPERIENCE);
+            scrollToAndClickOnElement(webDriver, actions, showMoreExperienceButton);
             randomSleep(3500, 5500);
         }
         randomSleep(1250, 3000);
@@ -39,9 +40,4 @@ public class VolunteersScraper implements Scraper<String> {
         return getElementHtml(volunteersSection);
     }
 
-    private void scrollToShowMoreButtonAndClick(WebDriver webDriver, Actions actions) {
-        WebElement showMoreExperienceButton = findElementBy(webDriver, SHOW_MORE_EXPERIENCE);
-        scrollToElement(webDriver, showMoreExperienceButton, 300);
-        clickOnElement(showMoreExperienceButton, actions, randomLong(750, 1500));
-    }
 }

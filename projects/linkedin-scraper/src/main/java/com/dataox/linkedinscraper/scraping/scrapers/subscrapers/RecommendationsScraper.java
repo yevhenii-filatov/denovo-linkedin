@@ -64,31 +64,28 @@ public class RecommendationsScraper implements Scraper<Map<String, String>> {
         openRecommendationsTab(webDriver, actions, receivedRecommendationsTab);
         while (nonNull(findElementBy(webDriver, SHOW_MORE_RECOMMENDATIONS_BUTTON))) {
             WebElement showMoreButton = findElementBy(webDriver, SHOW_MORE_RECOMMENDATIONS_BUTTON);
-            scrollToElement(webDriver, showMoreButton, 500);
-            actions.moveToElement(showMoreButton).pause(randomLong(800, 1500)).click().perform();
+            scrollToAndClickOnElement(webDriver, actions, showMoreButton);
             wait.until(ExpectedConditions.invisibilityOfElementLocated(LOADING_ANIMATION));
             randomSleep(4500, 6000);
         }
-        clickAllSeeMoreButton(webDriver);
+        clickAllSeeMoreButton(webDriver, actions);
         return getElementHtml(findElementBy(webDriver, RECOMMENDATION_SECTION));
     }
 
     private void openRecommendationsTab(WebDriver webDriver, Actions actions, By recommendationsTabSelector) {
         WebElement recommendationsTab = findElementBy(webDriver, recommendationsTabSelector);
-        scrollToElement(webDriver, recommendationsTab, 450);
-        actions.moveToElement(recommendationsTab).pause(randomLong(1500, 2500)).click().perform();
+        scrollToAndClickOnElement(webDriver, actions, recommendationsTab);
         randomSleep(2500, 4500);
     }
 
-    private void clickAllSeeMoreButton(WebDriver webDriver) {
+    private void clickAllSeeMoreButton(WebDriver webDriver, Actions actions) {
         List<WebElement> allSeeMoreButtons = webDriver.findElements(SEE_MORE_BUTTON);
         if (allSeeMoreButtons.isEmpty())
             return;
         WebElement firstSeeMoreButton = allSeeMoreButtons.get(0);
         scrollToElement(webDriver, firstSeeMoreButton, 450);
         for (WebElement seeMoreButton : allSeeMoreButtons) {
-            scrollToElement(webDriver, seeMoreButton, 400);
-            new Actions(webDriver).moveToElement(seeMoreButton).pause(randomLong(1500, 2500)).click().perform();
+            scrollToAndClickOnElement(webDriver, actions, seeMoreButton);
             randomSleep(1500, 2500);
         }
     }

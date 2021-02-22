@@ -62,7 +62,8 @@ public class InterestsScraper implements Scraper<Map<String, String>> {
             groupAndInterestSource.put(group, getElementHtml(interestsPopup));
             randomSleep(1500, 4000);
         }
-        clickOnElement(findElementBy(webDriver, CLOSE_POPUP_BUTTON),actions,randomLong(750,1500));
+        WebElement closePopupButton = findElementBy(webDriver, CLOSE_POPUP_BUTTON);
+        clickOnElement(closePopupButton,actions,randomLong(750,1500));
         return groupAndInterestSource;
     }
 

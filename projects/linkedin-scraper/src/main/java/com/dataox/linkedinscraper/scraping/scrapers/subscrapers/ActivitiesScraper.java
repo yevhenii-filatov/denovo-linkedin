@@ -51,7 +51,7 @@ public class ActivitiesScraper implements Scraper<Map<String, String>> {
             return Collections.emptyMap();
         Actions action = new Actions(webDriver);
         WebDriverWait wait = new WebDriverWait(webDriver, 45);
-        scrollToAndClickOnElement(webDriver, seeAllButton, action);
+        scrollToAndClickOnElement(webDriver,action,seeAllButton);
         wait.until(ExpectedConditions.or(
                 ExpectedConditions.presenceOfElementLocated(ACTIVITY_POSTS),
                 ExpectedConditions.presenceOfElementLocated(EMPTY_ACTIVITIES)
@@ -70,7 +70,7 @@ public class ActivitiesScraper implements Scraper<Map<String, String>> {
             if (posts.size()-1 < i)
                 return urlAndActivityPost;
             currentPost = posts.get(i);
-            scrollToElement(webDriver, currentPost, 100);
+            scrollToElement(webDriver, currentPost, 300);
             String postUrl = getPostUrl(action, wait, currentPost);
             urlAndActivityPost.put(postUrl, getElementHtml(currentPost));
             randomSleep(1500, 2500);
@@ -85,11 +85,6 @@ public class ActivitiesScraper implements Scraper<Map<String, String>> {
         WebElement copyLinkButton = currentPost.findElement(COPY_LINK_BUTTON);
         clickOnElement(copyLinkButton, action, randomLong(750, 1500));
         return fetchPostUrlFromClipboard();
-    }
-
-    private void scrollToAndClickOnElement(WebDriver webDriver, WebElement seeAllButton, Actions action) {
-        scrollToElement(webDriver, seeAllButton, 450);
-        clickOnElement(seeAllButton, action, randomLong(750, 1500));
     }
 
     private String fetchPostUrlFromClipboard() {
