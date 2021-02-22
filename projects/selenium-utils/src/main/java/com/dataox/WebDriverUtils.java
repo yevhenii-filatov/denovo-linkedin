@@ -1,11 +1,14 @@
 package com.dataox;
 
 import org.openqa.selenium.*;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.List;
 import java.util.Optional;
+
+import static com.dataox.WebDriverUtils.ScrollingDirection.*;
 
 /**
  * @author Yevhenii Filatov
@@ -60,21 +63,22 @@ public final class WebDriverUtils {
     }
 
     public static void randomScroll(WebDriver webDriver) {
-        ScrollingDirection direction = ScrollingDirection.random();
+        ScrollingDirection direction = random();
         long step = CommonUtils.randomLong(250, 400);
         scroll(webDriver, direction, step);
     }
 
     public static void scroll(WebDriver webDriver, ScrollingDirection direction, long stepPx) {
-        if (direction == ScrollingDirection.UP) {
+        if (direction == UP) {
             stepPx *= -1;
         }
         executeJavascript(webDriver, String.format("window.scrollBy(0, %d)", stepPx));
     }
 
-    public static void scrollToElement(WebDriver webDriver, WebElement webElement, int topPanelSize) {
-        int y = webElement.getLocation().getY() - topPanelSize;
-        scrollTo(webDriver, y);
+    public static void scrollToElement(WebDriver webDriver, WebElement webElement, int topPanelHeight) {
+        int elementY = webElement.getLocation().getY();
+        elementY -=topPanelHeight;
+        scrollTo(webDriver, elementY);
     }
 
     public static void scrollToElement(WebDriver webDriver, WebElement webElement) {
@@ -82,14 +86,20 @@ public final class WebDriverUtils {
         scrollTo(webDriver, y);
     }
 
-    public static void scrollTo(WebDriver webDriver, int y) {
-        int amountOfSteps = 10;
-        int step = y / amountOfSteps;
-        int counter = 0;
+    public static void scrollTo(WebDriver webDriver, int desiredScrollY) {
+        int amountOfSteps = 25;
+        Long currentScrollY = getScrollY(webDriver);
+        int step = (int) (Math.abs((desiredScrollY - currentScrollY)) / amountOfSteps);
+        ScrollingDirection scrollingDirection = currentScrollY > desiredScrollY ? UP : DOWN;
         for (int i = 0; i < amountOfSteps; i++) {
-            WebDriverUtils.executeJavascript(webDriver, String.format("scrollTo(0,%d);", counter += step));
-            CommonUtils.randomSleep(400, 800);
+            scroll(webDriver, scrollingDirection, step);
+            CommonUtils.randomSleep(150, 250);
         }
+    }
+
+    public static Long getScrollY(WebDriver webDriver) {
+        JavascriptExecutor js = (JavascriptExecutor) webDriver;
+        return (Long) js.executeScript("return scrollY");
     }
 
     public static String getElementHtml(WebElement webElement) {
@@ -109,6 +119,10 @@ public final class WebDriverUtils {
     public static void deleteDataFromTextFieldWithKeyboard(WebElement element) {
         element.sendKeys(Keys.CONTROL, "a");
         element.sendKeys(Keys.DELETE);
+    }
+
+    public static void clickOnElement(WebElement elementToClick, Actions actions,Long pause) {
+        actions.moveToElement(elementToClick).pause(pause).click().perform();
     }
 
     public enum ScrollingDirection {
