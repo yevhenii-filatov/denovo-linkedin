@@ -1,9 +1,9 @@
 app:
   chromedriver:
-    path: /home/eternal/Documents/chromedriver
+    path: [ PATH ]
     headless: false
   captcha:
     anti-captcha:
-      token: 983073955c13b2e5c6895eaf9d2b8490
+      token: [ TOKEN ]
   scraper:
     activities-amount: 50
