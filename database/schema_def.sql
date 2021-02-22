@@ -294,3 +294,28 @@ create table if not exists linkedin_comment
             on delete cascade on update cascade
 );
 create index linkedin_comment_linkedin_post_idx on linkedin_comment (linkedin_post_id);
+
+create type linkedin_accomplishment_type as enum (
+    'PUBLICATIONS',
+    'LANGUAGES',
+    'PATENTS',
+    'PROJECTS',
+    'HONORS_AND_AWARDS',
+    'TEST_SCORES',
+    'ORGANIZATIONS');
+
+create table if not exists linkedin_accomplishment
+(
+    id                  bigserial                    not null
+            constraint linkedin_accomplishment_pk primary key,
+    updated_at          timestamp                    not null,
+    item_source         text                         not null,
+    title               varchar                      not null,
+    description         varchar,
+    type                linkedin_accomplishment_type not null,
+    linkedin_profile_id bigint                       not null
+        constraint linkedin_activity_linkedin_profile_fk
+            references linkedin_profile (id)
+            on delete cascade on update cascade
+);
+create index linkedin_accomplishment_linkedin_profile_idx on linkedin_accomplishment (linkedin_profile_id);

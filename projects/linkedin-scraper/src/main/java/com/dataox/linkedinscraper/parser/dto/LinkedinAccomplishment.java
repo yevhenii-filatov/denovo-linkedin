@@ -9,29 +9,19 @@ import java.time.Instant;
 
 @Data
 @NoArgsConstructor
-public class LinkedinRecommendation {
+public class LinkedinAccomplishment {
 
-    @NotNull
     private Instant updatedAt;
 
     @NotBlank
     private String itemSource;
 
+    @NotBlank
+    private String title;
+
+    private String description;
+
     @NotNull
     private String type;
 
-    @NotBlank
-    private String personFullName;
-
-    @NotBlank
-    private String personProfileUrl;
-
-    @NotBlank
-    private String personHeadline;
-
-    @NotBlank
-    private String personExtraInfo;
-
-    @NotBlank
-    private String description;
 }

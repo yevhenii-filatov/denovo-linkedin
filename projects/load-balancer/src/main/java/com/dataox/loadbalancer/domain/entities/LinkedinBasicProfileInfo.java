@@ -40,6 +40,10 @@ public class LinkedinBasicProfileInfo {
     @Column(name = "number_of_connections")
     private int numberOfConnections;
 
+    @NotEmpty
+    @Column(name = "location")
+    private String location;
+
     @Column(name = "cached_image_url")
     private String cachedImageUrl;
 

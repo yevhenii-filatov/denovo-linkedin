@@ -26,6 +26,9 @@ public class LinkedinBasicProfileInfo {
     @NotBlank
     private String numberOfConnections;
 
+    @NotBlank
+    private String location;
+
     private String cachedImageUrl;
 
     private String about;

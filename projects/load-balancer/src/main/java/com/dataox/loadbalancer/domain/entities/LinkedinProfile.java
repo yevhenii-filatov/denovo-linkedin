@@ -65,4 +65,7 @@ public class LinkedinProfile {
 
     @OneToMany(mappedBy = "linkedinProfile", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<LinkedinActivity> linkedinActivities = new ArrayList<>();
+
+    @OneToMany(mappedBy = "linkedinProfile", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<LinkedinAccomplishment> linkedinAccomplishments = new ArrayList<>();
 }

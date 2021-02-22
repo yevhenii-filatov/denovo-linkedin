@@ -1,6 +1,5 @@
 package com.dataox.linkedinscraper.parser.dto;
 
-import com.dataox.linkedinscraper.parser.types.LinkedinInterestType;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -22,7 +21,7 @@ public class LinkedinInterest {
     private String name;
 
     @NotNull
-    private LinkedinInterestType linkedinInterestType;
+    private String type;
 
     @NotBlank
     private String profileUrl;

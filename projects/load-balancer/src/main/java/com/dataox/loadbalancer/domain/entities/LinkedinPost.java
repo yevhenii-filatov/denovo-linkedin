@@ -62,7 +62,7 @@ public class LinkedinPost {
     private int numberOfReactions;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "linkedin_activity_id",referencedColumnName = "id")
     private LinkedinActivity linkedinActivity;
 
