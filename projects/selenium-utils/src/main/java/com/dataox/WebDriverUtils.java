@@ -75,9 +75,22 @@ public final class WebDriverUtils {
         executeJavascript(webDriver, String.format("window.scrollBy(0, %d)", stepPx));
     }
 
+    public static void scrollToAndClickOnElement(WebDriver webDriver, Actions actions, WebElement webElement) {
+        scrollToAndClickOnElement(webDriver, actions, webElement, CommonUtils.randomLong(750, 1500), 400);
+    }
+
+    public static void scrollToAndClickOnElement(WebDriver webDriver,
+                                                 Actions actions,
+                                                 WebElement webElement,
+                                                 Long clickPause,
+                                                 int topPanelHeight) {
+        scrollToElement(webDriver, webElement, topPanelHeight);
+        actions.moveToElement(webElement).pause(clickPause).click().perform();
+    }
+
     public static void scrollToElement(WebDriver webDriver, WebElement webElement, int topPanelHeight) {
         int elementY = webElement.getLocation().getY();
-        elementY -=topPanelHeight;
+        elementY -= topPanelHeight;
         scrollTo(webDriver, elementY);
     }
 
@@ -87,13 +100,13 @@ public final class WebDriverUtils {
     }
 
     public static void scrollTo(WebDriver webDriver, int desiredScrollY) {
-        int amountOfSteps = 25;
+        int amountOfSteps = 30;
         Long currentScrollY = getScrollY(webDriver);
         int step = (int) (Math.abs((desiredScrollY - currentScrollY)) / amountOfSteps);
         ScrollingDirection scrollingDirection = currentScrollY > desiredScrollY ? UP : DOWN;
         for (int i = 0; i < amountOfSteps; i++) {
             scroll(webDriver, scrollingDirection, step);
-            CommonUtils.randomSleep(150, 250);
+            CommonUtils.randomSleep(75, 125);
         }
     }
 
@@ -121,7 +134,7 @@ public final class WebDriverUtils {
         element.sendKeys(Keys.DELETE);
     }
 
-    public static void clickOnElement(WebElement elementToClick, Actions actions,Long pause) {
+    public static void clickOnElement(WebElement elementToClick, Actions actions, Long pause) {
         actions.moveToElement(elementToClick).pause(pause).click().perform();
     }
 
