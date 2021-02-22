@@ -47,7 +47,6 @@ public class LoginService {
         solveCaptcha(webDriver);
         checkForErrors(webDriver);
         wait.until(ExpectedConditions.presenceOfElementLocated(PROFILE_SECTION));
-        System.out.println("d");
     }
 
     private void checkForErrors(WebDriver webDriver) {

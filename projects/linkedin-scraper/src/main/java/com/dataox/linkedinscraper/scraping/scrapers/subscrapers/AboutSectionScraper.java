@@ -24,12 +24,14 @@ public class AboutSectionScraper implements Scraper<String> {
 
     @Override
     public String scrape(WebDriver webDriver) {
-        randomSleep(2000,5000);
+        randomSleep(2000, 5000);
         WebElement aboutSection = findElementBy(webDriver, ABOUT_SELECTOR);
         scrollToElement(webDriver, aboutSection, 200);
         WebElement seeMoreButton = findElementBy(webDriver, SEE_MORE_BUTTON);
-        if (nonNull(seeMoreButton))
-            new Actions(webDriver).moveToElement(seeMoreButton).pause(1500).click().perform();
+        if (nonNull(seeMoreButton)) {
+            Actions actions = new Actions(webDriver);
+            clickOnElement(seeMoreButton, actions, randomLong(750, 1500));
+        }
         aboutSection = findElementBy(webDriver, ABOUT_SELECTOR);
         return getElementHtml(aboutSection);
     }

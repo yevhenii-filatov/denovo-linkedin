@@ -1,7 +1,5 @@
 package com.dataox.linkedinscraper.scraping.scrapers.subscrapers;
 
-import com.dataox.CommonUtils;
-import com.dataox.WebDriverUtils;
 import com.dataox.linkedinscraper.scraping.scrapers.Scraper;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -9,8 +7,10 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.springframework.stereotype.Service;
 
-import static com.dataox.CommonUtils.*;
+import static com.dataox.CommonUtils.randomLong;
+import static com.dataox.CommonUtils.randomSleep;
 import static com.dataox.WebDriverUtils.*;
+import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 /**
@@ -26,18 +26,22 @@ public class EducationScraper implements Scraper<String> {
     @Override
     public String scrape(WebDriver webDriver) {
         WebElement educationSection = findElementBy(webDriver, EDUCATION_SECTION);
+        if (isNull(educationSection))
+            return "";
         scrollToElement(webDriver, educationSection, 200);
         randomSleep(2000, 5000);
-        while (nonNull(findElementBy(webDriver, SHOW_MORE_EDUCATIONS_BUTTON)))
-            scrollToAndClickShowMoreEducationsButton(webDriver);
+        while (nonNull(findElementBy(webDriver, SHOW_MORE_EDUCATIONS_BUTTON))) {
+            Actions actions = new Actions(webDriver);
+            scrollToAndClickShowMoreEducationsButton(webDriver, actions);
+        }
         educationSection = findElementBy(webDriver, EDUCATION_SECTION);
         return getElementHtml(educationSection);
     }
 
-    private void scrollToAndClickShowMoreEducationsButton(WebDriver webDriver) {
+    private void scrollToAndClickShowMoreEducationsButton(WebDriver webDriver, Actions actions) {
         WebElement showMoreEducationsButton = findElementBy(webDriver, SHOW_MORE_EDUCATIONS_BUTTON);
         scrollToElement(webDriver, showMoreEducationsButton, 400);
-        new Actions(webDriver).moveToElement(showMoreEducationsButton).pause(randomLong(800, 1500)).click().perform();
-        randomSleep(2000,5000);
+        clickOnElement(showMoreEducationsButton, actions, randomLong(750, 1500));
+        randomSleep(2000, 5000);
     }
 }

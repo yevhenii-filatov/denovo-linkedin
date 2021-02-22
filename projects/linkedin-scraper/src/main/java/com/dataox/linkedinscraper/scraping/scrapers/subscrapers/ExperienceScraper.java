@@ -12,6 +12,7 @@ import java.util.List;
 import static com.dataox.CommonUtils.randomLong;
 import static com.dataox.CommonUtils.randomSleep;
 import static com.dataox.WebDriverUtils.*;
+import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 /**
@@ -30,11 +31,13 @@ public class ExperienceScraper implements Scraper<String> {
     public String scrape(WebDriver webDriver) {
         randomSleep(2000, 5000);
         WebElement experienceSection = findElementBy(webDriver, EXPERIENCE_SECTION);
+        if (isNull(experienceSection))
+            return "";
         scrollToElement(webDriver, experienceSection, 400);
         Actions actions = new Actions(webDriver);
         while (nonNull(findElementBy(webDriver, SHOW_MORE_EXPERIENCES_BUTTON))) {
             scrollToAndClickSeeMoreExperiencesButton(webDriver, actions);
-            randomSleep(6000, 10000);
+            randomSleep(4000, 6000);
         }
         clickAllShowMoreRolesButtons(webDriver, actions);
         clickAllSeeMoreButtons(webDriver, actions);
@@ -47,7 +50,7 @@ public class ExperienceScraper implements Scraper<String> {
         while (!showMoreRoles.isEmpty()) {
             for (WebElement showMoreRole : showMoreRoles) {
                 scrollToElement(webDriver, showMoreRole, 450);
-                actions.moveToElement(showMoreRole).pause(randomLong(2000, 3000)).click().perform();
+                clickOnElement(showMoreRole, actions, randomLong(750, 1500));
                 randomSleep(4000, 6000);
             }
             showMoreRoles = webDriver.findElements(SHOW_MORE_ROLES_BUTTON);
@@ -57,7 +60,7 @@ public class ExperienceScraper implements Scraper<String> {
     private void scrollToAndClickSeeMoreExperiencesButton(WebDriver webDriver, Actions actions) {
         WebElement showMoreExperiencesButton = findElementBy(webDriver, SHOW_MORE_EXPERIENCES_BUTTON);
         scrollToElement(webDriver, showMoreExperiencesButton, 400);
-        actions.moveToElement(showMoreExperiencesButton).pause(randomLong(1500, 2500)).click().perform();
+        clickOnElement(showMoreExperiencesButton, actions, randomLong(750, 1500));
         randomSleep(2500, 5000);
     }
 
@@ -66,7 +69,7 @@ public class ExperienceScraper implements Scraper<String> {
         if (!seeMoreButtons.isEmpty())
             for (WebElement seeMoreButton : seeMoreButtons) {
                 scrollToElement(webDriver, seeMoreButton, 500);
-                actions.moveToElement(seeMoreButton).pause(randomLong(1000, 2000)).click().perform();
+                clickOnElement(seeMoreButton, actions, randomLong(750, 1500));
                 randomSleep(1500, 3000);
             }
     }

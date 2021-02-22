@@ -30,7 +30,8 @@ public class VolunteersScraper implements Scraper<String> {
         scrollToElement(webDriver, volunteersSection, 300);
         randomSleep(2000, 5000);
         while (nonNull(findElementBy(webDriver, SHOW_MORE_EXPERIENCE))) {
-            scrollToShowMoreButtonAndClick(webDriver);
+            Actions actions = new Actions(webDriver);
+            scrollToShowMoreButtonAndClick(webDriver, actions);
             randomSleep(3500, 5500);
         }
         randomSleep(1250, 3000);
@@ -38,9 +39,9 @@ public class VolunteersScraper implements Scraper<String> {
         return getElementHtml(volunteersSection);
     }
 
-    private void scrollToShowMoreButtonAndClick(WebDriver webDriver) {
+    private void scrollToShowMoreButtonAndClick(WebDriver webDriver, Actions actions) {
         WebElement showMoreExperienceButton = findElementBy(webDriver, SHOW_MORE_EXPERIENCE);
         scrollToElement(webDriver, showMoreExperienceButton, 300);
-        new Actions(webDriver).moveToElement(showMoreExperienceButton).pause(randomLong(1000, 1500)).click().perform();
+        clickOnElement(showMoreExperienceButton, actions, randomLong(750, 1500));
     }
 }

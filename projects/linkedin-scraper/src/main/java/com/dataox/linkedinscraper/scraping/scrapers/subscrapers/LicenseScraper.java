@@ -31,16 +31,17 @@ public class LicenseScraper implements Scraper<String> {
         scrollToElement(webDriver, certificatesSection, 300);
         randomSleep(2000, 5000);
         while (nonNull(findElementBy(webDriver, SHOW_MORE_CERTIFICATES))) {
-            scrollToAndClickShowMoreCertificates(webDriver);
+            Actions actions = new Actions(webDriver);
+            scrollToAndClickShowMoreCertificates(webDriver, actions);
             randomSleep(2500, 5000);
         }
         certificatesSection = findElementBy(webDriver, CERTIFICATES_SECTION);
         return getElementHtml(certificatesSection);
     }
 
-    private void scrollToAndClickShowMoreCertificates(WebDriver webDriver) {
+    private void scrollToAndClickShowMoreCertificates(WebDriver webDriver, Actions actions) {
         WebElement showMoreButton = findElementBy(webDriver, SHOW_MORE_CERTIFICATES);
         scrollToElement(webDriver, showMoreButton, 300);
-        new Actions(webDriver).moveToElement(showMoreButton).pause(randomLong(800, 1500)).click().perform();
+        clickOnElement(showMoreButton, actions, randomLong(750, 1500));
     }
 }

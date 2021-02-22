@@ -11,8 +11,7 @@ import org.springframework.stereotype.Service;
 
 import static com.dataox.CommonUtils.randomLong;
 import static com.dataox.CommonUtils.randomSleep;
-import static com.dataox.WebDriverUtils.findElementBy;
-import static com.dataox.WebDriverUtils.getElementHtml;
+import static com.dataox.WebDriverUtils.*;
 import static java.util.Objects.isNull;
 
 /**
@@ -38,8 +37,8 @@ public class HeaderSectionScraper implements Scraper<String> {
         if (isNull(croppedProfilePhoto))
             return "";
         Actions actions = new Actions(webDriver);
-        actions.moveToElement(croppedProfilePhoto).pause(randomLong(2500, 3500)).click().perform();
         WebDriverWait wait = new WebDriverWait(webDriver, 15);
+        clickOnElement(croppedProfilePhoto,actions,randomLong(750,1500));
         wait.until(ExpectedConditions.presenceOfElementLocated(FULL_PROFILE_PHOTO));
         String profilePhotoUrl = findElementBy(webDriver, FULL_PROFILE_PHOTO).getAttribute("src");
         randomSleep(3500,5000);
@@ -49,6 +48,6 @@ public class HeaderSectionScraper implements Scraper<String> {
 
     private void closePopUp(Actions actions, WebDriver webDriver) {
         WebElement closeButton = findElementBy(webDriver, CLOSE_POPUP_BUTTON);
-        actions.moveToElement(closeButton).pause(randomLong(1500, 3500)).click().perform();
+        clickOnElement(closeButton,actions,randomLong(750,1500));
     }
 }
