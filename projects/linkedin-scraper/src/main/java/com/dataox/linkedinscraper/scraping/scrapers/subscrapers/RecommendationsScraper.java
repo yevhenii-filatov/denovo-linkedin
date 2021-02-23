@@ -2,7 +2,9 @@ package com.dataox.linkedinscraper.scraping.scrapers.subscrapers;
 
 import com.dataox.linkedinscraper.dto.sources.RecommendationsSource;
 import com.dataox.linkedinscraper.dto.types.RecommendationType;
+import com.dataox.linkedinscraper.scraping.exceptions.ElementNotFoundException;
 import com.dataox.linkedinscraper.scraping.scrapers.Scraper;
+import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -11,10 +13,10 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.Element;
+import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static com.dataox.CommonUtils.randomSleep;
 import static com.dataox.WebDriverUtils.*;
@@ -25,6 +27,7 @@ import static java.util.Objects.nonNull;
  * @author Dmitriy Lysko
  * @since 29/01/2021
  */
+@Slf4j
 @Service
 public class RecommendationsScraper implements Scraper<List<RecommendationsSource>> {
 
@@ -46,34 +49,43 @@ public class RecommendationsScraper implements Scraper<List<RecommendationsSourc
     @Override
     public List<RecommendationsSource> scrape(WebDriver webDriver) {
         WebElement recommendationSection = findElementBy(webDriver, RECOMMENDATION_SECTION);
-        if (isNull(recommendationSection))
-            return Collections.emptyMap();
+        if (isNull(recommendationSection)) {
+            log.info("Recommendations section is not present");
+            return Collections.emptyList();
+        }
         scrollToElement(webDriver, recommendationSection, 450);
 
-        Map<String, String> recommendations = new HashMap<>();
+        log.info("Scraping recommendations section");
+        List<RecommendationsSource> recommendationsSources = new ArrayList<>();
         if (isNull(findElementBy(webDriver, ZERO_RECEIVED_RECOMMENDATIONS)))
-            recommendations.put(RecommendationType.RECEIVED, scrapeTab(webDriver, RECEIVED_RECOMMENDATIONS_TAB));
+            recommendationsSources.add(new RecommendationsSource(RecommendationType.RECEIVED, scrapeTab(webDriver, RECEIVED_RECOMMENDATIONS_TAB)));
         if (isNull(findElementBy(webDriver, ZERO_GIVEN_RECOMMENDATIONS)))
-            recommendations.put(RecommendationType.GIVEN, scrapeTab(webDriver, GIVEN_RECOMMENDATIONS_TAB));
-        return recommendations;
+            recommendationsSources.add(new RecommendationsSource(RecommendationType.GIVEN, scrapeTab(webDriver, GIVEN_RECOMMENDATIONS_TAB)));
+        return recommendationsSources;
     }
 
     private String scrapeTab(WebDriver webDriver, By receivedRecommendationsTab) {
         WebDriverWait wait = new WebDriverWait(webDriver, 45);
         Actions actions = new Actions(webDriver);
         openRecommendationsTab(webDriver, actions, receivedRecommendationsTab);
-        while (nonNull(findElementBy(webDriver, SHOW_MORE_RECOMMENDATIONS_BUTTON))) {
-            WebElement showMoreButton = findElementBy(webDriver, SHOW_MORE_RECOMMENDATIONS_BUTTON);
-            scrollToAndClickOnElement(webDriver, actions, showMoreButton);
-            wait.until(ExpectedConditions.invisibilityOfElementLocated(LOADING_ANIMATION));
-            randomSleep(4500, 6000);
-        }
+        openAllRecommendations(webDriver, wait, actions);
         clickAllSeeMoreButton(webDriver, actions);
         return getElementHtml(findElementBy(webDriver, RECOMMENDATION_SECTION));
     }
 
+    private void openAllRecommendations(WebDriver webDriver, WebDriverWait wait, Actions actions) {
+        WebElement showMoreRecommendationsButton = findElementBy(webDriver, SHOW_MORE_RECOMMENDATIONS_BUTTON);
+        while (nonNull(showMoreRecommendationsButton)) {
+            scrollToAndClickOnElement(webDriver, actions, showMoreRecommendationsButton);
+            randomSleep(4500, 6000);
+            wait.until(ExpectedConditions.invisibilityOfElementLocated(LOADING_ANIMATION));
+            showMoreRecommendationsButton = findElementBy(webDriver, SHOW_MORE_RECOMMENDATIONS_BUTTON);
+        }
+    }
+
     private void openRecommendationsTab(WebDriver webDriver, Actions actions, By recommendationsTabSelector) {
-        WebElement recommendationsTab = findElementBy(webDriver, recommendationsTabSelector);
+        WebElement recommendationsTab = findWebElementBy(webDriver, recommendationsTabSelector)
+                .orElseThrow(() -> ElementNotFoundException.notFound("Recommendations tab"));
         scrollToAndClickOnElement(webDriver, actions, recommendationsTab);
         randomSleep(2500, 4500);
     }

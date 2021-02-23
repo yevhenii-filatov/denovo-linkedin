@@ -1,6 +1,7 @@
 package com.dataox.linkedinscraper.scraping.scrapers.subscrapers;
 
 import com.dataox.linkedinscraper.scraping.scrapers.Scraper;
+import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -18,6 +19,7 @@ import static java.util.Objects.nonNull;
  * @author Dmitriy Lysko
  * @since 29/01/2021
  */
+@Slf4j
 @Service
 public class ExperienceScraper implements Scraper<String> {
 
@@ -30,12 +32,16 @@ public class ExperienceScraper implements Scraper<String> {
     public String scrape(WebDriver webDriver) {
         randomSleep(2000, 5000);
         WebElement experienceSection = findElementBy(webDriver, EXPERIENCE_SECTION);
-        if (isNull(experienceSection))
+        if (isNull(experienceSection)) {
+            log.info("Experience section is not present");
             return "";
+        }
+        log.info("Scraping experience section");
         scrollToElement(webDriver, experienceSection, 400);
         Actions actions = new Actions(webDriver);
-        while (nonNull(findElementBy(webDriver, SHOW_MORE_EXPERIENCES_BUTTON))) {
-            WebElement showMoreExperiencesButton = findElementBy(webDriver, SHOW_MORE_EXPERIENCES_BUTTON);
+        WebElement showMoreExperiencesButton = findElementBy(webDriver, SHOW_MORE_EXPERIENCES_BUTTON);
+        while (nonNull(showMoreExperiencesButton)) {
+            showMoreExperiencesButton = findElementBy(webDriver, SHOW_MORE_EXPERIENCES_BUTTON);
             scrollToAndClickOnElement(webDriver, actions, showMoreExperiencesButton);
             randomSleep(4000, 6000);
         }

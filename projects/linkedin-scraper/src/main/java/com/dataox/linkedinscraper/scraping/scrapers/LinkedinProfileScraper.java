@@ -1,11 +1,9 @@
 package com.dataox.linkedinscraper.scraping.scrapers;
 
 import com.dataox.linkedinscraper.dto.CollectedProfileSourcesDTO;
-import com.dataox.linkedinscraper.scraping.exceptions.ElementNotFoundException;
 import com.dataox.linkedinscraper.scraping.scrapers.subscrapers.*;
-import com.dataox.linkedinscraper.scraping.service.login.LoginService;
 import lombok.RequiredArgsConstructor;
-import org.openqa.selenium.NotFoundException;
+import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.WebDriver;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
@@ -14,6 +12,7 @@ import org.springframework.stereotype.Service;
  * @author Dmitriy Lysko
  * @since 29/01/2021
  */
+@Slf4j
 @Primary
 @Service
 @RequiredArgsConstructor
@@ -33,6 +32,7 @@ public class LinkedinProfileScraper {
     private final AccomplishmentsScraper accomplishmentsScraper;
 
     public CollectedProfileSourcesDTO scrape(WebDriver webDriver, String profileUrl) {
+        log.info("Scraping profile: {}", profileUrl);
         webDriver.get(profileUrl);
         CollectedProfileSourcesDTO profileSourcesDTO = new CollectedProfileSourcesDTO();
         profileSourcesDTO.setProfileUrl(profileUrl);

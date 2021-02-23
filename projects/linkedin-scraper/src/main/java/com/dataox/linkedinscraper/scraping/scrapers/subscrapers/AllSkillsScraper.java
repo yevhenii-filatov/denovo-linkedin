@@ -3,6 +3,7 @@ package com.dataox.linkedinscraper.scraping.scrapers.subscrapers;
 import com.dataox.CommonUtils;
 import com.dataox.WebDriverUtils;
 import com.dataox.linkedinscraper.scraping.scrapers.Scraper;
+import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -18,6 +19,7 @@ import static java.util.Objects.nonNull;
  * @author Dmitriy Lysko
  * @since 29/01/2021
  */
+@Slf4j
 @Service
 public class AllSkillsScraper implements Scraper<String> {
     private static final By SHOW_MORE_SKILLS = By.xpath("//section[contains(@class,'pv-profile-section pv-skill-categories-section')]" +
@@ -26,14 +28,19 @@ public class AllSkillsScraper implements Scraper<String> {
 
     @Override
     public String scrape(WebDriver webDriver) {
-        WebElement showMoreSkillsButton = findElementBy(webDriver, SHOW_MORE_SKILLS);
-        if (nonNull(showMoreSkillsButton)) {
-            Actions actions = new Actions(webDriver);
-            scrollToAndClickOnElement(webDriver,actions,showMoreSkillsButton);
-        }
         WebElement skillsSection = findElementBy(webDriver, SKILLS_SECTION);
-        if (isNull(skillsSection))
+        if (isNull(skillsSection)) {
+            log.info("Skills section is not present");
             return "";
+        }
+        log.info("Scraping all skills section");
+        findWebElementBy(webDriver, SHOW_MORE_SKILLS)
+                .ifPresent(webElement -> clickShowMoreSkills(webDriver,webElement));
         return getElementHtml(skillsSection);
+    }
+
+    private void clickShowMoreSkills(WebDriver webDriver, WebElement showMoreSkillsButton) {
+        Actions actions = new Actions(webDriver);
+        scrollToAndClickOnElement(webDriver,actions,showMoreSkillsButton);
     }
 }

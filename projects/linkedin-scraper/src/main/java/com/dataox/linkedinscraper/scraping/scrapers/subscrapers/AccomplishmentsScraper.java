@@ -1,8 +1,8 @@
 package com.dataox.linkedinscraper.scraping.scrapers.subscrapers;
 
 import com.dataox.linkedinscraper.scraping.scrapers.Scraper;
+import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -22,6 +22,7 @@ import static java.util.Objects.nonNull;
  * @author Dmitriy Lysko
  * @since 09/02/2021
  */
+@Slf4j
 @Service
 public class AccomplishmentsScraper implements Scraper<List<String>> {
 
@@ -34,8 +35,11 @@ public class AccomplishmentsScraper implements Scraper<List<String>> {
     public List<String> scrape(WebDriver webDriver) {
         Actions actions = new Actions(webDriver);
         WebElement accSection = findElementBy(webDriver, ACCOMPLISHMENTS_SECTION);
-        if (isNull(accSection))
+        if (isNull(accSection)) {
+            log.info("Accomplishments section is not present");
             return Collections.emptyList();
+        }
+        log.info("Scraping accomplishments section");
         List<String> sources = new ArrayList<>();
         scrollToElement(webDriver, accSection, 400);
         List<WebElement> subSections = webDriver.findElements(ACCOMPLISHMENTS_SUBSECTIONS);
@@ -46,26 +50,18 @@ public class AccomplishmentsScraper implements Scraper<List<String>> {
             clickOnElement(expandButton, actions, randomLong(750, 1500));
             randomSleep(2500, 3500);
             subSection = reFindSubSection(webDriver, i);
-            WebElement showMoreButton = findElement(subSection, SHOW_MORE_BUTTON);
+            WebElement showMoreButton = findWebElementFromParentBy(subSection, SHOW_MORE_BUTTON)
+                    .orElse(null);
             while (nonNull(showMoreButton)) {
                 scrollToAndClickOnElement(webDriver, actions, showMoreButton);
                 randomSleep(2500, 3500);
                 subSection = reFindSubSection(webDriver, i);
-                showMoreButton = findElement(subSection, SHOW_MORE_BUTTON);
+                showMoreButton = findWebElementFromParentBy(subSection, SHOW_MORE_BUTTON)
+                        .orElse(null);
             }
             sources.add(getElementHtml(subSection));
         }
         return sources;
-    }
-
-    private WebElement findElement(WebElement parent, By by) {
-        WebElement element;
-        try {
-            element = parent.findElement(by);
-        } catch (NoSuchElementException e) {
-            return null;
-        }
-        return element;
     }
 
     private WebElement reFindSubSection(WebDriver webDriver, int index) {

@@ -14,18 +14,12 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.stereotype.Service;
 
-import java.awt.*;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.UnsupportedFlavorException;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.dataox.CommonUtils.randomLong;
 import static com.dataox.CommonUtils.randomSleep;
 import static com.dataox.WebDriverUtils.*;
 import static java.util.Collections.emptyList;
-import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 /**
@@ -44,11 +38,14 @@ public class ActivitiesScraper implements Scraper<List<ActivitiesSource>> {
     private static final By COPY_LINK_BUTTON = By.xpath("//h5[text()='Copy link to post']");
     private static final By SEE_ALL_ACTIVITIES_BUTTON = By.xpath("//section[contains(@class,'pv-recent-activity-section-v2')]" +
             "/a/span[text()='See all activity'][1]");
+    private static final By LINK_COPIED_NOTIFICATION = By.xpath("//li[@data-test-artdeco-toast-item-type='success']");
+    private static final By POST_LINK = By.xpath("//li[@data-test-artdeco-toast-item-type='success']//a");
 
     @Override
     public List<ActivitiesSource> scrape(WebDriver webDriver) {
         WebElement seeAllButton = findWebElementBy(webDriver, SEE_ALL_ACTIVITIES_BUTTON)
                 .orElseThrow(() -> ElementNotFoundException.notFound("See all activity button"));
+        log.info("Scraping activities section");
         Actions action = new Actions(webDriver);
         WebDriverWait wait = new WebDriverWait(webDriver, 20);
         scrollToAndClickOnElement(webDriver, action, seeAllButton);
@@ -73,7 +70,7 @@ public class ActivitiesScraper implements Scraper<List<ActivitiesSource>> {
                 return activitiesSources;
             currentPost = posts.get(i);
             scrollToElement(webDriver, currentPost, 300);
-            String postUrl = getPostUrl(action, wait, currentPost);
+            String postUrl = getPostUrl(webDriver, action, wait, currentPost);
             activitiesSources.add(new ActivitiesSource(postUrl, getElementHtml(currentPost)));
             randomSleep(1500, 2500);
         }
@@ -85,21 +82,21 @@ public class ActivitiesScraper implements Scraper<List<ActivitiesSource>> {
             throw ElementNotFoundException.notFound("Activity posts");
     }
 
-    private String getPostUrl(Actions action, WebDriverWait wait, WebElement currentPost) {
-        WebElement postMenu = currentPost.findElement(POSTS_MENU_BUTTON);
-        clickOnElement(postMenu, action, randomLong(750, 1500));
-        wait.until(ExpectedConditions.presenceOfElementLocated(COPY_LINK_BUTTON));
-        WebElement copyLinkButton = currentPost.findElement(COPY_LINK_BUTTON);
-        clickOnElement(copyLinkButton, action, randomLong(750, 1500));
-        return fetchPostUrlFromClipboard();
+    private String getPostUrl(WebDriver webDriver, Actions action, WebDriverWait wait, WebElement currentPost) {
+        clickCopyPostUrl(action, wait, currentPost);
+        wait.until(ExpectedConditions.presenceOfElementLocated(LINK_COPIED_NOTIFICATION));
+        WebElement viewPost = findWebElementBy(webDriver, POST_LINK)
+                .orElseThrow(() -> ElementNotFoundException.notFound("View Post button"));
+        return getElementHtml(viewPost);
     }
 
-    private String fetchPostUrlFromClipboard() {
-        try {
-            return (String) Toolkit.getDefaultToolkit()
-                    .getSystemClipboard().getData(DataFlavor.stringFlavor);
-        } catch (UnsupportedFlavorException | IOException e) {
-            throw new NullPointerException("Can't retrieve url from clipboard");
-        }
+    private void clickCopyPostUrl(Actions action, WebDriverWait wait, WebElement currentPost) {
+        WebElement postMenu = findWebElementFromParentBy(currentPost, POSTS_MENU_BUTTON)
+                .orElseThrow(() -> ElementNotFoundException.notFound("Post menu button"));
+        clickOnElement(postMenu, action);
+        wait.until(ExpectedConditions.presenceOfElementLocated(COPY_LINK_BUTTON));
+        WebElement copyLinkButton = findWebElementFromParentBy(currentPost, COPY_LINK_BUTTON)
+                .orElseThrow(() -> ElementNotFoundException.notFound("Copy post link button"));
+        clickOnElement(copyLinkButton, action);
     }
 }

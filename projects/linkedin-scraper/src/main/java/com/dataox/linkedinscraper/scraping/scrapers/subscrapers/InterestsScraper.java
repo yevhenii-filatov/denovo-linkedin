@@ -2,7 +2,9 @@ package com.dataox.linkedinscraper.scraping.scrapers.subscrapers;
 
 import com.dataox.linkedinscraper.dto.sources.InterestsSource;
 import com.dataox.linkedinscraper.dto.types.InterestsType;
+import com.dataox.linkedinscraper.scraping.exceptions.ElementNotFoundException;
 import com.dataox.linkedinscraper.scraping.scrapers.Scraper;
+import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -11,20 +13,20 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-import static com.dataox.CommonUtils.randomLong;
 import static com.dataox.CommonUtils.randomSleep;
 import static com.dataox.WebDriverUtils.*;
+import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonList;
 import static java.util.Objects.isNull;
 
 /**
  * @author Dmitriy Lysko
  * @since 29/01/2021
  */
+@Slf4j
 @Service
 public class InterestsScraper implements Scraper<List<InterestsSource>> {
 
@@ -36,43 +38,57 @@ public class InterestsScraper implements Scraper<List<InterestsSource>> {
 
     @Override
     public List<InterestsSource> scrape(WebDriver webDriver) {
-        if (isNull(findElementBy(webDriver, INTERESTS_SECTION)))
-            return Collections.emptyMap();
-        if (isNull(findElementBy(webDriver, SEE_ALL_BUTTON)))
-            return collectWhileInterestsSection(webDriver);
+        WebElement interestsSection = findElementBy(webDriver, INTERESTS_SECTION);
+        if (isNull(interestsSection)) {
+            log.info("Interests section is not present");
+            return emptyList();
+        }
+        WebElement seeAllButton = findElementBy(webDriver, SEE_ALL_BUTTON);
+        if (isNull(seeAllButton)) {
+            log.info("Scraping while interests section");
+            return collectWholeInterestsSection(webDriver);
+        }
+        log.info("Scraping interests section by categories");
         return collectInterestsByGroups(webDriver);
     }
 
-    private Map<String, String> collectWhileInterestsSection(WebDriver webDriver) {
+    private List<InterestsSource> collectWholeInterestsSection(WebDriver webDriver) {
         WebElement interestsSection = findElementBy(webDriver, INTERESTS_SECTION);
         scrollToElement(webDriver, interestsSection, 400);
-        return Collections.singletonMap(InterestsType.DEFAULT, getElementHtml(interestsSection));
+        return singletonList(new InterestsSource(InterestsType.DEFAULT, getElementHtml(interestsSection)));
     }
 
-    private Map<String, String> collectInterestsByGroups(WebDriver webDriver) {
-        Map<String, String> groupAndInterestSource = new HashMap<>();
+    private List<InterestsSource> collectInterestsByGroups(WebDriver webDriver) {
+        List<InterestsSource> interestsSources = new ArrayList<>();
         WebDriverWait wait = new WebDriverWait(webDriver, 45);
         Actions actions = new Actions(webDriver);
 
         clickSeeAllButton(webDriver, wait, actions);
-        for (WebElement tab : webDriver.findElements(TAB_LIST)) {
-            clickOnElement(tab,actions,randomLong(750,1500));
+        List<WebElement> interestsTabs = webDriver.findElements(TAB_LIST);
+        if (interestsTabs.isEmpty())
+            throw ElementNotFoundException.notFound("Interests tabs");
+
+        for (WebElement tab : interestsTabs) {
+            clickOnElement(tab, actions);
             randomSleep(1500, 4000);
-            WebElement interestsPopup = findElementBy(webDriver, POPUP_INTERESTS_WINDOW);
+            WebElement interestsPopup = findWebElementBy(webDriver, POPUP_INTERESTS_WINDOW)
+                    .orElseThrow(() -> ElementNotFoundException.notFound("Interests popup window"));
             String group = tab.getText();
-            groupAndInterestSource.put(group, getElementHtml(interestsPopup));
+            interestsSources.add(new InterestsSource(group, getElementHtml(interestsPopup)));
             randomSleep(1500, 4000);
         }
-        WebElement closePopupButton = findElementBy(webDriver, CLOSE_POPUP_BUTTON);
-        clickOnElement(closePopupButton,actions,randomLong(750,1500));
-        return groupAndInterestSource;
+        WebElement closePopupButton = findWebElementBy(webDriver, CLOSE_POPUP_BUTTON)
+                .orElseThrow(() -> ElementNotFoundException.notFound("Close interests popup window button"));
+        clickOnElement(closePopupButton, actions);
+        return interestsSources;
     }
 
     private void clickSeeAllButton(WebDriver webDriver, WebDriverWait wait, Actions actions) {
-        WebElement seeAllButton = findElementBy(webDriver, SEE_ALL_BUTTON);
+        WebElement seeAllButton = findWebElementBy(webDriver, SEE_ALL_BUTTON)
+                .orElseThrow(() -> ElementNotFoundException.notFound("See all interests button"));
         scrollToElement(webDriver, seeAllButton, 450);
         randomSleep(2500, 4500);
-        clickOnElement(seeAllButton,actions,randomLong(750,1500));
+        clickOnElement(seeAllButton, actions);
         wait.until(ExpectedConditions.presenceOfElementLocated(POPUP_INTERESTS_WINDOW));
     }
 }
