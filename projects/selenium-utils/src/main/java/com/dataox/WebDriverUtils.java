@@ -41,7 +41,7 @@ public final class WebDriverUtils {
                 : elements.get(0);
     }
 
-    public static Optional<Object> findWebElementFromParentBy(WebElement parent, By by) {
+    public static Optional<WebElement> findWebElementFromParentBy(WebElement parent, By by) {
         WebElement element;
         try {
             element = parent.findElement(by);
