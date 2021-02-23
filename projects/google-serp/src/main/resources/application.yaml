@@ -18,8 +18,8 @@ app:
     required-results-count: 5
   notifications:
     telegram:
-      bot-token: '1267422790:AAHiQcyTkqpPphUMP5SPNVWaXu1XXxJLtTQ'
-      chat-id: -1001201576524
+      bot-token: [ BOT_TOKEN ]
+      chat-id: [ CHAT_ID ]
       enabled: true
   proxy:
     operia:
