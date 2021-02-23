@@ -20,5 +20,7 @@ public interface InitialDataRepository extends JpaRepository<InitialData, Long> 
 
     List<InitialData> findAllByIdBetween(Long start, Long end);
 
+    List<InitialData> findAllByDenovoIdInAndSearchedFalse(List<Long> id);
+
     Optional<InitialData> findByIdAndSearchedFalse(Long id);
 }
