@@ -29,11 +29,9 @@ public final class WebDriverUtils {
         }
     }
 
-    public static void enterDataIntoTextFieldWithKeyboard(WebElement field, String data) {
-        for (char symbol : data.toCharArray()) {
-            field.sendKeys(String.valueOf(symbol));
-            CommonUtils.randomSleep(100, 500);
-        }
+    public static Optional<WebElement> findWebElementBy(WebDriver webDriver, By by) {
+        List<WebElement> elements = webDriver.findElements(by);
+        return elements.isEmpty() ? Optional.empty() : Optional.of(elements.get(0));
     }
 
     public static WebElement findElementBy(WebDriver webDriver, By by) {
@@ -41,6 +39,23 @@ public final class WebDriverUtils {
         return elements.isEmpty()
                 ? null
                 : elements.get(0);
+    }
+
+    public static Optional<Object> findWebElementFromParentBy(WebElement parent, By by) {
+        WebElement element;
+        try {
+            element = parent.findElement(by);
+        } catch (NoSuchElementException e) {
+            return Optional.empty();
+        }
+        return Optional.of(element);
+    }
+
+    public static void enterDataIntoTextFieldWithKeyboard(WebElement field, String data) {
+        for (char symbol : data.toCharArray()) {
+            field.sendKeys(String.valueOf(symbol));
+            CommonUtils.randomSleep(100, 500);
+        }
     }
 
     public static void executeJavascript(WebDriver webDriver, String script, Object... args) {
@@ -85,7 +100,7 @@ public final class WebDriverUtils {
                                                  Long clickPause,
                                                  int topPanelHeight) {
         scrollToElement(webDriver, webElement, topPanelHeight);
-        actions.moveToElement(webElement).pause(clickPause).click().perform();
+        clickOnElement(webElement, actions, clickPause);
     }
 
     public static void scrollToElement(WebDriver webDriver, WebElement webElement, int topPanelHeight) {
@@ -136,6 +151,10 @@ public final class WebDriverUtils {
 
     public static void clickOnElement(WebElement elementToClick, Actions actions, Long pause) {
         actions.moveToElement(elementToClick).pause(pause).click().perform();
+    }
+
+    public static void clickOnElement(WebElement elementToClick, Actions actions) {
+        actions.moveToElement(elementToClick).pause(CommonUtils.randomLong(750, 1500)).click().perform();
     }
 
     public enum ScrollingDirection {
