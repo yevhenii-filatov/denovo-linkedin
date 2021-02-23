@@ -1,9 +1,9 @@
 package com.dataox.linkedinscraper.scraping.scrapers.subscrapers;
 
+import com.dataox.linkedinscraper.dto.sources.InterestsSource;
 import com.dataox.linkedinscraper.dto.types.InterestsType;
 import com.dataox.linkedinscraper.scraping.scrapers.Scraper;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static com.dataox.CommonUtils.randomLong;
@@ -25,7 +26,7 @@ import static java.util.Objects.isNull;
  * @since 29/01/2021
  */
 @Service
-public class InterestsScraper implements Scraper<Map<String, String>> {
+public class InterestsScraper implements Scraper<List<InterestsSource>> {
 
     private static final By INTERESTS_SECTION = By.xpath("//section[contains(@class,'v-interests-section')]");
     private static final By SEE_ALL_BUTTON = By.xpath("//section[contains(@class,'v-interests-section')]//a/span[text()='See all']");
@@ -34,7 +35,7 @@ public class InterestsScraper implements Scraper<Map<String, String>> {
     private static final By CLOSE_POPUP_BUTTON = By.xpath("//button[@aria-label='Dismiss']");
 
     @Override
-    public Map<String, String> scrape(WebDriver webDriver) {
+    public List<InterestsSource> scrape(WebDriver webDriver) {
         if (isNull(findElementBy(webDriver, INTERESTS_SECTION)))
             return Collections.emptyMap();
         if (isNull(findElementBy(webDriver, SEE_ALL_BUTTON)))

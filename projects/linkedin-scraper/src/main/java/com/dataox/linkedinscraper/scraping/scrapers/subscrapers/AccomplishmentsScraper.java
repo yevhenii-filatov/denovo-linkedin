@@ -34,9 +34,8 @@ public class AccomplishmentsScraper implements Scraper<List<String>> {
     public List<String> scrape(WebDriver webDriver) {
         Actions actions = new Actions(webDriver);
         WebElement accSection = findElementBy(webDriver, ACCOMPLISHMENTS_SECTION);
-        if (isNull(accSection)) {
+        if (isNull(accSection))
             return Collections.emptyList();
-        }
         List<String> sources = new ArrayList<>();
         scrollToElement(webDriver, accSection, 400);
         List<WebElement> subSections = webDriver.findElements(ACCOMPLISHMENTS_SUBSECTIONS);
@@ -54,7 +53,6 @@ public class AccomplishmentsScraper implements Scraper<List<String>> {
                 subSection = reFindSubSection(webDriver, i);
                 showMoreButton = findElement(subSection, SHOW_MORE_BUTTON);
             }
-
             sources.add(getElementHtml(subSection));
         }
         return sources;

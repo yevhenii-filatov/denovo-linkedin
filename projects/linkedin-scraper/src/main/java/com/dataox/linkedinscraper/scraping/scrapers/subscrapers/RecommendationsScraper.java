@@ -1,5 +1,6 @@
 package com.dataox.linkedinscraper.scraping.scrapers.subscrapers;
 
+import com.dataox.linkedinscraper.dto.sources.RecommendationsSource;
 import com.dataox.linkedinscraper.dto.types.RecommendationType;
 import com.dataox.linkedinscraper.scraping.scrapers.Scraper;
 import org.openqa.selenium.By;
@@ -15,7 +16,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.dataox.CommonUtils.randomLong;
 import static com.dataox.CommonUtils.randomSleep;
 import static com.dataox.WebDriverUtils.*;
 import static java.util.Objects.isNull;
@@ -26,7 +26,7 @@ import static java.util.Objects.nonNull;
  * @since 29/01/2021
  */
 @Service
-public class RecommendationsScraper implements Scraper<Map<String, String>> {
+public class RecommendationsScraper implements Scraper<List<RecommendationsSource>> {
 
     private static final By RECOMMENDATION_SECTION = By.xpath("//section[contains(@class,'pv-profile-section pv-recommendations-section')]");
     private static final By ZERO_RECEIVED_RECOMMENDATIONS = By.xpath("//section[contains(@class,'pv-profile-section pv-recommendations-section')]" +
@@ -44,7 +44,7 @@ public class RecommendationsScraper implements Scraper<Map<String, String>> {
     private static final By LOADING_ANIMATION = By.className("artdeco-loader--small");
 
     @Override
-    public Map<String, String> scrape(WebDriver webDriver) {
+    public List<RecommendationsSource> scrape(WebDriver webDriver) {
         WebElement recommendationSection = findElementBy(webDriver, RECOMMENDATION_SECTION);
         if (isNull(recommendationSection))
             return Collections.emptyMap();

@@ -1,9 +1,11 @@
 package com.dataox.linkedinscraper.scraping.scrapers;
 
 import com.dataox.linkedinscraper.dto.CollectedProfileSourcesDTO;
+import com.dataox.linkedinscraper.scraping.exceptions.ElementNotFoundException;
 import com.dataox.linkedinscraper.scraping.scrapers.subscrapers.*;
 import com.dataox.linkedinscraper.scraping.service.login.LoginService;
 import lombok.RequiredArgsConstructor;
+import org.openqa.selenium.NotFoundException;
 import org.openqa.selenium.WebDriver;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
@@ -41,9 +43,9 @@ public class LinkedinProfileScraper {
         profileSourcesDTO.setEducationsSource(educationScraper.scrape(webDriver));
         profileSourcesDTO.setLicenseSource(licenseScraper.scrape(webDriver));
         profileSourcesDTO.setVolunteersSource(volunteersScraper.scrape(webDriver));
-        profileSourcesDTO.setSkillsWithEndorsementsSource(skillsWithEndorsementsScraper.scrape(webDriver));
+        profileSourcesDTO.setSkillsWithEndorsementsSources(skillsWithEndorsementsScraper.scrape(webDriver));
         profileSourcesDTO.setAllSkillsSource(allSkillsScraper.scrape(webDriver));
-        profileSourcesDTO.setRecommendationsSource(recommendationsScraper.scrape(webDriver));
+        profileSourcesDTO.setRecommendationsSources(recommendationsScraper.scrape(webDriver));
         profileSourcesDTO.setAccomplishmentsSources(accomplishmentsScraper.scrape(webDriver));
         profileSourcesDTO.setInterestsSources(interestsScraper.scrape(webDriver));
         profileSourcesDTO.setPostUrlAndActivitySource(activitiesScraper.scrape(webDriver));

@@ -1,5 +1,6 @@
 package com.dataox.linkedinscraper.scraping.scrapers.subscrapers;
 
+import com.dataox.linkedinscraper.dto.sources.SkillsSource;
 import com.dataox.linkedinscraper.scraping.scrapers.Scraper;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -22,7 +23,7 @@ import static java.util.Objects.nonNull;
  * @since 02/02/2021
  */
 @Service
-public class SkillsWithEndorsementsScraper implements Scraper<Map<String, List<String>>> {
+public class SkillsWithEndorsementsScraper implements Scraper<List<SkillsSource>> {
 
     private static final int SCROLL_STEP = 500;
     private static final String TOP_CATEGORY_NAME = "Top";
@@ -40,7 +41,7 @@ public class SkillsWithEndorsementsScraper implements Scraper<Map<String, List<S
     private static final String POPUP_SCROLLING_AREA = "//div[@data-test-modal]//div[@class='artdeco-modal__content ember-view']";
 
     @Override
-    public Map<String, List<String>> scrape(WebDriver webDriver) {
+    public List<SkillsSource> scrape(WebDriver webDriver) {
         Actions actions = new Actions(webDriver);
         WebDriverWait wait = new WebDriverWait(webDriver, 30);
         WebElement showMoreSkillsButton = findElementBy(webDriver, SHOW_MORE_SKILLS);
