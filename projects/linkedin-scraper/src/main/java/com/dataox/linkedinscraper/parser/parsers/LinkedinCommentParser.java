@@ -9,7 +9,6 @@ import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,26 +28,11 @@ public class LinkedinCommentParser implements LinkedinParser<List<LinkedinCommen
 
     @Override
     public List<LinkedinComment> parse(String source) {
-        if (source.isEmpty()) {
-            return Collections.emptyList();
-        }
-
         Element commentSectionElement = toElement(source);
         Instant time = Instant.now();
 
         return splitComments(commentSectionElement).stream()
-                .map(commentElement -> {
-                    String urn = commentElement.attr("data-id");
-                    LinkedinComment comment = getLinkedinComment(commentElement, time, urn);
-                    String parentClass = commentElement.parent().className();
-
-                    if (isReply(parentClass)) {
-                        String parentUrn = getParentUrn(commentElement);
-                        comment.setUrl(getReplyUrl(urn, getCommentUrl(parentUrn)));
-                    }
-
-                    return comment;
-                })
+                .map(commentElement -> getLinkedinComment(commentElement,time))
                 .collect(Collectors.toList());
     }
 
@@ -56,19 +40,30 @@ public class LinkedinCommentParser implements LinkedinParser<List<LinkedinCommen
         return commentSectionElement.select("article[data-id^=urn]");
     }
 
-    private LinkedinComment getLinkedinComment(Element contentElement, Instant time, String urn) {
-        LinkedinComment comment = new LinkedinComment();
+    private LinkedinComment getLinkedinComment(Element commentElement, Instant time) {
+        String urn = commentElement.attr("data-id");
 
+        LinkedinComment comment = new LinkedinComment();
         comment.setCollectedDate(time);
-        comment.setItemSource(contentElement.html());
-        comment.setContent(parseContent(contentElement));
-        comment.setRelativePublicationDate(parseRelativePublicationDate(contentElement));
-        comment.setAbsolutePublicationDate(getAbsolutePublicationDate(contentElement));
-        comment.setNumberOfReactions(parseNumberOfReactions(contentElement));
-        comment.setNumberOfReplies(parseNumberOfReplies(contentElement));
+        comment.setItemSource(commentElement.html());
+        comment.setContent(parseContent(commentElement));
+        comment.setRelativePublicationDate(parseRelativePublicationDate(commentElement));
+        comment.setAbsolutePublicationDate(getAbsolutePublicationDate(commentElement));
+        comment.setNumberOfReactions(parseNumberOfReactions(commentElement));
+        comment.setNumberOfReplies(parseNumberOfReplies(commentElement));
         comment.setUrl(getCommentUrl(urn));
+        setReplyUrl(commentElement, urn, comment);
 
         return comment;
+    }
+
+    private void setReplyUrl(Element commentElement, String urn, LinkedinComment comment) {
+        String parentClass = commentElement.parent().className();
+
+        if (isReply(parentClass)) {
+            String parentUrn = getParentUrn(commentElement);
+            comment.setUrl(getReplyUrl(urn, getCommentUrl(parentUrn)));
+        }
     }
 
     private boolean isReply(String parentClass) {

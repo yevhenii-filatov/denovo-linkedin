@@ -36,9 +36,9 @@ public class LinkedinBasicProfileInfo {
     @Column(name = "full_name")
     private String fullName;
 
-    @NotEmpty
+    @NotBlank
     @Column(name = "number_of_connections")
-    private int numberOfConnections;
+    private String numberOfConnections;
 
     @NotEmpty
     @Column(name = "location")

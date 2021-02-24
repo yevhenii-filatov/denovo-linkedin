@@ -4,56 +4,40 @@ import com.dataox.linkedinscraper.parser.LinkedinParser;
 import com.dataox.linkedinscraper.parser.dto.LinkedinComment;
 import com.dataox.linkedinscraper.parser.dto.LinkedinPost;
 import com.dataox.linkedinscraper.parser.utils.TimeConverter;
+import com.dataox.linkedinscraper.parser.utils.sources.ActivitiesSource;
 import lombok.RequiredArgsConstructor;
 import org.jsoup.nodes.Element;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.List;
-import java.util.Map;
 
 import static com.dataox.jsouputils.JsoupUtils.absUrlFromHref;
 import static com.dataox.jsouputils.JsoupUtils.text;
+import static com.dataox.linkedinscraper.parser.utils.ParsingUtils.toElement;
 import static java.lang.Integer.parseInt;
 import static java.util.Objects.nonNull;
-import static org.apache.commons.lang3.StringUtils.substringAfter;
-import static org.apache.commons.lang3.StringUtils.substringBefore;
+import static org.apache.commons.lang3.StringUtils.*;
 
 @Service
 @RequiredArgsConstructor
-public class LinkedinPostParser implements LinkedinParser<LinkedinPost, Map<String, Element>> {
+public class LinkedinPostParser implements LinkedinParser<LinkedinPost, ActivitiesSource> {
 
     private final TimeConverter timeConverter;
     private final LinkedinCommentParser commentParser;
 
     @Override
-    public LinkedinPost parse(Map<String, Element> source) {
-        if (source.isEmpty()) {
-            return null;
-        }
-
+    public LinkedinPost parse(ActivitiesSource source) {
         Instant time = Instant.now();
 
-        //noinspection OptionalGetWithoutIsPresent
-        return source.entrySet().stream()
-                .map(entry -> {
-                    String postUrl = entry.getKey();
-                    Element postElement = entry.getValue();
-                    LinkedinPost linkedinPost = getLinkedinPost(postElement, time, postUrl);
-
-                    if (isCommentsPresent(postElement)) {
-                        setComments(postElement, linkedinPost);
-                    }
-
-                    return linkedinPost;
-                })
-                .findAny()
-                .get();
+        return getLinkedinPost(time,source);
     }
 
-    public LinkedinPost getLinkedinPost(Element postElement, Instant time, String postUrl) {
-        LinkedinPost post = new LinkedinPost();
+    public LinkedinPost getLinkedinPost(Instant time, ActivitiesSource source) {
+        String postUrl = source.getPostUrl();
+        Element postElement = toElement(source.getSource());
 
+        LinkedinPost post = new LinkedinPost();
         post.setCollectedDate(time);
         post.setItemSource(postElement.html());
         post.setUrl(postUrl);
@@ -65,6 +49,10 @@ public class LinkedinPostParser implements LinkedinParser<LinkedinPost, Map<Stri
         post.setContent(parseContent(postElement));
         post.setNumberOfComments(parseNumberOfComments(postElement));
         post.setNumberOfReactions(parseNumberOfReactions(postElement));
+
+        if (isCommentsPresent(postElement)) {
+            setComments(postElement, post);
+        }
 
         return post;
     }
