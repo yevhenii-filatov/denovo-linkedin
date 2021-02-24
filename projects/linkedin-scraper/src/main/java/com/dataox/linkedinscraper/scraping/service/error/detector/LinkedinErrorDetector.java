@@ -19,6 +19,7 @@ public class LinkedinErrorDetector {
     private static final By RESTRICTION_HEADING_SELECTOR = By.xpath("//h1[contains(text(),'restricted your account temporarily')]");
     private static final By BAN_HEADING_SELECTOR = By.xpath("//h1[contains(text(),'Your account has been restricted')]");
     private static final By ISNT_QUITE_RIGHT = By.xpath("//main/h1[text()='Something isn’t quite right']");
+    private static final By SOMETHING_WENT_WRONG = By.xpath("//h1[text()='Something went wrong']");
 
     public LinkedinError detect(WebDriver webDriver) {
         if (banDetected(webDriver)) {
@@ -42,11 +43,20 @@ public class LinkedinErrorDetector {
         if (unexpectedErrorOnLinkedinSideDetected(webDriver)) {
             return LinkedinError.OOPS_ITS_NOT_YOU_ITS_US;
         }
-        if (dontHaveAccessToThisProfile(webDriver))
+        if (dontHaveAccessToThisProfile(webDriver)) {
             return LinkedinError.DONT_HAVE_ACCESS_TO_PROFILE;
-        if(isntQuiteRight(webDriver))
+        }
+        if (isntQuiteRight(webDriver)) {
             return LinkedinError.ISNT_QUITE_RIGHT;
+        }
+        if (somethingWentWrong(webDriver)) {
+            return LinkedinError.SOMETHING_WENT_WRONG;
+        }
         return LinkedinError.NO_ERRORS;
+    }
+
+    private boolean somethingWentWrong(WebDriver webDriver) {
+        return Objects.nonNull(WebDriverUtils.findElementBy(webDriver, SOMETHING_WENT_WRONG));
     }
 
     private boolean isntQuiteRight(WebDriver webDriver) {

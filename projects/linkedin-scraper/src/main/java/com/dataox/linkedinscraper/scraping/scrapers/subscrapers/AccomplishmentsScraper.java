@@ -26,7 +26,7 @@ import static java.util.Objects.nonNull;
 @Service
 public class AccomplishmentsScraper implements Scraper<List<String>> {
 
-    private static final By ACCOMPLISHMENTS_SECTION = By.className("pv-accomplishments-section");
+    private static final By ACCOMPLISHMENTS_SECTION = By.xpath("//section[contains(@class,'pv-accomplishments-section')][not(@style)]");
     private static final By ACCOMPLISHMENTS_SUBSECTIONS = By.xpath("//section[contains(@class,'pv-accomplishments-section')]/div");
     private static final By EXPAND_SUBSECTION_BUTTON = By.tagName("button");
     private static final By SHOW_MORE_BUTTON = By.className("pv-profile-section__see-more-inline");

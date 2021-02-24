@@ -33,6 +33,7 @@ public class LoginService {
     private final AccountCredentials accountCredentials;
     private final CaptchaSolver captchaSolver;
     private final LinkedinErrorDetector errorDetector;
+    private static final String LINKEDIN_LOGIN_PAGE_URL = "https://www.linkedin.com/";
     private static final By LOGIN_INPUT_FIELD = By.xpath("//input[@autocomplete='username']");
     private static final By PASSWORD_INPUT_FIELD = By.xpath("//input[@autocomplete='current-password']");
     private static final By SUBMIT_BUTTON = By.xpath("//button[@class='sign-in-form__submit-button'][@type='submit']");
@@ -40,6 +41,7 @@ public class LoginService {
     private static final By CAPTCHA_FORM = By.cssSelector("form#captcha-challenge");
 
     public void performLogin(WebDriver webDriver) {
+        webDriver.get(LINKEDIN_LOGIN_PAGE_URL);
         log.info("Performing login to linkedin with user credentials: {}", accountCredentials);
         WebDriverWait wait = new WebDriverWait(webDriver, 60);
         fillFieldsAndSubmitForm(webDriver);

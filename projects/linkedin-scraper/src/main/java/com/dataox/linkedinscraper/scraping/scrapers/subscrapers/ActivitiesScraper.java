@@ -45,7 +45,7 @@ public class ActivitiesScraper implements Scraper<List<ActivitiesSource>> {
     public List<ActivitiesSource> scrape(WebDriver webDriver) {
         WebElement seeAllButton = findWebElementBy(webDriver, SEE_ALL_ACTIVITIES_BUTTON)
                 .orElseThrow(() -> ElementNotFoundException.notFound("See all activity button"));
-        log.info("Scraping activities section");
+        log.info("Scraping activities");
         Actions action = new Actions(webDriver);
         WebDriverWait wait = new WebDriverWait(webDriver, 20);
         scrollToAndClickOnElement(webDriver, action, seeAllButton);
@@ -87,7 +87,7 @@ public class ActivitiesScraper implements Scraper<List<ActivitiesSource>> {
         wait.until(ExpectedConditions.presenceOfElementLocated(LINK_COPIED_NOTIFICATION));
         WebElement viewPost = findWebElementBy(webDriver, POST_LINK)
                 .orElseThrow(() -> ElementNotFoundException.notFound("View Post button"));
-        return getElementHtml(viewPost);
+        return viewPost.getAttribute("href");
     }
 
     private void clickCopyPostUrl(Actions action, WebDriverWait wait, WebElement currentPost) {

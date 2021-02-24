@@ -31,7 +31,7 @@ import static java.util.Objects.nonNull;
 @Service
 public class RecommendationsScraper implements Scraper<List<RecommendationsSource>> {
 
-    private static final By RECOMMENDATION_SECTION = By.xpath("//section[contains(@class,'pv-profile-section pv-recommendations-section')]");
+    private static final By RECOMMENDATION_SECTION = By.xpath("//section[contains(@class,'pv-profile-section pv-recommendations-section')][not(@style)]");
     private static final By ZERO_RECEIVED_RECOMMENDATIONS = By.xpath("//section[contains(@class,'pv-profile-section pv-recommendations-section')]" +
             "//button[text()='Received (0)']");
     private static final By ZERO_GIVEN_RECOMMENDATIONS = By.xpath("//section[contains(@class,'pv-profile-section pv-recommendations-section')]" +

@@ -6,6 +6,7 @@ import com.dataox.linkedinscraper.scraping.exceptions.ElementNotFoundException;
 import com.dataox.linkedinscraper.scraping.scrapers.Scraper;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -35,6 +36,8 @@ public class InterestsScraper implements Scraper<List<InterestsSource>> {
     private static final By POPUP_INTERESTS_WINDOW = By.xpath("//div[@role='dialog']");
     private static final By TAB_LIST = By.xpath("//ul[@role='tablist']/li");
     private static final By CLOSE_POPUP_BUTTON = By.xpath("//button[@aria-label='Dismiss']");
+    private static final By POPUP_SCROLLING_AREA = By.xpath("//div[@data-test-modal]//div[contains(@class,'entity-all pv-interests-list')]");
+    private static final int SCROLL_STEP = 500;
 
     @Override
     public List<InterestsSource> scrape(WebDriver webDriver) {
@@ -45,7 +48,7 @@ public class InterestsScraper implements Scraper<List<InterestsSource>> {
         }
         WebElement seeAllButton = findElementBy(webDriver, SEE_ALL_BUTTON);
         if (isNull(seeAllButton)) {
-            log.info("Scraping while interests section");
+            log.info("Scraping whole interests section");
             return collectWholeInterestsSection(webDriver);
         }
         log.info("Scraping interests section by categories");
@@ -70,7 +73,10 @@ public class InterestsScraper implements Scraper<List<InterestsSource>> {
 
         for (WebElement tab : interestsTabs) {
             clickOnElement(tab, actions);
-            randomSleep(1500, 4000);
+            randomSleep(1500, 2000);
+            WebElement scrollingArea = findWebElementBy(webDriver, POPUP_SCROLLING_AREA)
+                    .orElseThrow(() -> ElementNotFoundException.notFound("Interests tab scrolling area"));
+            scrollToTheBottomOfPopUp(webDriver, scrollingArea, SCROLL_STEP);
             WebElement interestsPopup = findWebElementBy(webDriver, POPUP_INTERESTS_WINDOW)
                     .orElseThrow(() -> ElementNotFoundException.notFound("Interests popup window"));
             String group = tab.getText();
@@ -81,6 +87,23 @@ public class InterestsScraper implements Scraper<List<InterestsSource>> {
                 .orElseThrow(() -> ElementNotFoundException.notFound("Close interests popup window button"));
         clickOnElement(closePopupButton, actions);
         return interestsSources;
+    }
+
+    private void scrollToTheBottomOfPopUp(WebDriver webDriver, WebElement scrollingElement, int scrollStop) {
+        int desiredScrollY = 0;
+        Long beforeScroll;
+        Long afterScroll;
+        do {
+            beforeScroll = getCurrentScrollYInElement(webDriver, scrollingElement);
+            executeJavascript(webDriver, "arguments[0].scrollTop=arguments[1]", scrollingElement, desiredScrollY += scrollStop);
+            afterScroll = getCurrentScrollYInElement(webDriver, scrollingElement);
+            randomSleep(750, 1500);
+        } while (!beforeScroll.equals(afterScroll));
+    }
+
+    private Long getCurrentScrollYInElement(WebDriver webDriver, WebElement scrollingArea) {
+        JavascriptExecutor js = (JavascriptExecutor) webDriver;
+        return (Long) js.executeScript("return arguments[0].scrollTop", scrollingArea);
     }
 
     private void clickSeeAllButton(WebDriver webDriver, WebDriverWait wait, Actions actions) {

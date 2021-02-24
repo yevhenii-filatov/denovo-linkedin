@@ -31,6 +31,8 @@ public class HeaderSectionScraper implements Scraper<String> {
 
     @Override
     public String scrape(WebDriver webDriver) {
+        WebDriverWait wait = new WebDriverWait(webDriver, 30);
+        wait.until(ExpectedConditions.presenceOfElementLocated(HEADER_SELECTOR));
         WebElement headerSection = findWebElementBy(webDriver, HEADER_SELECTOR)
                 .orElseThrow(() -> ElementNotFoundException.notFound("Header section"));
         log.info("Scraping header section");

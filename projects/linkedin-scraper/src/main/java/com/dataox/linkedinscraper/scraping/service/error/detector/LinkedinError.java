@@ -18,7 +18,8 @@ public enum LinkedinError implements Error {
     PAGE_NOT_FOUND("25", "Page not found", false),
     OOPS_ITS_NOT_YOU_ITS_US("26", "Unexpected error on Linkedin side", false),
     DONT_HAVE_ACCESS_TO_PROFILE("27", "The profiles of members who are outside your network have limited visibility", false),
-    ISNT_QUITE_RIGHT("28","We noticed unusual activity from your account.",false);
+    ISNT_QUITE_RIGHT("28","We noticed unusual activity from your account.",false),
+    SOMETHING_WENT_WRONG("29","Something went wrong. Refresh the page",false);
 
     String code;
     String message;
