@@ -1,5 +1,6 @@
 package com.dataox.linkedinscraper.parser.utils;
 
+import com.dataox.linkedinscraper.parser.exceptions.TimeConvertingException;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -20,17 +21,9 @@ public class TimeConverter {
 
     private ChronoUnit getChronoUnit(String when) {
         return Arrays.stream(ChronoUnit.values())
-                .filter(chronoUnit -> {
-                    String date = extractLetters(when);
-                    return chronoUnit.toString().toLowerCase().startsWith(handleYear(date));
-                })
-                .findFirst().orElseThrow(IllegalArgumentException::new);
-    }
-
-    private String handleYear(String date){
-        return date.equals("yr")
-                ? "y"
-                : date;
+                .filter(chronoUnit -> chronoUnit.toString().toLowerCase().startsWith(extractLetters(when)))
+                .findFirst()
+                .orElseThrow(() -> new TimeConvertingException("Failed to get the corresponding ChronoUnit"));
     }
 
     private long toLong(String when) {
@@ -42,6 +35,6 @@ public class TimeConverter {
     }
 
     private String extractLetters(String when) {
-        return normalizeSpace(when.replace(extractNumbers(when), ""));
+        return normalizeSpace(when.replaceAll("\\d+|r+", ""));
     }
 }
