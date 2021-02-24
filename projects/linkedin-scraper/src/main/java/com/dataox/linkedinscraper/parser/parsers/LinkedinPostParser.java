@@ -4,7 +4,6 @@ import com.dataox.linkedinscraper.parser.LinkedinParser;
 import com.dataox.linkedinscraper.parser.dto.LinkedinComment;
 import com.dataox.linkedinscraper.parser.dto.LinkedinPost;
 import com.dataox.linkedinscraper.parser.utils.TimeConverter;
-import com.dataox.linkedinscraper.parser.utils.sources.ActivitiesSource;
 import lombok.RequiredArgsConstructor;
 import org.jsoup.nodes.Element;
 import org.springframework.stereotype.Service;
@@ -17,30 +16,32 @@ import static com.dataox.jsouputils.JsoupUtils.text;
 import static com.dataox.linkedinscraper.parser.utils.ParsingUtils.toElement;
 import static java.lang.Integer.parseInt;
 import static java.util.Objects.nonNull;
-import static org.apache.commons.lang3.StringUtils.*;
+import static org.apache.commons.lang3.StringUtils.substringAfter;
+import static org.apache.commons.lang3.StringUtils.substringBefore;
 
 @Service
 @RequiredArgsConstructor
-public class LinkedinPostParser implements LinkedinParser<LinkedinPost, ActivitiesSource> {
+public class LinkedinPostParser implements LinkedinParser<LinkedinPost, String> {
+    private final static String BASE_URL = "https://www.linkedin.com/feed/update/";
 
     private final TimeConverter timeConverter;
     private final LinkedinCommentParser commentParser;
 
     @Override
-    public LinkedinPost parse(ActivitiesSource source) {
+    public LinkedinPost parse(String source) {
         Instant time = Instant.now();
 
         return getLinkedinPost(time,source);
     }
 
-    public LinkedinPost getLinkedinPost(Instant time, ActivitiesSource source) {
-        String postUrl = source.getPostUrl();
-        Element postElement = toElement(source.getSource());
+    public LinkedinPost getLinkedinPost(Instant time, String source) {
+        String postUrl = "source.getPostUrl()";
+        Element postElement = toElement(source);
 
         LinkedinPost post = new LinkedinPost();
         post.setCollectedDate(time);
         post.setItemSource(postElement.html());
-        post.setUrl(postUrl);
+        post.setUrl(getActivityUrl(postElement));
         post.setRelativePublicationDate(parseRelativePublicationDate(postElement));
         post.setAbsolutePublicationDate(getAbsolutePublicationDate(postElement));
         post.setAuthorProfileUrl(parseAuthorProfileUrl(postElement));
@@ -57,14 +58,12 @@ public class LinkedinPostParser implements LinkedinParser<LinkedinPost, Activiti
         return post;
     }
 
-    private void setComments(Element postElement, LinkedinPost linkedinPost) {
-        Element commentElement = postElement.selectFirst(".feed-shared-update-v2__comments-container");
-        List<LinkedinComment> comments = commentParser.parse(commentElement.html());
-        linkedinPost.setLinkedinComments(comments);
+    private String getActivityUrl(Element postElement) {
+        return BASE_URL + parsePostUrn(postElement);
     }
 
-    private boolean isCommentsPresent(Element postElement) {
-        return nonNull(postElement.selectFirst(".feed-shared-update-v2__comments-container"));
+    private String parsePostUrn(Element postElement) {
+        return postElement.selectFirst("div[data-urn]").attr("data-urn");
     }
 
     private String parseRelativePublicationDate(Element postElement) {
@@ -76,7 +75,7 @@ public class LinkedinPostParser implements LinkedinParser<LinkedinPost, Activiti
     }
 
     private String parseAuthorProfileUrl(Element postElement) {
-        return absUrlFromHref(postElement.selectFirst("a[data-control-name=original_share_actor_container]"));
+        return absUrlFromHref(postElement.selectFirst("a[data-control-name=actor_container]"));
     }
 
     private String parseAuthorConnectionDegree(Element postElement) {
@@ -109,14 +108,24 @@ public class LinkedinPostParser implements LinkedinParser<LinkedinPost, Activiti
     private int parseNumberOfComments(Element postElement) {
         String numberOfComments = text(postElement.selectFirst("li.social-details-social-counts__comments"));
         return nonNull(numberOfComments)
-                ? parseInt(substringBefore(numberOfComments, "comments").trim())
+                ? parseInt(numberOfComments.replaceAll("\\D+", ""))
                 : 0;
     }
 
     private int parseNumberOfReactions(Element postElement) {
         String numberOfReactions = text(postElement.selectFirst("span.social-details-social-counts__reactions-count"));
         return nonNull(numberOfReactions)
-                ? parseInt(numberOfReactions)
+                ? parseInt(numberOfReactions.replaceAll("\\D+", ""))
                 : 0;
+    }
+
+    private void setComments(Element postElement, LinkedinPost linkedinPost) {
+        Element commentElement = postElement.selectFirst(".feed-shared-update-v2__comments-container");
+        List<LinkedinComment> comments = commentParser.parse(commentElement.html());
+        linkedinPost.setLinkedinComments(comments);
+    }
+
+    private boolean isCommentsPresent(Element postElement) {
+        return nonNull(postElement.selectFirst(".feed-shared-update-v2__comments-container"));
     }
 }

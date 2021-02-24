@@ -18,7 +18,7 @@ class LinkedinPostParserTest {
 
     @Test
     void shouldParse() throws IOException {
-        ActivitiesSource source = new ActivitiesSource(POST_URL, loadResource(ACTIVITY_SOURCE));
+        String source = loadResource(ACTIVITY_SOURCE);
         LinkedinPostParser parser = new LinkedinPostParser(new TimeConverter()
         ,new LinkedinCommentParser(new TimeConverter()));
 
@@ -27,9 +27,9 @@ class LinkedinPostParserTest {
         System.out.println(post.getLinkedinComments().size());
 
         ActivitiesSource source1 = new ActivitiesSource(POST_URL, loadResource(ACTIVITY_SOURCE));
-        LinkedinParser<List<LinkedinActivity>,List<ActivitiesSource>> parser1 = new LinkedinActivityParser(parser);
-        List<LinkedinActivity> parse = parser1.parse(List.of(source1));
-        System.out.println(parse.get(0).getLinkedinPost().getUrl());
+        LinkedinParser<List<LinkedinActivity>,List<String>> parser1 = new LinkedinActivityParser(parser);
+        List<LinkedinActivity> parse = parser1.parse(List.of(source));
+        System.out.println(parse.get(0).getLinkedinPost().getAuthorProfileUrl());
 
     }
 }

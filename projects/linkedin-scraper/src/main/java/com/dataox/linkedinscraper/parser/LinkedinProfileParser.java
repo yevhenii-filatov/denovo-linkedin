@@ -36,7 +36,7 @@ public class LinkedinProfileParser implements LinkedinParser<LinkedinProfile, Co
         LinkedinProfile linkedinProfile = new LinkedinProfile();
 
         linkedinProfile.setProfileUrl(source.getProfileUrl());
-        linkedinProfile.setLinkedinActivities(activityParser.parse(source.getPostUrlAndActivitySource()));
+        linkedinProfile.setLinkedinActivities(activityParser.parse(source.getActivitySource()));
         linkedinProfile.setLinkedinBasicProfileInfo(basicProfileInfoParser.parse(getBasicProfileSource(source)));
         linkedinProfile.setLinkedinEducations(educationParser.parse(source.getEducationsSource()));
         linkedinProfile.setLinkedinSkills(getAllLinkedinSkills(source));

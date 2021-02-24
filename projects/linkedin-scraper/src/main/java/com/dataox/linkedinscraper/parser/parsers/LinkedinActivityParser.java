@@ -20,12 +20,12 @@ import static java.util.Objects.nonNull;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class LinkedinActivityParser implements LinkedinParser<List<LinkedinActivity>, List<ActivitiesSource>> {
+public class LinkedinActivityParser implements LinkedinParser<List<LinkedinActivity>, List<String>> {
 
     private final LinkedinPostParser postParser;
 
     @Override
-    public List<LinkedinActivity> parse(List<ActivitiesSource> source) {
+    public List<LinkedinActivity> parse(List<String> source) {
         if (source.isEmpty()) {
             log.info("{} received empty source", this.getClass().getSimpleName());
             return Collections.emptyList();
@@ -38,9 +38,9 @@ public class LinkedinActivityParser implements LinkedinParser<List<LinkedinActiv
                 .collect(Collectors.toList());
     }
 
-    private LinkedinActivity getLinkedinActivity(Instant time, ActivitiesSource source) {
+    private LinkedinActivity getLinkedinActivity(Instant time, String source) {
         LinkedinActivity activity = new LinkedinActivity();
-        Element activityElement = toElement(source.getSource());
+        Element activityElement = toElement(source);
 
         activity.setUpdatedAt(time);
         activity.setType(parseType(activityElement));
