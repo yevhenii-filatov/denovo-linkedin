@@ -22,30 +22,28 @@ public class LinkedinBasicProfileInfoParser implements LinkedinParser<LinkedinBa
         }
 
         String headerSectionSource = source.get(0);
-        String aboutSectionSource = source.get(1);
-
         Element headerElement = toElement(headerSectionSource);
-        Element aboutElement = toElement(aboutSectionSource);
 
-        return getLinkedinBasicProfileInfo(
-                headerSectionSource, aboutSectionSource, headerElement, aboutElement
-        );
-    }
-
-    private LinkedinBasicProfileInfo getLinkedinBasicProfileInfo(String headerSectionSource, String aboutSectionSource,
-                                                                 Element headerElement, Element aboutElement) {
         LinkedinBasicProfileInfo basicProfileInfo = new LinkedinBasicProfileInfo();
-
+        basicProfileInfo.setUpdatedAt(Instant.now());
         basicProfileInfo.setHeaderSectionSource(headerSectionSource);
-        basicProfileInfo.setAboutSectionSource(aboutSectionSource);
         basicProfileInfo.setFullName(parseFullName(headerElement));
         basicProfileInfo.setNumberOfConnections(parseNumberOfConnections(headerElement));
         basicProfileInfo.setLocation(parseLocation(headerElement));
         basicProfileInfo.setCachedImageUrl(parseImgUrl(headerElement));
-        basicProfileInfo.setAbout(parseAbout(aboutElement));
-        basicProfileInfo.setUpdatedAt(Instant.now());
+
+        setAboutIfExists(source, basicProfileInfo);
 
         return basicProfileInfo;
+    }
+
+    private void setAboutIfExists(List<String> source, LinkedinBasicProfileInfo basicProfileInfo) {
+        if(source.size() == 2) {
+            String aboutSectionSource = source.get(1);
+            Element aboutElement = toElement(aboutSectionSource);
+            basicProfileInfo.setAbout(parseAbout(aboutElement));
+            basicProfileInfo.setAboutSectionSource(aboutSectionSource);
+        }
     }
 
     private String parseFullName(Element headerElement) {
