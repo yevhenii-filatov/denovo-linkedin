@@ -24,7 +24,7 @@ public class LinkedinLicenseCertificationParser implements LinkedinParser<List<L
 
     @Override
     public List<LinkedinLicenseCertification> parse(String source) {
-        if (isNotBlank(source)) {
+        if (isBlank(source)) {
             log.info("{} received empty source", this.getClass().getSimpleName());
             return Collections.emptyList();
         }

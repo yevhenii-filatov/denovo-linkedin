@@ -35,7 +35,6 @@ public class LinkedinPostParser implements LinkedinParser<LinkedinPost, String> 
     }
 
     public LinkedinPost getLinkedinPost(Instant time, String source) {
-        String postUrl = "source.getPostUrl()";
         Element postElement = toElement(source);
 
         LinkedinPost post = new LinkedinPost();
