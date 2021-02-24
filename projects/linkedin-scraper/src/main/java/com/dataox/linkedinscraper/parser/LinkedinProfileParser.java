@@ -1,8 +1,10 @@
 package com.dataox.linkedinscraper.parser;
 
 import com.dataox.linkedinscraper.parser.dto.LinkedinProfile;
+import com.dataox.linkedinscraper.parser.dto.LinkedinSkill;
 import com.dataox.linkedinscraper.parser.parsers.*;
 import com.dataox.linkedinscraper.parser.utils.CollectedProfileSourcesDTO;
+import com.dataox.linkedinscraper.parser.utils.sources.SkillsSource;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -10,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static java.util.Objects.nonNull;
 import static org.apache.commons.collections4.ListUtils.union;
 
 @Service
@@ -33,22 +36,31 @@ public class LinkedinProfileParser implements LinkedinParser<LinkedinProfile, Co
 
         linkedinProfile.setProfileUrl(source.getProfileUrl());
         linkedinProfile.setLinkedinActivities(activityParser.parse(source.getPostUrlAndActivitySource()));
-        linkedinProfile.setLinkedinBasicProfileInfo(
-                basicProfileInfoParser.parse(List.of(source.getHeaderSectionSource(), source.getAboutSectionSource()))
-        );
+        linkedinProfile.setLinkedinBasicProfileInfo(basicProfileInfoParser.parse(getBasicProfileSource(source)));
         linkedinProfile.setLinkedinEducations(educationParser.parse(source.getEducationsSource()));
-        linkedinProfile.setLinkedinSkills(
-                union(
-                        skillsWithEndorsementParser.parse(source.getSkillsWithEndorsementsSource()),
-                        skillsWithoutEndorsementParser.parse(source.getAllSkillsSource())
-                )
-        );
+        linkedinProfile.setLinkedinSkills(getAllLinkedinSkills(source));
         linkedinProfile.setLinkedinExperiences(experienceParser.parse(source.getExperiencesSource()));
         linkedinProfile.setLinkedinInterests(interestParser.parse(source.getInterestsSources()));
         linkedinProfile.setLinkedinLicenseCertifications(licenseCertificationParser.parse(source.getLicenseSource()));
-        linkedinProfile.setLinkedinRecommendations(recommendationParser.parse(source.getRecommendationsSource()));
+        linkedinProfile.setLinkedinRecommendations(recommendationParser.parse(source.getRecommendationsSources()));
         linkedinProfile.setLinkedinVolunteerExperiences(volunteerExperienceParser.parse(source.getVolunteersSource()));
 
         return linkedinProfile;
+    }
+
+    private List<LinkedinSkill> getAllLinkedinSkills(CollectedProfileSourcesDTO source) {
+        List<SkillsSource> skillsWithEndorsementsSources = source.getSkillsWithEndorsementsSources();
+        String allSkillsSource = source.getAllSkillsSource();
+
+        List<LinkedinSkill> skillsWithEndorsements = skillsWithEndorsementParser.parse(skillsWithEndorsementsSources);
+        List<LinkedinSkill> skillsWithoutEndorsements = skillsWithoutEndorsementParser.parse(allSkillsSource);
+
+        return union(skillsWithEndorsements, skillsWithoutEndorsements);
+    }
+
+    private List<String> getBasicProfileSource(CollectedProfileSourcesDTO source) {
+        String headerSectionSource = source.getHeaderSectionSource();
+        String aboutSectionSource = source.getAboutSectionSource();
+        return List.of(headerSectionSource, aboutSectionSource);
     }
 }
