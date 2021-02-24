@@ -32,10 +32,10 @@ public class EducationScraper implements Scraper<String> {
             return "";
         }
         log.info("Scraping education section");
+        Actions actions = new Actions(webDriver);
         scrollToElement(webDriver, educationSection, 200);
         randomSleep(2000, 5000);
         WebElement showMoreEducationsButton = findElementBy(webDriver, SHOW_MORE_EDUCATIONS_BUTTON);
-        Actions actions = new Actions(webDriver);
         while (nonNull(showMoreEducationsButton)) {
             showMoreEducationsButton = findElementBy(webDriver, SHOW_MORE_EDUCATIONS_BUTTON);
             scrollToAndClickOnElement(webDriver, actions, showMoreEducationsButton);

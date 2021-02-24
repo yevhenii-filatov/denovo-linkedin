@@ -1,6 +1,5 @@
 package com.dataox.linkedinscraper.scraping.scrapers.subscrapers;
 
-import com.dataox.linkedinscraper.dto.sources.ActivitiesSource;
 import com.dataox.linkedinscraper.scraping.configuration.property.ScraperProperties;
 import com.dataox.linkedinscraper.scraping.exceptions.ElementNotFoundException;
 import com.dataox.linkedinscraper.scraping.scrapers.Scraper;
@@ -29,7 +28,7 @@ import static java.util.Objects.nonNull;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class ActivitiesScraper implements Scraper<List<ActivitiesSource>> {
+public class ActivitiesScraper implements Scraper<List<String>> {
 
     private final ScraperProperties scraperProperties;
     private static final By EMPTY_ACTIVITIES = By.xpath("//h1[text()='Nothing to see for now']");
@@ -42,7 +41,7 @@ public class ActivitiesScraper implements Scraper<List<ActivitiesSource>> {
     private static final By POST_LINK = By.xpath("//li[@data-test-artdeco-toast-item-type='success']//a");
 
     @Override
-    public List<ActivitiesSource> scrape(WebDriver webDriver) {
+    public List<String> scrape(WebDriver webDriver) {
         WebElement seeAllButton = findWebElementBy(webDriver, SEE_ALL_ACTIVITIES_BUTTON)
                 .orElseThrow(() -> ElementNotFoundException.notFound("See all activity button"));
         log.info("Scraping activities");
@@ -56,11 +55,11 @@ public class ActivitiesScraper implements Scraper<List<ActivitiesSource>> {
         WebElement emptyActivitiesMessage = findElementBy(webDriver, EMPTY_ACTIVITIES);
         if (nonNull(emptyActivitiesMessage))
             return emptyList();
-        return collectActivities(webDriver, action, wait);
+        return collectActivities(webDriver);
     }
 
-    private List<ActivitiesSource> collectActivities(WebDriver webDriver, Actions action, WebDriverWait wait) {
-        List<ActivitiesSource> activitiesSources = new ArrayList<>();
+    private List<String> collectActivities(WebDriver webDriver) {
+        List<String> activitiesSources = new ArrayList<>();
         WebElement currentPost;
 
         for (int i = 0; i < scraperProperties.getActivitiesAmount(); i++) {
@@ -70,8 +69,7 @@ public class ActivitiesScraper implements Scraper<List<ActivitiesSource>> {
                 return activitiesSources;
             currentPost = posts.get(i);
             scrollToElement(webDriver, currentPost, 300);
-            String postUrl = getPostUrl(webDriver, action, wait, currentPost);
-            activitiesSources.add(new ActivitiesSource(postUrl, getElementHtml(currentPost)));
+            activitiesSources.add(getElementHtml(currentPost));
             randomSleep(1500, 2500);
         }
         return activitiesSources;
@@ -82,21 +80,4 @@ public class ActivitiesScraper implements Scraper<List<ActivitiesSource>> {
             throw ElementNotFoundException.notFound("Activity posts");
     }
 
-    private String getPostUrl(WebDriver webDriver, Actions action, WebDriverWait wait, WebElement currentPost) {
-        clickCopyPostUrl(action, wait, currentPost);
-        wait.until(ExpectedConditions.presenceOfElementLocated(LINK_COPIED_NOTIFICATION));
-        WebElement viewPost = findWebElementBy(webDriver, POST_LINK)
-                .orElseThrow(() -> ElementNotFoundException.notFound("View Post button"));
-        return viewPost.getAttribute("href");
-    }
-
-    private void clickCopyPostUrl(Actions action, WebDriverWait wait, WebElement currentPost) {
-        WebElement postMenu = findWebElementFromParentBy(currentPost, POSTS_MENU_BUTTON)
-                .orElseThrow(() -> ElementNotFoundException.notFound("Post menu button"));
-        clickOnElement(postMenu, action);
-        wait.until(ExpectedConditions.presenceOfElementLocated(COPY_LINK_BUTTON));
-        WebElement copyLinkButton = findWebElementFromParentBy(currentPost, COPY_LINK_BUTTON)
-                .orElseThrow(() -> ElementNotFoundException.notFound("Copy post link button"));
-        clickOnElement(copyLinkButton, action);
-    }
 }

@@ -1,6 +1,5 @@
 package com.dataox.linkedinscraper.dto;
 
-import com.dataox.linkedinscraper.dto.sources.ActivitiesSource;
 import com.dataox.linkedinscraper.dto.sources.InterestsSource;
 import com.dataox.linkedinscraper.dto.sources.RecommendationsSource;
 import com.dataox.linkedinscraper.dto.sources.SkillsSource;
@@ -30,5 +29,5 @@ public class CollectedProfileSourcesDTO {
     List<SkillsSource> skillsWithEndorsementsSources;
     List<RecommendationsSource> recommendationsSources;
     List<InterestsSource> interestsSources;
-    List<ActivitiesSource> postUrlAndActivitySource;
+    List<String> activitiesSources;
 }

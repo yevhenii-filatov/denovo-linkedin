@@ -37,13 +37,13 @@ public class ExperienceScraper implements Scraper<String> {
             return "";
         }
         log.info("Scraping experience section");
-        scrollToElement(webDriver, experienceSection, 400);
         Actions actions = new Actions(webDriver);
+        scrollToElement(webDriver, experienceSection, 400);
         WebElement showMoreExperiencesButton = findElementBy(webDriver, SHOW_MORE_EXPERIENCES_BUTTON);
         while (nonNull(showMoreExperiencesButton)) {
-            showMoreExperiencesButton = findElementBy(webDriver, SHOW_MORE_EXPERIENCES_BUTTON);
             scrollToAndClickOnElement(webDriver, actions, showMoreExperiencesButton);
             randomSleep(4000, 6000);
+            showMoreExperiencesButton = findElementBy(webDriver, SHOW_MORE_EXPERIENCES_BUTTON);
         }
         clickAllShowMoreRolesButtons(webDriver, actions);
         clickAllSeeMoreButtons(webDriver, actions);
