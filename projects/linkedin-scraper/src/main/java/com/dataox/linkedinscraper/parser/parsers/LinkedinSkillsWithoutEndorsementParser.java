@@ -2,6 +2,7 @@ package com.dataox.linkedinscraper.parser.parsers;
 
 import com.dataox.linkedinscraper.parser.LinkedinParser;
 import com.dataox.linkedinscraper.parser.dto.LinkedinSkill;
+import lombok.extern.slf4j.Slf4j;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,7 @@ import static com.dataox.linkedinscraper.parser.utils.ParsingUtils.toElement;
 import static java.util.Objects.nonNull;
 
 @Service
+@Slf4j
 public class LinkedinSkillsWithoutEndorsementParser implements LinkedinParser<List<LinkedinSkill>, String> {
 
     private static final String WITHOUT_ENDORSEMENTS_SELECTOR = "li:not(:has(a[data-control-name=skills_endorsement_full_list]))";
@@ -23,6 +25,7 @@ public class LinkedinSkillsWithoutEndorsementParser implements LinkedinParser<Li
     @Override
     public List<LinkedinSkill> parse(String source) {
         if (source.isEmpty()) {
+            log.info("{} received empty source", this.getClass().getSimpleName());
             return Collections.emptyList();
         }
 

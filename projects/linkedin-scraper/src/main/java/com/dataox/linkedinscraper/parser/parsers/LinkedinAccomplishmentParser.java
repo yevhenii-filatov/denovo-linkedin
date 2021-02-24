@@ -3,6 +3,7 @@ package com.dataox.linkedinscraper.parser.parsers;
 import com.dataox.linkedinscraper.parser.LinkedinParser;
 import com.dataox.linkedinscraper.parser.dto.LinkedinAccomplishment;
 import com.dataox.linkedinscraper.parser.utils.ParsingUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
@@ -16,12 +17,14 @@ import java.util.stream.Stream;
 import static com.dataox.jsouputils.JsoupUtils.text;
 import static org.apache.commons.lang3.StringUtils.substringAfter;
 
+@Slf4j
 @Service
 public class LinkedinAccomplishmentParser implements LinkedinParser<List<LinkedinAccomplishment>, List<String>> {
 
     @Override
     public List<LinkedinAccomplishment> parse(List<String> source) {
         if (source.isEmpty()) {
+            log.info("{} received empty source", this.getClass().getSimpleName());
             return Collections.emptyList();
         }
 

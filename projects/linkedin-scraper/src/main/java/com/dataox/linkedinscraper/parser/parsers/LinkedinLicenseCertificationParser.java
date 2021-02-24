@@ -2,6 +2,7 @@ package com.dataox.linkedinscraper.parser.parsers;
 
 import com.dataox.linkedinscraper.parser.LinkedinParser;
 import com.dataox.linkedinscraper.parser.dto.LinkedinLicenseCertification;
+import lombok.extern.slf4j.Slf4j;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
@@ -19,11 +20,13 @@ import static org.apache.commons.lang3.StringUtils.substringAfter;
 import static org.apache.commons.lang3.StringUtils.substringBetween;
 
 @Service
+@Slf4j
 public class LinkedinLicenseCertificationParser implements LinkedinParser<List<LinkedinLicenseCertification>, String> {
 
     @Override
     public List<LinkedinLicenseCertification> parse(String source) {
         if (source.isEmpty()) {
+            log.info("{} received empty source", this.getClass().getSimpleName());
             return Collections.emptyList();
         }
 

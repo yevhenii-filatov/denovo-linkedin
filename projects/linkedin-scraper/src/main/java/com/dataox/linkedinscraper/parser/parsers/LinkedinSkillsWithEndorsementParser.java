@@ -5,6 +5,7 @@ import com.dataox.linkedinscraper.parser.dto.LinkedinEndorsement;
 import com.dataox.linkedinscraper.parser.dto.LinkedinSkill;
 import com.dataox.linkedinscraper.parser.utils.sources.SkillsSource;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.jsoup.nodes.Element;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +21,7 @@ import static org.apache.commons.lang3.StringUtils.substringBefore;
 import static org.apache.commons.lang3.StringUtils.substringBetween;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class LinkedinSkillsWithEndorsementParser implements LinkedinParser<List<LinkedinSkill>, List<SkillsSource>> {
 
@@ -28,6 +30,7 @@ public class LinkedinSkillsWithEndorsementParser implements LinkedinParser<List<
     @Override
     public List<LinkedinSkill> parse(List<SkillsSource> source) {
         if (source.isEmpty()) {
+            log.info("{} received empty source", this.getClass().getSimpleName());
             return Collections.emptyList();
         }
 

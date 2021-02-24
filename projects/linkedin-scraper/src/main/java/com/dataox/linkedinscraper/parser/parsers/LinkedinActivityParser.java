@@ -4,6 +4,7 @@ import com.dataox.linkedinscraper.parser.LinkedinParser;
 import com.dataox.linkedinscraper.parser.dto.LinkedinActivity;
 import com.dataox.linkedinscraper.parser.utils.sources.ActivitiesSource;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.jsoup.nodes.Element;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,7 @@ import static com.dataox.linkedinscraper.parser.utils.ParsingUtils.toElement;
 import static java.util.Objects.nonNull;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class LinkedinActivityParser implements LinkedinParser<List<LinkedinActivity>, List<ActivitiesSource>> {
 
@@ -25,6 +27,7 @@ public class LinkedinActivityParser implements LinkedinParser<List<LinkedinActiv
     @Override
     public List<LinkedinActivity> parse(List<ActivitiesSource> source) {
         if (source.isEmpty()) {
+            log.info("{} received empty source", this.getClass().getSimpleName());
             return Collections.emptyList();
         }
 

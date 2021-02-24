@@ -3,6 +3,7 @@ package com.dataox.linkedinscraper.parser.parsers;
 import com.dataox.linkedinscraper.parser.LinkedinParser;
 import com.dataox.linkedinscraper.parser.dto.LinkedinInterest;
 import com.dataox.linkedinscraper.parser.utils.sources.InterestsSource;
+import lombok.extern.slf4j.Slf4j;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
@@ -19,11 +20,13 @@ import static com.dataox.linkedinscraper.parser.utils.ParsingUtils.toElement;
 import static org.apache.commons.lang3.StringUtils.substringBefore;
 
 @Service
+@Slf4j
 public class LinkedinInterestParser implements LinkedinParser<List<LinkedinInterest>, List<InterestsSource>> {
 
     @Override
     public List<LinkedinInterest> parse(List<InterestsSource> source) {
         if (source.isEmpty()) {
+            log.info("{} received empty source", this.getClass().getSimpleName());
             return Collections.emptyList();
         }
 

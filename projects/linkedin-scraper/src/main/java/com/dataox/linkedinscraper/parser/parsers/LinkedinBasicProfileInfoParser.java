@@ -2,6 +2,7 @@ package com.dataox.linkedinscraper.parser.parsers;
 
 import com.dataox.linkedinscraper.parser.LinkedinParser;
 import com.dataox.linkedinscraper.parser.dto.LinkedinBasicProfileInfo;
+import lombok.extern.slf4j.Slf4j;
 import org.jsoup.nodes.Element;
 import org.springframework.stereotype.Service;
 
@@ -13,11 +14,13 @@ import static com.dataox.linkedinscraper.parser.utils.ParsingUtils.toElement;
 import static org.apache.commons.lang3.StringUtils.substringBefore;
 
 @Service
+@Slf4j
 public class LinkedinBasicProfileInfoParser implements LinkedinParser<LinkedinBasicProfileInfo, List<String>> {
 
     @Override
     public LinkedinBasicProfileInfo parse(List<String> source) {
         if (source.isEmpty()) {
+            log.info("{} received empty source", this.getClass().getSimpleName());
             return null;
         }
 
