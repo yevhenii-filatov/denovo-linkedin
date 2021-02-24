@@ -6,7 +6,6 @@ import com.dataox.linkedinscraper.scraping.exceptions.ElementNotFoundException;
 import com.dataox.linkedinscraper.scraping.scrapers.Scraper;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -76,7 +75,7 @@ public class InterestsScraper implements Scraper<List<InterestsSource>> {
             randomSleep(1500, 2000);
             WebElement scrollingArea = findWebElementBy(webDriver, POPUP_SCROLLING_AREA)
                     .orElseThrow(() -> ElementNotFoundException.notFound("Interests tab scrolling area"));
-            scrollToTheBottomOfPopUp(webDriver, scrollingArea, SCROLL_STEP);
+            scrollToTheBottomOfElement(webDriver, scrollingArea, SCROLL_STEP);
             WebElement interestsPopup = findWebElementBy(webDriver, POPUP_INTERESTS_WINDOW)
                     .orElseThrow(() -> ElementNotFoundException.notFound("Interests popup window"));
             String group = tab.getText();
@@ -89,22 +88,6 @@ public class InterestsScraper implements Scraper<List<InterestsSource>> {
         return interestsSources;
     }
 
-    private void scrollToTheBottomOfPopUp(WebDriver webDriver, WebElement scrollingElement, int scrollStop) {
-        int desiredScrollY = 0;
-        Long beforeScroll;
-        Long afterScroll;
-        do {
-            beforeScroll = getCurrentScrollYInElement(webDriver, scrollingElement);
-            executeJavascript(webDriver, "arguments[0].scrollTop=arguments[1]", scrollingElement, desiredScrollY += scrollStop);
-            afterScroll = getCurrentScrollYInElement(webDriver, scrollingElement);
-            randomSleep(750, 1500);
-        } while (!beforeScroll.equals(afterScroll));
-    }
-
-    private Long getCurrentScrollYInElement(WebDriver webDriver, WebElement scrollingArea) {
-        JavascriptExecutor js = (JavascriptExecutor) webDriver;
-        return (Long) js.executeScript("return arguments[0].scrollTop", scrollingArea);
-    }
 
     private void clickSeeAllButton(WebDriver webDriver, WebDriverWait wait, Actions actions) {
         WebElement seeAllButton = findWebElementBy(webDriver, SEE_ALL_BUTTON)

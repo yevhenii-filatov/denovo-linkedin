@@ -5,7 +5,6 @@ import com.dataox.linkedinscraper.scraping.exceptions.ElementNotFoundException;
 import com.dataox.linkedinscraper.scraping.scrapers.Scraper;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -13,9 +12,10 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
-import static com.dataox.CommonUtils.randomLong;
 import static com.dataox.CommonUtils.randomSleep;
 import static com.dataox.WebDriverUtils.*;
 
@@ -103,31 +103,14 @@ public class SkillsWithEndorsementsScraper implements Scraper<List<SkillsSource>
         wait.until(ExpectedConditions.elementToBeClickable(CLOSE_POPUP_SKILL_ENDORSEMENTS_BUTTON));
         sources.add(getElementHtml(findElementBy(webDriver, SKILLS_POPUP_WINDOW)));
         randomSleep(1500, 2000);
-        scrollToTheBottomOfPopUp(webDriver);
+        WebElement scrollingArea = findWebElementBy(webDriver, POPUP_SCROLLING_AREA)
+                .orElseThrow(() -> ElementNotFoundException.notFound("Endorsements popup scrolling area"));
+        scrollToTheBottomOfElement(webDriver, scrollingArea, SCROLL_STEP);
         WebElement closeButton = findWebElementBy(webDriver, CLOSE_POPUP_SKILL_ENDORSEMENTS_BUTTON)
                 .orElseThrow(() -> ElementNotFoundException.notFound("Close popup skill endorsements button"));
         clickOnElement(closeButton, actions);
         randomSleep(750, 1500);
         return sources;
-    }
-
-    private void scrollToTheBottomOfPopUp(WebDriver webDriver) {
-        int desiredScrollY = 0;
-        WebElement scrollingArea = findWebElementBy(webDriver, POPUP_SCROLLING_AREA)
-                .orElseThrow(() -> ElementNotFoundException.notFound("Endorsements popup scrolling area"));
-        Long beforeScroll;
-        Long afterScroll;
-        do {
-            beforeScroll = getCurrentScrollYInElement(webDriver, scrollingArea);
-            executeJavascript(webDriver, "arguments[0].scrollTop=arguments[1]", scrollingArea, desiredScrollY += SCROLL_STEP);
-            afterScroll = getCurrentScrollYInElement(webDriver, scrollingArea);
-            randomSleep(750, 1500);
-        } while (!beforeScroll.equals(afterScroll));
-    }
-
-    private Long getCurrentScrollYInElement(WebDriver webDriver, WebElement scrollingArea) {
-        JavascriptExecutor js = (JavascriptExecutor) webDriver;
-        return (Long) js.executeScript("return arguments[0].scrollTop", scrollingArea);
     }
 
 }
