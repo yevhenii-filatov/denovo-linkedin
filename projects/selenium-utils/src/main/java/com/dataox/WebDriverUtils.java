@@ -8,6 +8,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.util.List;
 import java.util.Optional;
 
+import static com.dataox.CommonUtils.randomSleep;
 import static com.dataox.WebDriverUtils.ScrollingDirection.*;
 
 /**
@@ -54,7 +55,7 @@ public final class WebDriverUtils {
     public static void enterDataIntoTextFieldWithKeyboard(WebElement field, String data) {
         for (char symbol : data.toCharArray()) {
             field.sendKeys(String.valueOf(symbol));
-            CommonUtils.randomSleep(100, 500);
+            randomSleep(100, 500);
         }
     }
 
@@ -121,13 +122,30 @@ public final class WebDriverUtils {
         ScrollingDirection scrollingDirection = currentScrollY > desiredScrollY ? UP : DOWN;
         for (int i = 0; i < amountOfSteps; i++) {
             scroll(webDriver, scrollingDirection, step);
-            CommonUtils.randomSleep(75, 125);
+            randomSleep(75, 125);
         }
     }
 
     public static Long getScrollY(WebDriver webDriver) {
         JavascriptExecutor js = (JavascriptExecutor) webDriver;
         return (Long) js.executeScript("return scrollY");
+    }
+
+    public static void scrollToTheBottomOfElement(WebDriver webDriver, WebElement scrollingElement, int scrollStop) {
+        int desiredScrollY = 0;
+        Long beforeScroll;
+        Long afterScroll;
+        do {
+            beforeScroll = getCurrentScrollYInElement(webDriver, scrollingElement);
+            executeJavascript(webDriver, "arguments[0].scrollTop=arguments[1]", scrollingElement, desiredScrollY += scrollStop);
+            afterScroll = getCurrentScrollYInElement(webDriver, scrollingElement);
+            randomSleep(1500, 2500);
+        } while (!beforeScroll.equals(afterScroll));
+    }
+
+    public static Long getCurrentScrollYInElement(WebDriver webDriver, WebElement scrollingElement) {
+        JavascriptExecutor js = (JavascriptExecutor) webDriver;
+        return (Long) js.executeScript("return arguments[0].scrollTop", scrollingElement);
     }
 
     public static String getElementHtml(WebElement webElement) {
