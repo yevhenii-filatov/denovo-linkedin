@@ -2,12 +2,13 @@ package com.dataox.linkedinscraper.parser.parsers;
 
 import com.dataox.linkedinscraper.parser.LinkedinParser;
 import com.dataox.linkedinscraper.parser.dto.LinkedinRecommendation;
+import com.dataox.linkedinscraper.parser.utils.sources.RecommendationsSource;
 import org.junit.jupiter.api.Test;
 import org.springframework.util.DigestUtils;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 import static com.dataox.linkedinscraper.parser.ParsingTestUtils.hashedStingComparator;
 import static com.dataox.linkedinscraper.parser.ParsingTestUtils.loadResource;
@@ -20,10 +21,10 @@ class LinkedinRecommendationParserTest {
     @Test
     void shouldParse() throws IOException {
         String source = loadResource(RECOMMENDATION_SOURCE);
-        Map<String, String> typeSource = Map.of("Given", source);
-        LinkedinParser<List<LinkedinRecommendation>, Map<String, String>> parser = new LinkedinRecommendationParser();
+        RecommendationsSource typeSource = new RecommendationsSource("Given", source);
+        LinkedinParser<List<LinkedinRecommendation>, List<RecommendationsSource>> parser = new LinkedinRecommendationParser();
 
-        List<LinkedinRecommendation> recommendations = parser.parse(typeSource);
+        List<LinkedinRecommendation> recommendations = parser.parse(Collections.singletonList(typeSource));
 
         assertThat(recommendations.size()).isEqualTo(3);
 

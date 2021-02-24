@@ -38,10 +38,7 @@ public class LinkedinInterestParser implements LinkedinParser<List<LinkedinInter
         Element interestsSectionElement = toElement(interestsSource.getSource());
 
         return splitInterests(interestsSectionElement).stream()
-                .map(interestsElement -> {
-                    String interestType = interestsSource.getCategory();
-                    return getLinkedinInterest(interestsElement, time, interestType);
-                });
+                .map(interestsElement -> getLinkedinInterest(interestsElement, time, interestsSource.getCategory()));
     }
 
     private Elements splitInterests(Element interestsSectionElement) {

@@ -2,6 +2,7 @@ package com.dataox.linkedinscraper.parser.parsers;
 
 import com.dataox.linkedinscraper.parser.LinkedinParser;
 import com.dataox.linkedinscraper.parser.dto.LinkedinRecommendation;
+import com.dataox.linkedinscraper.parser.utils.sources.RecommendationsSource;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
@@ -9,34 +10,36 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static com.dataox.jsouputils.JsoupUtils.absUrlFromHref;
 import static com.dataox.jsouputils.JsoupUtils.text;
 import static com.dataox.linkedinscraper.parser.utils.ParsingUtils.toElement;
 
 @Service
-public class LinkedinRecommendationParser implements LinkedinParser<List<LinkedinRecommendation>, Map<String, String>> {
+public class LinkedinRecommendationParser implements LinkedinParser<List<LinkedinRecommendation>, List<RecommendationsSource>> {
 
     @Override
-    public List<LinkedinRecommendation> parse(Map<String, String> source) {
+    public List<LinkedinRecommendation> parse(List<RecommendationsSource> source) {
         if (source.isEmpty()) {
             return Collections.emptyList();
         }
 
         Instant time = Instant.now();
 
-        return source.entrySet().stream()
-                .flatMap(entry -> {
-                    Element recommendationSectionElement = toElement(entry.getValue());
-
-                    return splitRecommendation(recommendationSectionElement).stream()
-                            .map(recommendationElement ->
-                                    getLinkedinRecommendation(recommendationElement, time, entry.getKey())
-                            );
-                })
+        return source.stream()
+                .flatMap(recommendationsSource -> resolveRecommendationsByType(time, recommendationsSource))
                 .collect(Collectors.toList());
+    }
+
+    private Stream<LinkedinRecommendation> resolveRecommendationsByType(Instant time, RecommendationsSource recommendationsSource) {
+        Element recommendationSectionElement = toElement(recommendationsSource.getSource());
+
+        return splitRecommendation(recommendationSectionElement).stream()
+                .map(recommendationElement ->
+                        getLinkedinRecommendation(recommendationElement, time, recommendationsSource.getType())
+                );
     }
 
     private Elements splitRecommendation(Element recommendationSectionElement) {
