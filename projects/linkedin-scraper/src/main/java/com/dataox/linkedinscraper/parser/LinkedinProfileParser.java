@@ -8,12 +8,15 @@ import com.dataox.linkedinscraper.parser.utils.sources.SkillsSource;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 
 import static java.util.Objects.nonNull;
 import static org.apache.commons.collections4.ListUtils.union;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 @Service
 @RequiredArgsConstructor
@@ -48,6 +51,14 @@ public class LinkedinProfileParser implements LinkedinParser<LinkedinProfile, Co
         return linkedinProfile;
     }
 
+    private List<String> getBasicProfileSource(CollectedProfileSourcesDTO source) {
+        String headerSectionSource = source.getHeaderSectionSource();
+        String aboutSectionSource = source.getAboutSectionSource();
+        return isNotBlank(aboutSectionSource)
+                ? List.of(headerSectionSource, aboutSectionSource)
+                : Collections.singletonList(headerSectionSource);
+    }
+
     private List<LinkedinSkill> getAllLinkedinSkills(CollectedProfileSourcesDTO source) {
         List<SkillsSource> skillsWithEndorsementsSources = source.getSkillsWithEndorsementsSources();
         String allSkillsSource = source.getAllSkillsSource();
@@ -56,11 +67,5 @@ public class LinkedinProfileParser implements LinkedinParser<LinkedinProfile, Co
         List<LinkedinSkill> skillsWithoutEndorsements = skillsWithoutEndorsementParser.parse(allSkillsSource);
 
         return union(skillsWithEndorsements, skillsWithoutEndorsements);
-    }
-
-    private List<String> getBasicProfileSource(CollectedProfileSourcesDTO source) {
-        String headerSectionSource = source.getHeaderSectionSource();
-        String aboutSectionSource = source.getAboutSectionSource();
-        return List.of(headerSectionSource, aboutSectionSource);
     }
 }
