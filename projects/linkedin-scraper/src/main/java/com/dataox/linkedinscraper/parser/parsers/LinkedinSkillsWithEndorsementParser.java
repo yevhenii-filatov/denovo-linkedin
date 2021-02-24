@@ -3,6 +3,7 @@ package com.dataox.linkedinscraper.parser.parsers;
 import com.dataox.linkedinscraper.parser.LinkedinParser;
 import com.dataox.linkedinscraper.parser.dto.LinkedinEndorsement;
 import com.dataox.linkedinscraper.parser.dto.LinkedinSkill;
+import com.dataox.linkedinscraper.parser.utils.sources.SkillsSource;
 import lombok.RequiredArgsConstructor;
 import org.jsoup.nodes.Element;
 import org.springframework.stereotype.Service;
@@ -10,8 +11,8 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static com.dataox.jsouputils.JsoupUtils.text;
 import static com.dataox.linkedinscraper.parser.utils.ParsingUtils.toElement;
@@ -20,42 +21,39 @@ import static org.apache.commons.lang3.StringUtils.substringBetween;
 
 @Service
 @RequiredArgsConstructor
-public class LinkedinSkillsWithEndorsementParser implements LinkedinParser<List<LinkedinSkill>, Map<String, List<String>>> {
+public class LinkedinSkillsWithEndorsementParser implements LinkedinParser<List<LinkedinSkill>, List<SkillsSource>> {
 
     private final LinkedinEndorsementParser endorsementParser;
 
     @Override
-    public List<LinkedinSkill> parse(Map<String, List<String>> source) {
+    public List<LinkedinSkill> parse(List<SkillsSource> source) {
         if (source.isEmpty()) {
             return Collections.emptyList();
         }
 
         Instant time = Instant.now();
 
-        return source.entrySet().stream()
-                .flatMap(entry -> {
-                    String category = entry.getKey();
-                    return entry.getValue().stream()
-                            .map(skillEndorsement -> {
-                                Element skillEndorsementSource = toElement(skillEndorsement);
-                                LinkedinSkill linkedinSkill = getLinkedinSkill(skillEndorsementSource, time, category);
-
-                                setEndorsements(skillEndorsementSource, linkedinSkill);
-
-                                return linkedinSkill;
-                            });
-                })
+        return source.stream()
+                .flatMap(skillsSource -> getCategorySkills(time, skillsSource))
                 .collect(Collectors.toList());
     }
 
-    private LinkedinSkill getLinkedinSkill(Element skillElement, Instant time, String category) {
-        LinkedinSkill skill = new LinkedinSkill();
+    private Stream<LinkedinSkill> getCategorySkills(Instant time, SkillsSource skillsSource) {
+        String category = skillsSource.getCategory();
+        return skillsSource.getSkillsWithEndorsementsSources().stream()
+                .map(skillEndorsement -> getLinkedinSkill(skillEndorsement, time, category));
+    }
 
+    private LinkedinSkill getLinkedinSkill(String skillEndorsementSource, Instant time, String category) {
+        Element skillElement = toElement(skillEndorsementSource);
+
+        LinkedinSkill skill = new LinkedinSkill();
         skill.setUpdatedAt(time);
         skill.setItemSource(skillElement.html());
         skill.setCategory(category);
         skill.setName(parseName(skillElement));
         skill.setNumberOfEndorsements(getNumberOfEndorsements(skillElement));
+        setEndorsements(skillElement, skill);
 
         return skill;
     }

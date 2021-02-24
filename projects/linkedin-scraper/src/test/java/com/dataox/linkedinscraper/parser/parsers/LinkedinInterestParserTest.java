@@ -2,12 +2,13 @@ package com.dataox.linkedinscraper.parser.parsers;
 
 import com.dataox.linkedinscraper.parser.LinkedinParser;
 import com.dataox.linkedinscraper.parser.dto.LinkedinInterest;
+import com.dataox.linkedinscraper.parser.utils.sources.InterestsSource;
 import org.junit.jupiter.api.Test;
 import org.springframework.util.DigestUtils;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 import static com.dataox.linkedinscraper.parser.ParsingTestUtils.hashedStingComparator;
 import static com.dataox.linkedinscraper.parser.ParsingTestUtils.loadResource;
@@ -19,10 +20,10 @@ class LinkedinInterestParserTest {
 
     @Test
     void shouldParse() throws IOException {
-        Map<String, String> source = Map.of( "Companies", loadResource(COMPANIES_SOURCE));
-        LinkedinParser<List<LinkedinInterest>, Map<String, String>> parser = new LinkedinInterestParser();
+        InterestsSource source = new InterestsSource("Companies", loadResource(COMPANIES_SOURCE));
+        LinkedinParser<List<LinkedinInterest>, List<InterestsSource> > parser = new LinkedinInterestParser();
 
-        List<LinkedinInterest> interests = parser.parse(source);
+        List<LinkedinInterest> interests = parser.parse(Collections.singletonList(source));
         interests.forEach(s -> System.out.println(s + "h"));
 
         assertThat(interests.size()).isEqualTo(11);

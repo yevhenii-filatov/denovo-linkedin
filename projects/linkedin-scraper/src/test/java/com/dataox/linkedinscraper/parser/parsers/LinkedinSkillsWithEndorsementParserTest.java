@@ -2,11 +2,12 @@ package com.dataox.linkedinscraper.parser.parsers;
 
 import com.dataox.linkedinscraper.parser.LinkedinParser;
 import com.dataox.linkedinscraper.parser.dto.LinkedinSkill;
+import com.dataox.linkedinscraper.parser.utils.sources.SkillsSource;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 import static com.dataox.linkedinscraper.parser.ParsingTestUtils.loadResource;
 
@@ -18,11 +19,11 @@ class LinkedinSkillsWithEndorsementParserTest {
     void shouldParse() throws IOException {
         String source = loadResource(SKILLS_SOURCE);
 
-        Map<String, List<String>> mapSource = Map.of("Top Three", List.of(source));
+        SkillsSource skillsSource = new SkillsSource("Top Three", List.of(source));
 
-        LinkedinParser<List<LinkedinSkill>, Map<String, List<String>>> parser = new LinkedinSkillsWithEndorsementParser(new LinkedinEndorsementParser());
+        LinkedinParser<List<LinkedinSkill>, List<SkillsSource>> parser = new LinkedinSkillsWithEndorsementParser(new LinkedinEndorsementParser());
 
-        List<LinkedinSkill> parse = parser.parse(mapSource);
+        List<LinkedinSkill> parse = parser.parse(Collections.singletonList(skillsSource));
         LinkedinSkill linkedinSkill = parse.get(0);
         System.out.println(linkedinSkill.getNumberOfEndorsements());
         System.out.println(linkedinSkill.getName());

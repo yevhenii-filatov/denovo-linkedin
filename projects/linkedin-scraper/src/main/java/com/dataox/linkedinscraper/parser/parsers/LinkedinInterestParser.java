@@ -2,6 +2,7 @@ package com.dataox.linkedinscraper.parser.parsers;
 
 import com.dataox.linkedinscraper.parser.LinkedinParser;
 import com.dataox.linkedinscraper.parser.dto.LinkedinInterest;
+import com.dataox.linkedinscraper.parser.utils.sources.InterestsSource;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
@@ -9,8 +10,8 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static com.dataox.jsouputils.JsoupUtils.absUrlFromHref;
 import static com.dataox.jsouputils.JsoupUtils.text;
@@ -18,27 +19,29 @@ import static com.dataox.linkedinscraper.parser.utils.ParsingUtils.toElement;
 import static org.apache.commons.lang3.StringUtils.substringBefore;
 
 @Service
-public class LinkedinInterestParser implements LinkedinParser<List<LinkedinInterest>, Map<String, String>> {
+public class LinkedinInterestParser implements LinkedinParser<List<LinkedinInterest>, List<InterestsSource>> {
 
     @Override
-    public List<LinkedinInterest> parse(Map<String, String> source) {
+    public List<LinkedinInterest> parse(List<InterestsSource> source) {
         if (source.isEmpty()) {
             return Collections.emptyList();
         }
 
         Instant time = Instant.now();
 
-        return source.entrySet().stream()
-                .flatMap(entry -> {
-                    Element interestsSectionElement = toElement(entry.getValue());
-
-                    return splitInterests(interestsSectionElement).stream()
-                            .map(interestsElement -> {
-                                String interestType = entry.getKey();
-                                return getLinkedinInterest(interestsElement, time, interestType);
-                            });
-                })
+        return source.stream()
+                .flatMap(interestsSource -> resolveInterestsByType(time, interestsSource))
                 .collect(Collectors.toList());
+    }
+
+    private Stream<LinkedinInterest> resolveInterestsByType(Instant time, InterestsSource interestsSource) {
+        Element interestsSectionElement = toElement(interestsSource.getSource());
+
+        return splitInterests(interestsSectionElement).stream()
+                .map(interestsElement -> {
+                    String interestType = interestsSource.getCategory();
+                    return getLinkedinInterest(interestsElement, time, interestType);
+                });
     }
 
     private Elements splitInterests(Element interestsSectionElement) {
