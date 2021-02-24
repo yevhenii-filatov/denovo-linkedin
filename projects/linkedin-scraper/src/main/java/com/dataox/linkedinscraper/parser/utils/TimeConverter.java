@@ -20,8 +20,17 @@ public class TimeConverter {
 
     private ChronoUnit getChronoUnit(String when) {
         return Arrays.stream(ChronoUnit.values())
-                .filter(chronoUnit -> chronoUnit.toString().toLowerCase().startsWith(extractLetters(when)))
+                .filter(chronoUnit -> {
+                    String date = extractLetters(when);
+                    return chronoUnit.toString().toLowerCase().startsWith(handleYear(date));
+                })
                 .findFirst().orElseThrow(IllegalArgumentException::new);
+    }
+
+    private String handleYear(String date){
+        return date.equals("yr")
+                ? "y"
+                : date;
     }
 
     private long toLong(String when) {

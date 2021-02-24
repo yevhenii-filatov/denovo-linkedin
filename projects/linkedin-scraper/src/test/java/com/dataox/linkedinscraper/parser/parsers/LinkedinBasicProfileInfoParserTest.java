@@ -34,7 +34,6 @@ class LinkedinBasicProfileInfoParserTest {
         expected.setUpdatedAt(actual.getUpdatedAt());
         expected.setNumberOfConnections("500+ connections");
         expected.setLocation("Ukraine");
-        expected.setCachedImageUrl("https://media-exp1.licdn.com/dms/image/C4D03AQEX_iCMV31pSA/profile-displayphoto-shrink_200_200/0/1583226665190?e=1617840000&v=beta&t=HwimiCIA7MHcGWYmSz8N2BORe_TyMSmTJwjtjt_C2-M");
         expected.setAbout(
                 "I am a co-founder of a software company named DataOx engaged in web scraping services and data cleansing technologies. " +
                 "We are a company focused on providing high-quality data scraping and data processing solutions for enterprises and individuals. " +
