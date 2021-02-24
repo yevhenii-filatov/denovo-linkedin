@@ -11,6 +11,7 @@ import java.time.Instant;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static com.dataox.jsouputils.JsoupUtils.text;
 import static org.apache.commons.lang3.StringUtils.substringAfter;
@@ -28,13 +29,15 @@ public class LinkedinAccomplishmentParser implements LinkedinParser<List<Linkedi
 
         return source.stream()
                 .map(ParsingUtils::toElement)
-                .flatMap(accomplishmentSectionElement -> {
-                    String type = parseType(accomplishmentSectionElement);
-
-                    return splitAccomplishment(accomplishmentSectionElement).stream()
-                            .map(accomplishmentElement -> getLinkedinAccomplishment(time, accomplishmentElement, type));
-                })
+                .flatMap(accomplishmentSectionElement -> getAccomplishmentsWithinType(time, accomplishmentSectionElement))
                 .collect(Collectors.toList());
+    }
+
+    private Stream<LinkedinAccomplishment> getAccomplishmentsWithinType(Instant time, Element accomplishmentSectionElement) {
+        String type = parseType(accomplishmentSectionElement);
+
+        return splitAccomplishment(accomplishmentSectionElement).stream()
+                .map(accomplishmentElement -> getLinkedinAccomplishment(time, accomplishmentElement, type));
     }
 
     private LinkedinAccomplishment getLinkedinAccomplishment(Instant time, Element accomplishmentElement, String type) {
