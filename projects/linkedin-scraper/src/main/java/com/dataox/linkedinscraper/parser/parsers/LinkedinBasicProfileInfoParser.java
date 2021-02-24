@@ -33,7 +33,6 @@ public class LinkedinBasicProfileInfoParser implements LinkedinParser<LinkedinBa
         basicProfileInfo.setFullName(parseFullName(headerElement));
         basicProfileInfo.setNumberOfConnections(parseNumberOfConnections(headerElement));
         basicProfileInfo.setLocation(parseLocation(headerElement));
-        basicProfileInfo.setCachedImageUrl(parseImgUrl(headerElement));
 
         setAboutIfExists(source, basicProfileInfo);
 
@@ -59,10 +58,6 @@ public class LinkedinBasicProfileInfoParser implements LinkedinParser<LinkedinBa
 
     private String parseLocation(Element headerElement) {
         return text(headerElement.selectFirst("ul.mt1 > li.inline-block:lt(1)"));
-    }
-
-    private String parseImgUrl(Element headerElement) {
-        return headerElement.selectFirst("div > img[title]").attr("src");
     }
 
     private String parseAbout(Element aboutElement) {
