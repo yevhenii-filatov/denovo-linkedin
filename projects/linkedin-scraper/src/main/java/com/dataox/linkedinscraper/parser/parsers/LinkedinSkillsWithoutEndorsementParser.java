@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 
 import static com.dataox.jsouputils.JsoupUtils.text;
 import static com.dataox.linkedinscraper.parser.utils.ParsingUtils.toElement;
+import static java.util.Objects.nonNull;
 
 @Service
 public class LinkedinSkillsWithoutEndorsementParser implements LinkedinParser<List<LinkedinSkill>, String> {
@@ -30,10 +31,7 @@ public class LinkedinSkillsWithoutEndorsementParser implements LinkedinParser<Li
         Element skillsSectionElement = toElement(source);
         List<LinkedinSkill> topThreeSkills = getTopThree(time, skillsSectionElement);
 
-        Element categoriesExpandedElement = skillsSectionElement.selectFirst("#skill-categories-expanded");
-        List<LinkedinSkill> otherSkills = getOtherSkills(time, categoriesExpandedElement);
-
-        topThreeSkills.addAll(otherSkills);
+        addOtherSkills(time, skillsSectionElement, topThreeSkills);
 
         return topThreeSkills;
     }
@@ -42,6 +40,15 @@ public class LinkedinSkillsWithoutEndorsementParser implements LinkedinParser<Li
         return splitTopThreeSkills(skillsSectionElement).stream()
                 .map(element -> getLinkedinSkill(element, time, "Top Three"))
                 .collect(Collectors.toList());
+    }
+
+    private void addOtherSkills(Instant time, Element skillsSectionElement, List<LinkedinSkill> topThreeSkills) {
+        Element categoriesExpandedElement = skillsSectionElement.selectFirst("#skill-categories-expanded");
+
+        if (nonNull(categoriesExpandedElement)) {
+            List<LinkedinSkill> otherSkills = getOtherSkills(time, categoriesExpandedElement);
+            topThreeSkills.addAll(otherSkills);
+        }
     }
 
     private List<LinkedinSkill> getOtherSkills(Instant time, Element categoriesExpandedElement) {
