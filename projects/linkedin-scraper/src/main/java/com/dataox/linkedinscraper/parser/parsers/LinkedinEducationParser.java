@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 import static com.dataox.jsouputils.JsoupUtils.absUrlFromHref;
 import static com.dataox.jsouputils.JsoupUtils.text;
 import static com.dataox.linkedinscraper.parser.utils.ParsingUtils.toElement;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 @Service
 @Slf4j
@@ -22,7 +23,7 @@ public class LinkedinEducationParser implements LinkedinParser<List<LinkedinEduc
 
     @Override
     public List<LinkedinEducation> parse(String source) {
-        if (source.isEmpty()) {
+        if (isNotBlank(source)) {
             log.info("{} received empty source", this.getClass().getSimpleName());
             return Collections.emptyList();
         }

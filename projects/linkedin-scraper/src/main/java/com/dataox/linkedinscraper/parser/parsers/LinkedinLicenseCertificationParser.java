@@ -16,8 +16,7 @@ import static com.dataox.jsouputils.JsoupUtils.absUrlFromHref;
 import static com.dataox.jsouputils.JsoupUtils.text;
 import static com.dataox.linkedinscraper.parser.utils.ParsingUtils.toElement;
 import static java.util.Objects.nonNull;
-import static org.apache.commons.lang3.StringUtils.substringAfter;
-import static org.apache.commons.lang3.StringUtils.substringBetween;
+import static org.apache.commons.lang3.StringUtils.*;
 
 @Service
 @Slf4j
@@ -25,7 +24,7 @@ public class LinkedinLicenseCertificationParser implements LinkedinParser<List<L
 
     @Override
     public List<LinkedinLicenseCertification> parse(String source) {
-        if (source.isEmpty()) {
+        if (isNotBlank(source)) {
             log.info("{} received empty source", this.getClass().getSimpleName());
             return Collections.emptyList();
         }
