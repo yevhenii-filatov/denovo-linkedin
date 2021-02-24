@@ -1,9 +1,9 @@
 package com.dataox.linkedinscraper.parser.parsers;
 
+import com.dataox.linkedinscraper.dto.sources.SkillsSource;
 import com.dataox.linkedinscraper.parser.LinkedinParser;
 import com.dataox.linkedinscraper.parser.dto.LinkedinEndorsement;
 import com.dataox.linkedinscraper.parser.dto.LinkedinSkill;
-import com.dataox.linkedinscraper.parser.utils.sources.SkillsSource;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.nodes.Element;

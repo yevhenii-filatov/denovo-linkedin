@@ -37,9 +37,9 @@ public class EducationScraper implements Scraper<String> {
         randomSleep(2000, 5000);
         WebElement showMoreEducationsButton = findElementBy(webDriver, SHOW_MORE_EDUCATIONS_BUTTON);
         while (nonNull(showMoreEducationsButton)) {
-            showMoreEducationsButton = findElementBy(webDriver, SHOW_MORE_EDUCATIONS_BUTTON);
             scrollToAndClickOnElement(webDriver, actions, showMoreEducationsButton);
             randomSleep(2500, 3500);
+            showMoreEducationsButton = findElementBy(webDriver, SHOW_MORE_EDUCATIONS_BUTTON);
         }
         educationSection = findElementBy(webDriver, EDUCATION_SECTION);
         return getElementHtml(educationSection);

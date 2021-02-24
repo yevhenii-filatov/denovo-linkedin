@@ -1,10 +1,10 @@
 package com.dataox.linkedinscraper.parser;
 
+import com.dataox.linkedinscraper.dto.CollectedProfileSourcesDTO;
+import com.dataox.linkedinscraper.dto.sources.SkillsSource;
 import com.dataox.linkedinscraper.parser.dto.LinkedinProfile;
 import com.dataox.linkedinscraper.parser.dto.LinkedinSkill;
 import com.dataox.linkedinscraper.parser.parsers.*;
-import com.dataox.linkedinscraper.parser.utils.CollectedProfileSourcesDTO;
-import com.dataox.linkedinscraper.parser.utils.sources.SkillsSource;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -36,7 +36,7 @@ public class LinkedinProfileParser implements LinkedinParser<LinkedinProfile, Co
         LinkedinProfile linkedinProfile = new LinkedinProfile();
 
         linkedinProfile.setProfileUrl(source.getProfileUrl());
-        linkedinProfile.setLinkedinActivities(activityParser.parse(source.getActivitySource()));
+        linkedinProfile.setLinkedinActivities(activityParser.parse(source.getActivitiesSources()));
         linkedinProfile.setLinkedinBasicProfileInfo(basicProfileInfoParser.parse(getBasicProfileSource(source)));
         linkedinProfile.setLinkedinEducations(educationParser.parse(source.getEducationsSource()));
         linkedinProfile.setLinkedinSkills(getAllLinkedinSkills(source));

@@ -1,8 +1,8 @@
 package com.dataox.linkedinscraper.parser.parsers;
 
+import com.dataox.linkedinscraper.dto.sources.SkillsSource;
 import com.dataox.linkedinscraper.parser.LinkedinParser;
 import com.dataox.linkedinscraper.parser.dto.LinkedinSkill;
-import com.dataox.linkedinscraper.parser.utils.sources.SkillsSource;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;

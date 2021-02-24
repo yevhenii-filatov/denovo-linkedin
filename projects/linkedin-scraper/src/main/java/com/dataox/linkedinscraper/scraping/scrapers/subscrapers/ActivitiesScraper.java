@@ -32,8 +32,10 @@ public class ActivitiesScraper implements Scraper<List<String>> {
 
     private final ScraperProperties scraperProperties;
     private static final By EMPTY_ACTIVITIES = By.xpath("//h1[text()='Nothing to see for now']");
-    private static final By ACTIVITY_POSTS = By.xpath("//div[contains(@class,'pv-recent-activity-detail__feed-container')]/div");
-    private static final By POSTS_MENU_BUTTON = By.className("feed-shared-control-menu__trigger");
+    private static final By ACTIVITY_POSTS = By.xpath("//div[contains(@class,'pv-recent-activity-detail__feed-container')]" +
+            "/div[contains(@class,'occludable-update')]");
+    private static final By LOADING_ANIMATION = By.xpath("//div[contains(@class,'pv-recent-activity-detail__feed-container')]" +
+            "/div[contains(@class,'detail-page-loader-container')]");
     private static final By COPY_LINK_BUTTON = By.xpath("//h5[text()='Copy link to post']");
     private static final By SEE_ALL_ACTIVITIES_BUTTON = By.xpath("//section[contains(@class,'pv-recent-activity-section-v2')]" +
             "/a/span[text()='See all activity'][1]");
@@ -42,11 +44,12 @@ public class ActivitiesScraper implements Scraper<List<String>> {
 
     @Override
     public List<String> scrape(WebDriver webDriver) {
+        WebDriverWait wait = new WebDriverWait(webDriver, 20);
+        wait.until(ExpectedConditions.presenceOfElementLocated(SEE_ALL_ACTIVITIES_BUTTON));
         WebElement seeAllButton = findWebElementBy(webDriver, SEE_ALL_ACTIVITIES_BUTTON)
                 .orElseThrow(() -> ElementNotFoundException.notFound("See all activity button"));
         log.info("Scraping activities");
         Actions action = new Actions(webDriver);
-        WebDriverWait wait = new WebDriverWait(webDriver, 20);
         scrollToAndClickOnElement(webDriver, action, seeAllButton);
         wait.until(ExpectedConditions.or(
                 ExpectedConditions.presenceOfElementLocated(ACTIVITY_POSTS),
@@ -55,10 +58,10 @@ public class ActivitiesScraper implements Scraper<List<String>> {
         WebElement emptyActivitiesMessage = findElementBy(webDriver, EMPTY_ACTIVITIES);
         if (nonNull(emptyActivitiesMessage))
             return emptyList();
-        return collectActivities(webDriver);
+        return collectActivities(webDriver, wait);
     }
 
-    private List<String> collectActivities(WebDriver webDriver) {
+    private List<String> collectActivities(WebDriver webDriver, WebDriverWait wait) {
         List<String> activitiesSources = new ArrayList<>();
         WebElement currentPost;
 
@@ -68,9 +71,9 @@ public class ActivitiesScraper implements Scraper<List<String>> {
             if (posts.size() - 1 < i)
                 return activitiesSources;
             currentPost = posts.get(i);
-            scrollToElement(webDriver, currentPost, 300);
+            scrollToElement(webDriver, currentPost, 100);
             activitiesSources.add(getElementHtml(currentPost));
-            randomSleep(1500, 2500);
+            randomSleep(300, 500);
         }
         return activitiesSources;
     }

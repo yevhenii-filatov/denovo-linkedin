@@ -1,8 +1,8 @@
 package com.dataox.linkedinscraper.parser.parsers;
 
+import com.dataox.linkedinscraper.dto.sources.RecommendationsSource;
 import com.dataox.linkedinscraper.parser.LinkedinParser;
 import com.dataox.linkedinscraper.parser.dto.LinkedinRecommendation;
-import com.dataox.linkedinscraper.parser.utils.sources.RecommendationsSource;
 import org.junit.jupiter.api.Test;
 import org.springframework.util.DigestUtils;
 
