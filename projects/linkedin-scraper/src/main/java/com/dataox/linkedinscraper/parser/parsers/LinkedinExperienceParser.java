@@ -32,17 +32,19 @@ public class LinkedinExperienceParser implements LinkedinParser<List<LinkedinExp
         Instant time = Instant.now();
 
         return splitExperience(experienceSectionElement).stream()
-                .flatMap(element -> {
-                    if (isMultiplePositions(element)) {
-                        return getAllPositions(time, element);
-                    }
-                    return Stream.of(getLinkedinExperience(element, time));
-                })
+                .flatMap(element -> resolveMultiplePositions(time, element))
                 .collect(Collectors.toList());
     }
 
     private Elements splitExperience(Element experienceSectionElement) {
         return experienceSectionElement.select("header + ul > li");
+    }
+
+    private Stream<LinkedinExperience> resolveMultiplePositions(Instant time, Element element) {
+        if (isMultiplePositions(element)) {
+            return getAllPositions(time, element);
+        }
+        return Stream.of(getLinkedinExperience(element, time));
     }
 
     private boolean isMultiplePositions(Element element) {
