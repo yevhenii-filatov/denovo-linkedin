@@ -34,16 +34,16 @@ public class Runner implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
         List<String> profileUrl = Arrays.asList(
-//                "https://www.linkedin.com/in/daymesanchez/",
-//                "https://www.linkedin.com/in/ashley-scheer-3b4155b/",
-//                "https://www.linkedin.com/in/lisa-umans-18350465/",
-//                "https://www.linkedin.com/in/winniedotwong/",
-//                "https://www.linkedin.com/in/evelyn-sahr-2615b212/",
-//                "https://www.linkedin.com/in/michael-mason-5196898/",
-//                "https://www.linkedin.com/in/clairebendix/",
+//                "https://www.linkedin.com/in/daymesanchez/"
+//                "https://www.linkedin.com/in/ashley-scheer-3b4155b/"
+//                "https://www.linkedin.com/in/lisa-umans-18350465/"
+//                "https://www.linkedin.com/in/winniedotwong/"
+//                "https://www.linkedin.com/in/evelyn-sahr-2615b212/"
+//                "https://www.linkedin.com/in/michael-mason-5196898/"
+                "https://www.linkedin.com/in/clairebendix/"
 //                "https://www.linkedin.com/in/andykgordon/",
 //                "https://www.linkedin.com/in/markostrau/",
-                "https://www.linkedin.com/in/davidjohnball/"
+//                "https://www.linkedin.com/in/davidjohnball/"
         );
         List<CollectedProfileSourcesDTO> sourcesDTOS = new ArrayList<>();
         ChromeDriverLauncher launcher = new ChromeDriverLauncher(chromeOptions);

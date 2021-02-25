@@ -77,7 +77,8 @@ public class SkillsWithEndorsementsScraper implements Scraper<List<SkillsSource>
         List<SkillsSource> skillsSources = new ArrayList<>();
         List<WebElement> skillsCategorySection = webDriver.findElements(SKILLS_CATEGORY_SECTIONS);
         for (WebElement skillCategorySection : skillsCategorySection)
-            skillsSources.add(collectSkillsFromCategory(webDriver, wait, actions, skillCategorySection));
+            if (!skillCategorySection.findElements(ENDORSEMENTS_IN_CATEGORY_BUTTON).isEmpty())
+                skillsSources.add(collectSkillsFromCategory(webDriver, wait, actions, skillCategorySection));
         return skillsSources;
     }
 
@@ -87,8 +88,6 @@ public class SkillsWithEndorsementsScraper implements Scraper<List<SkillsSource>
                 .getText();
         List<String> sources = new ArrayList<>();
         List<WebElement> endorsementsInCategory = skillCategorySection.findElements(ENDORSEMENTS_IN_CATEGORY_BUTTON);
-        if (endorsementsInCategory.isEmpty())
-            throw ElementNotFoundException.notFound("Endorsements in category");
         for (WebElement endorsementsButton : endorsementsInCategory)
             sources.addAll(collectEndorsementsSource(webDriver, wait, endorsementsButton, actions));
         return new SkillsSource(category, sources);

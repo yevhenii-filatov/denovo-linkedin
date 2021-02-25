@@ -47,7 +47,7 @@ public class AccomplishmentsScraper implements Scraper<List<String>> {
         for (int i = 0; i < subSections.size(); i++) {
             subSection = subSections.get(i);
             WebElement expandButton = subSection.findElement(EXPAND_SUBSECTION_BUTTON);
-            clickOnElement(expandButton, actions, randomLong(750, 1500));
+            scrollToAndClickOnElement(webDriver, actions, expandButton);
             randomSleep(2500, 3500);
             subSection = reFindSubSection(webDriver, i);
             WebElement showMoreButton = findWebElementFromParentBy(subSection, SHOW_MORE_BUTTON)
