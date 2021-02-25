@@ -2,8 +2,10 @@ package com.dataox.linkedinscraper.parser.parsers;
 
 import com.dataox.linkedinscraper.parser.LinkedinParser;
 import com.dataox.linkedinscraper.parser.dto.LinkedinComment;
+import com.dataox.linkedinscraper.parser.exceptions.EmptySourceException;
 import com.dataox.linkedinscraper.parser.utils.TimeConverter;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,7 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.apache.commons.lang3.StringUtils.substringBetween;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class LinkedinCommentParser implements LinkedinParser<List<LinkedinComment>, String> {
 
@@ -29,11 +32,16 @@ public class LinkedinCommentParser implements LinkedinParser<List<LinkedinCommen
 
     @Override
     public List<LinkedinComment> parse(String source) {
+        if (source.isEmpty()) {
+            log.error("received empty source", new EmptySourceException("Comment parser shouldn't receive empty source"));
+            return null;
+        }
+
         Element commentSectionElement = toElement(source);
         Instant time = Instant.now();
 
         return splitComments(commentSectionElement).stream()
-                .map(commentElement -> getLinkedinComment(commentElement,time))
+                .map(commentElement -> getLinkedinComment(commentElement, time))
                 .collect(Collectors.toList());
     }
 

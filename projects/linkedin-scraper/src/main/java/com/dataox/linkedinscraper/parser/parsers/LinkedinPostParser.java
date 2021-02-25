@@ -3,8 +3,10 @@ package com.dataox.linkedinscraper.parser.parsers;
 import com.dataox.linkedinscraper.parser.LinkedinParser;
 import com.dataox.linkedinscraper.parser.dto.LinkedinComment;
 import com.dataox.linkedinscraper.parser.dto.LinkedinPost;
+import com.dataox.linkedinscraper.parser.exceptions.EmptySourceException;
 import com.dataox.linkedinscraper.parser.utils.TimeConverter;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.jsoup.nodes.Element;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +23,7 @@ import static org.apache.commons.lang3.StringUtils.substringAfter;
 import static org.apache.commons.lang3.StringUtils.substringBefore;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class LinkedinPostParser implements LinkedinParser<LinkedinPost, String> {
     private final static String BASE_URL = "https://www.linkedin.com/feed/update/";
@@ -30,6 +33,11 @@ public class LinkedinPostParser implements LinkedinParser<LinkedinPost, String> 
 
     @Override
     public LinkedinPost parse(String source) {
+        if (source.isEmpty()) {
+            log.error("received empty source", new EmptySourceException("Post parser shouldn't receive empty source"));
+            return null;
+        }
+
         Instant time = Instant.now();
 
         Element postElement = toElement(source);

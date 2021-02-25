@@ -2,7 +2,6 @@ package com.dataox.linkedinscraper.parser.parsers;
 
 import com.dataox.linkedinscraper.parser.LinkedinParser;
 import com.dataox.linkedinscraper.parser.dto.LinkedinActivity;
-import com.dataox.linkedinscraper.parser.utils.sources.ActivitiesSource;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.nodes.Element;
@@ -27,14 +26,14 @@ public class LinkedinActivityParser implements LinkedinParser<List<LinkedinActiv
     @Override
     public List<LinkedinActivity> parse(List<String> source) {
         if (source.isEmpty()) {
-            log.info("{} received empty source", this.getClass().getSimpleName());
+            log.info("received empty source");
             return Collections.emptyList();
         }
 
         Instant time = Instant.now();
 
         return source.stream()
-                .map(activitySource -> getLinkedinActivity(time,activitySource))
+                .map(activitySource -> getLinkedinActivity(time, activitySource))
                 .collect(Collectors.toList());
     }
 

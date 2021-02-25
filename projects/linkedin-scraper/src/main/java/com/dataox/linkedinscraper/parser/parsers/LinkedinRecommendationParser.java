@@ -25,7 +25,7 @@ public class LinkedinRecommendationParser implements LinkedinParser<List<Linkedi
     @Override
     public List<LinkedinRecommendation> parse(List<RecommendationsSource> source) {
         if (source.isEmpty()) {
-            log.info("{} received empty source", this.getClass().getSimpleName());
+            log.info("received empty source");
             return Collections.emptyList();
         }
 

@@ -20,7 +20,7 @@ public class LinkedinBasicProfileInfoParser implements LinkedinParser<LinkedinBa
     @Override
     public LinkedinBasicProfileInfo parse(List<String> source) {
         if (source.isEmpty()) {
-            log.info("{} received empty source", this.getClass().getSimpleName());
+            log.info("received empty source");
             return null;
         }
 
@@ -40,7 +40,7 @@ public class LinkedinBasicProfileInfoParser implements LinkedinParser<LinkedinBa
     }
 
     private void setAboutIfExists(List<String> source, LinkedinBasicProfileInfo basicProfileInfo) {
-        if(source.size() == 2) {
+        if (source.size() == 2) {
             String aboutSectionSource = source.get(1);
             Element aboutElement = toElement(aboutSectionSource);
             basicProfileInfo.setAbout(parseAbout(aboutElement));

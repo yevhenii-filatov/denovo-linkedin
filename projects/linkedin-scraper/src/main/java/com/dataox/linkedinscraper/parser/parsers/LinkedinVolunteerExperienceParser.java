@@ -24,7 +24,7 @@ public class LinkedinVolunteerExperienceParser implements LinkedinParser<List<Li
     @Override
     public List<LinkedinVolunteerExperience> parse(String source) {
         if (isBlank(source)) {
-            log.info("{} received empty source", this.getClass().getSimpleName());
+            log.info("received empty source");
             return Collections.emptyList();
         }
 
