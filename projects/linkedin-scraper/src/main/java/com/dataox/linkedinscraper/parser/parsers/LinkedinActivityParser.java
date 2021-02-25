@@ -26,14 +26,14 @@ public class LinkedinActivityParser implements LinkedinParser<List<LinkedinActiv
     @Override
     public List<LinkedinActivity> parse(List<String> source) {
         if (source.isEmpty()) {
-            log.info("{} received empty source", this.getClass().getSimpleName());
+            log.info("received empty source");
             return Collections.emptyList();
         }
 
         Instant time = Instant.now();
 
         return source.stream()
-                .map(activitySource -> getLinkedinActivity(time,activitySource))
+                .map(activitySource -> getLinkedinActivity(time, activitySource))
                 .collect(Collectors.toList());
     }
 

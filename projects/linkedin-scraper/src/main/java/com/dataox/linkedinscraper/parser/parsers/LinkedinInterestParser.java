@@ -26,7 +26,7 @@ public class LinkedinInterestParser implements LinkedinParser<List<LinkedinInter
     @Override
     public List<LinkedinInterest> parse(List<InterestsSource> source) {
         if (source.isEmpty()) {
-            log.info("{} received empty source", this.getClass().getSimpleName());
+            log.info("received empty source");
             return Collections.emptyList();
         }
 

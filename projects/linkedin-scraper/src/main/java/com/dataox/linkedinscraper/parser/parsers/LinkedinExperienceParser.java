@@ -26,7 +26,7 @@ public class LinkedinExperienceParser implements LinkedinParser<List<LinkedinExp
     @Override
     public List<LinkedinExperience> parse(String source) {
         if (isBlank(source)) {
-            log.info("{} received empty source", this.getClass().getSimpleName());
+            log.info("received empty source");
             return Collections.emptyList();
         }
 

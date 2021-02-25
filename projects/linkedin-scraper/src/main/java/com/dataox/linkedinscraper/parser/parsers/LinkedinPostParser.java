@@ -3,13 +3,16 @@ package com.dataox.linkedinscraper.parser.parsers;
 import com.dataox.linkedinscraper.parser.LinkedinParser;
 import com.dataox.linkedinscraper.parser.dto.LinkedinComment;
 import com.dataox.linkedinscraper.parser.dto.LinkedinPost;
+import com.dataox.linkedinscraper.parser.exceptions.EmptySourceException;
 import com.dataox.linkedinscraper.parser.utils.TimeConverter;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.jsoup.nodes.Element;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Objects;
 
 import static com.dataox.jsouputils.JsoupUtils.absUrlFromHref;
 import static com.dataox.jsouputils.JsoupUtils.text;
@@ -20,6 +23,7 @@ import static org.apache.commons.lang3.StringUtils.substringAfter;
 import static org.apache.commons.lang3.StringUtils.substringBefore;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class LinkedinPostParser implements LinkedinParser<LinkedinPost, String> {
     private final static String BASE_URL = "https://www.linkedin.com/feed/update/";
@@ -29,20 +33,26 @@ public class LinkedinPostParser implements LinkedinParser<LinkedinPost, String> 
 
     @Override
     public LinkedinPost parse(String source) {
+        if (source.isEmpty()) {
+            log.error("received empty source", new EmptySourceException("Post parser shouldn't receive empty source"));
+            return null;
+        }
+
         Instant time = Instant.now();
 
-        return getLinkedinPost(time,source);
-    }
-
-    public LinkedinPost getLinkedinPost(Instant time, String source) {
         Element postElement = toElement(source);
 
+        return getLinkedinPost(time, postElement);
+    }
+
+    public LinkedinPost getLinkedinPost(Instant time, Element postElement) {
         LinkedinPost post = new LinkedinPost();
+
         post.setCollectedDate(time);
         post.setItemSource(postElement.html());
         post.setUrl(getActivityUrl(postElement));
         post.setRelativePublicationDate(parseRelativePublicationDate(postElement));
-        post.setAbsolutePublicationDate(getAbsolutePublicationDate(postElement));
+        post.setAbsolutePublicationDate(getAbsolutePublicationDate(post.getRelativePublicationDate()));
         post.setAuthorProfileUrl(parseAuthorProfileUrl(postElement));
         post.setAuthorConnectionDegree(parseAuthorConnectionDegree(postElement));
         post.setAuthorHeadline(parseAuthorHeadline(postElement));
@@ -69,8 +79,10 @@ public class LinkedinPostParser implements LinkedinParser<LinkedinPost, String> 
         return substringBefore(text(postElement.selectFirst("span.feed-shared-actor__sub-description")), " •");
     }
 
-    private Instant getAbsolutePublicationDate(Element postElement) {
-        return timeConverter.getAbsoluteTime(parseRelativePublicationDate(postElement));
+    private Instant getAbsolutePublicationDate(String relativePublicationDate) {
+        Objects.requireNonNull(relativePublicationDate, "Time converter received null relative date " +
+                " in Post parser");
+        return timeConverter.getAbsoluteTime(relativePublicationDate);
     }
 
     private String parseAuthorProfileUrl(Element postElement) {

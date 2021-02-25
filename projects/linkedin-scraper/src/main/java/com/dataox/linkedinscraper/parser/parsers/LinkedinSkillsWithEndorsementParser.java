@@ -30,7 +30,7 @@ public class LinkedinSkillsWithEndorsementParser implements LinkedinParser<List<
     @Override
     public List<LinkedinSkill> parse(List<SkillsSource> source) {
         if (source.isEmpty()) {
-            log.info("{} received empty source", this.getClass().getSimpleName());
+            log.info("received empty source");
             return Collections.emptyList();
         }
 
