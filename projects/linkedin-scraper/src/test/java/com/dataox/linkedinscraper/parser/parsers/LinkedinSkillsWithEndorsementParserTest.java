@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static com.dataox.linkedinscraper.parser.ParsingTestUtils.loadResource;
+import static com.dataox.linkedinscraper.parser.utils.sources.SkillsSource.SkillEndorsementsSource;
 
 class LinkedinSkillsWithEndorsementParserTest {
 
@@ -19,7 +20,8 @@ class LinkedinSkillsWithEndorsementParserTest {
     void shouldParse() throws IOException {
         String source = loadResource(SKILLS_SOURCE);
 
-        SkillsSource skillsSource = new SkillsSource("Top Three", List.of(source));
+        SkillsSource skillsSource = new SkillsSource("Top Three",
+                List.of(new SkillEndorsementsSource("https://www.linkedin.com/in/alexander-demchenko/detail/skills/(ACoAABW5p6YBmK0zd_9J3zxe16T5alPKjFkskQE,2)/",source)));
 
         LinkedinParser<List<LinkedinSkill>, List<SkillsSource>> parser = new LinkedinSkillsWithEndorsementParser(new LinkedinEndorsementParser());
 
@@ -28,6 +30,7 @@ class LinkedinSkillsWithEndorsementParserTest {
         System.out.println(linkedinSkill.getNumberOfEndorsements());
         System.out.println(linkedinSkill.getName());
         System.out.println(linkedinSkill.getCategory());
+        System.out.println(linkedinSkill.getUrl());
         linkedinSkill.getLinkedinEndorsements().forEach(linkedinEndorsement -> System.out.println(linkedinEndorsement.getEndorserFullName()));
     }
 

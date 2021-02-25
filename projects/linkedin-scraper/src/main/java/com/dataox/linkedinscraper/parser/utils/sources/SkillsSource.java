@@ -16,5 +16,15 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class SkillsSource {
     String category;
-    List<String> skillsWithEndorsementsSources;
+    List<SkillEndorsementsSource> skillsWithEndorsementsSources;
+
+    @Data
+    @AllArgsConstructor
+    @FieldDefaults(level = AccessLevel.PRIVATE)
+    public static class SkillEndorsementsSource {
+        String skillUrl;
+        String skillSource;
+    }
+
 }
+
