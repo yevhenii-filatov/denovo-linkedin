@@ -1,5 +1,6 @@
 package com.dataox.linkedinscraper.scraping.scrapers.subscrapers;
 
+import com.dataox.linkedinscraper.dto.sources.SkillEndorsementsSource;
 import com.dataox.linkedinscraper.dto.sources.SkillsSource;
 import com.dataox.linkedinscraper.scraping.exceptions.ElementNotFoundException;
 import com.dataox.linkedinscraper.scraping.scrapers.Scraper;
@@ -66,7 +67,7 @@ public class SkillsWithEndorsementsScraper implements Scraper<List<SkillsSource>
     }
 
     private SkillsSource collectTopCategory(WebDriver webDriver, WebDriverWait wait, Actions actions) {
-        List<String> sources = new ArrayList<>();
+        List<SkillEndorsementsSource> sources = new ArrayList<>();
         List<WebElement> topCategoryEndorsements = webDriver.findElements(TOP_CATEGORY_ENDORSEMENTS_BUTTONS);
         for (WebElement endorsementButton : topCategoryEndorsements)
             sources.addAll(collectEndorsementsSource(webDriver, wait, endorsementButton, actions));
@@ -86,30 +87,40 @@ public class SkillsWithEndorsementsScraper implements Scraper<List<SkillsSource>
         String category = findWebElementFromParentBy(skillCategorySection, CATEGORY_NAME)
                 .orElseThrow(() -> ElementNotFoundException.notFound("Category name"))
                 .getText();
-        List<String> sources = new ArrayList<>();
+        List<SkillEndorsementsSource> sources = new ArrayList<>();
         List<WebElement> endorsementsInCategory = skillCategorySection.findElements(ENDORSEMENTS_IN_CATEGORY_BUTTON);
         for (WebElement endorsementsButton : endorsementsInCategory)
             sources.addAll(collectEndorsementsSource(webDriver, wait, endorsementsButton, actions));
         return new SkillsSource(category, sources);
     }
 
-    private List<String> collectEndorsementsSource(WebDriver webDriver,
-                                                   WebDriverWait wait,
-                                                   WebElement endorsementButton,
-                                                   Actions actions) {
-        List<String> sources = new ArrayList<>();
+    private List<SkillEndorsementsSource> collectEndorsementsSource(WebDriver webDriver,
+                                                                    WebDriverWait wait,
+                                                                    WebElement endorsementButton,
+                                                                    Actions actions) {
+        List<SkillEndorsementsSource> sources = new ArrayList<>();
         scrollToAndClickOnElement(webDriver, actions, endorsementButton);
         wait.until(ExpectedConditions.elementToBeClickable(CLOSE_POPUP_SKILL_ENDORSEMENTS_BUTTON));
-        sources.add(getElementHtml(findElementBy(webDriver, SKILLS_POPUP_WINDOW)));
         randomSleep(1500, 2000);
+        scrollEndorsements(webDriver);
+        WebElement endorsementsWindow = findWebElementBy(webDriver, SKILLS_POPUP_WINDOW)
+                .orElseThrow(() -> ElementNotFoundException.notFound("Endorsements popup window"));
+        sources.add(new SkillEndorsementsSource(webDriver.getCurrentUrl(), getElementHtml(endorsementsWindow)));
+        closeEndorsementsPopup(webDriver, actions);
+        randomSleep(750, 1500);
+        return sources;
+    }
+
+    private void scrollEndorsements(WebDriver webDriver) {
         WebElement scrollingArea = findWebElementBy(webDriver, POPUP_SCROLLING_AREA)
                 .orElseThrow(() -> ElementNotFoundException.notFound("Endorsements popup scrolling area"));
         scrollToTheBottomOfElement(webDriver, scrollingArea, SCROLL_STEP);
+    }
+
+    private void closeEndorsementsPopup(WebDriver webDriver, Actions actions) {
         WebElement closeButton = findWebElementBy(webDriver, CLOSE_POPUP_SKILL_ENDORSEMENTS_BUTTON)
                 .orElseThrow(() -> ElementNotFoundException.notFound("Close popup skill endorsements button"));
         clickOnElement(closeButton, actions);
-        randomSleep(750, 1500);
-        return sources;
     }
 
 }

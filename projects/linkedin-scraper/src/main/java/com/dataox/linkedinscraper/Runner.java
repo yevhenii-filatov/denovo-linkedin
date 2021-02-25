@@ -8,6 +8,7 @@ import com.dataox.linkedinscraper.scraping.scrapers.LinkedinProfileScraper;
 import com.dataox.linkedinscraper.scraping.service.login.LoginService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.springframework.boot.ApplicationArguments;
@@ -22,6 +23,7 @@ import java.util.List;
  * @author Dmitriy Lysko
  * @since 24/02/2021
  */
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class Runner implements ApplicationRunner {
@@ -40,10 +42,10 @@ public class Runner implements ApplicationRunner {
 //                "https://www.linkedin.com/in/winniedotwong/"
 //                "https://www.linkedin.com/in/evelyn-sahr-2615b212/"
 //                "https://www.linkedin.com/in/michael-mason-5196898/"
-                "https://www.linkedin.com/in/clairebendix/"
-//                "https://www.linkedin.com/in/andykgordon/",
-//                "https://www.linkedin.com/in/markostrau/",
-//                "https://www.linkedin.com/in/davidjohnball/"
+//                "https://www.linkedin.com/in/clairebendix/"
+//                "https://www.linkedin.com/in/andykgordon/"
+//                "https://www.linkedin.com/in/markostrau/"
+                "https://www.linkedin.com/in/davidjohnball/"
         );
         List<CollectedProfileSourcesDTO> sourcesDTOS = new ArrayList<>();
         ChromeDriverLauncher launcher = new ChromeDriverLauncher(chromeOptions);
@@ -55,13 +57,36 @@ public class Runner implements ApplicationRunner {
             }
         }
         List<LinkedinProfile> profiles = new ArrayList<>();
-        sourcesDTOS.stream()
-                .map(parser::parse)
-                .forEach(profiles::add);
+        for (CollectedProfileSourcesDTO sourcesDTO : sourcesDTOS) {
+            log.info("Parsing profile {}", sourcesDTO.getProfileUrl());
+            LinkedinProfile parse = parser.parse(sourcesDTO);
+            profiles.add(parse);
+        }
         List<String> profileJsons = new ArrayList<>();
         for (LinkedinProfile profile : profiles) {
+            removeSources(profile);
             profileJsons.add(objectMapper.writeValueAsString(profile));
         }
         System.out.println(profileJsons);
+    }
+
+    private void removeSources(LinkedinProfile profile) {
+        profile.getLinkedinBasicProfileInfo().setHeaderSectionSource("");
+        profile.getLinkedinBasicProfileInfo().setAboutSectionSource("");
+        profile.getLinkedinActivities().forEach(linkedinActivity -> {
+            linkedinActivity.getLinkedinPost().setItemSource("");
+            linkedinActivity.getLinkedinPost().getLinkedinComments().forEach(linkedinComment -> linkedinComment.setItemSource(""));
+        });
+        profile.getLinkedinEducations().forEach(linkedinEducation -> linkedinEducation.setItemSource(""));
+        profile.getLinkedinSkills().forEach(linkedinSkill -> {
+            linkedinSkill.setItemSource("");
+            linkedinSkill.getLinkedinEndorsements().forEach(linkedinEndorsement -> linkedinEndorsement.setItemSource(""));
+        });
+        profile.getLinkedinExperiences().forEach(linkedinExperience -> linkedinExperience.setItemSource(""));
+        profile.getLinkedinInterests().forEach(linkedinInterest -> linkedinInterest.setItemSource(""));
+        profile.getLinkedinLicenseCertifications().forEach(linkedinLicenseCertification -> linkedinLicenseCertification.setItemSource(""));
+        profile.getLinkedinRecommendations().forEach(linkedinRecommendation -> linkedinRecommendation.setItemSource(""));
+        profile.getLinkedinVolunteerExperiences().forEach(linkedinVolunteerExperience -> linkedinVolunteerExperience.setItemSource(""));
+        profile.getLinkedinAccomplishments().forEach(linkedinAccomplishment -> linkedinAccomplishment.setItemSource(""));
     }
 }

@@ -1,5 +1,6 @@
 package com.dataox.linkedinscraper.parser.parsers;
 
+import com.dataox.linkedinscraper.dto.sources.SkillEndorsementsSource;
 import com.dataox.linkedinscraper.dto.sources.SkillsSource;
 import com.dataox.linkedinscraper.parser.LinkedinParser;
 import com.dataox.linkedinscraper.parser.dto.LinkedinSkill;
@@ -10,7 +11,6 @@ import java.util.Collections;
 import java.util.List;
 
 import static com.dataox.linkedinscraper.parser.ParsingTestUtils.loadResource;
-import static com.dataox.linkedinscraper.parser.utils.sources.SkillsSource.SkillEndorsementsSource;
 
 class LinkedinSkillsWithEndorsementParserTest {
 

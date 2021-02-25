@@ -1,5 +1,6 @@
 package com.dataox.linkedinscraper.parser.parsers;
 
+import com.dataox.linkedinscraper.dto.sources.SkillEndorsementsSource;
 import com.dataox.linkedinscraper.dto.sources.SkillsSource;
 import com.dataox.linkedinscraper.parser.LinkedinParser;
 import com.dataox.linkedinscraper.parser.dto.LinkedinEndorsement;
@@ -17,7 +18,6 @@ import java.util.stream.Stream;
 
 import static com.dataox.jsouputils.JsoupUtils.text;
 import static com.dataox.linkedinscraper.parser.utils.ParsingUtils.toElement;
-import static com.dataox.linkedinscraper.parser.utils.sources.SkillsSource.SkillEndorsementsSource;
 import static org.apache.commons.lang3.StringUtils.substringBefore;
 
 @Service
