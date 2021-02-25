@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static com.dataox.jsouputils.JsoupUtils.text;
@@ -48,7 +49,7 @@ public class LinkedinCommentParser implements LinkedinParser<List<LinkedinCommen
         comment.setItemSource(commentElement.html());
         comment.setContent(parseContent(commentElement));
         comment.setRelativePublicationDate(parseRelativePublicationDate(commentElement));
-        comment.setAbsolutePublicationDate(getAbsolutePublicationDate(commentElement));
+        comment.setAbsolutePublicationDate(getAbsolutePublicationDate(comment.getRelativePublicationDate()));
         comment.setNumberOfReactions(parseNumberOfReactions(commentElement));
         comment.setNumberOfReplies(parseNumberOfReplies(commentElement));
         comment.setUrl(getCommentUrl(urn));
@@ -98,8 +99,10 @@ public class LinkedinCommentParser implements LinkedinParser<List<LinkedinCommen
         return text(commentElement.selectFirst("time.comments-comment-item__timestamp"));
     }
 
-    private Instant getAbsolutePublicationDate(Element commentElement) {
-        return timeConverter.getAbsoluteTime(parseRelativePublicationDate(commentElement));
+    private Instant getAbsolutePublicationDate(String relativePublicationDate) {
+        Objects.requireNonNull(relativePublicationDate, "Time converter received null relative date " +
+                " in Post parser");
+        return timeConverter.getAbsoluteTime(relativePublicationDate);
     }
 
     private int parseNumberOfReactions(Element commentElement) {
