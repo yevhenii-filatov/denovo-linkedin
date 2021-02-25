@@ -26,6 +26,7 @@ import static org.apache.commons.lang3.StringUtils.substringBetween;
 public class LinkedinCommentParser implements LinkedinParser<List<LinkedinComment>, String> {
 
     private static final String COMMENT_URL_TEMPLATE = "https://www.linkedin.com/feed/update/urn:li:activity:ZX?commentUrn=urn%3Ali%3Acomment%3A%28activity%3AZF%2CZB%29";
+    private static final String COMMENT_URL_TEMPLATE_UGC_POST = "https://www.linkedin.com/feed/update/urn:li:ugcPost:ZX?commentUrn=urn%3Ali%3Acomment%3A%28ugcPost%3AZF%2CZB%29";
     private static final String REPLY_URL_TEMPLATE = "&replyUrn=urn%3Ali%3Acomment%3A%28activity%3AZX%2CZB%29";
 
     private final TimeConverter timeConverter;
@@ -60,6 +61,7 @@ public class LinkedinCommentParser implements LinkedinParser<List<LinkedinCommen
         comment.setAbsolutePublicationDate(getAbsolutePublicationDate(comment.getRelativePublicationDate()));
         comment.setNumberOfReactions(parseNumberOfReactions(commentElement));
         comment.setNumberOfReplies(parseNumberOfReplies(commentElement));
+        System.out.println(urn);
         comment.setUrl(getCommentUrl(urn));
         setReplyUrl(commentElement, urn, comment);
 
@@ -87,7 +89,9 @@ public class LinkedinCommentParser implements LinkedinParser<List<LinkedinCommen
 
     private String getCommentUrl(String urn) {
         String[] templateValues = getTemplateValues(urn);
-        return COMMENT_URL_TEMPLATE.replace("ZX", templateValues[0]).replace("ZF", templateValues[0]).replace("ZB", templateValues[1]);
+        return urn.contains("ugcPost")
+                ? COMMENT_URL_TEMPLATE_UGC_POST.replace("ZX", templateValues[0]).replace("ZF", templateValues[0]).replace("ZB", templateValues[1])
+                : COMMENT_URL_TEMPLATE.replace("ZX", templateValues[0]).replace("ZF", templateValues[0]).replace("ZB", templateValues[1]);
     }
 
     private String getReplyUrl(String urn, String commentUrl) {
@@ -96,7 +100,9 @@ public class LinkedinCommentParser implements LinkedinParser<List<LinkedinCommen
     }
 
     private String[] getTemplateValues(String urn) {
-        return substringBetween(urn, "activity:", ")").split(",");
+        return urn.contains("ugcPost")
+                ? substringBetween(urn, "ugcPost:", ")").split(",")
+                : substringBetween(urn, "activity:", ")").split(",");
     }
 
     private String parseContent(Element commentElement) {
