@@ -28,7 +28,6 @@ public class LinkedinPost {
     @Column(name = "item_source")
     private String itemSource;
 
-    @NotBlank
     @Column(name = "relative_publication_date")
     private String relativePublicationDate;
 
@@ -36,7 +35,6 @@ public class LinkedinPost {
     @Column(name = "collected_date")
     private Instant collectedDate;
 
-    @NotNull
     @Column(name = "absolute_publication_date")
     private Instant absolutePublicationDate;
 

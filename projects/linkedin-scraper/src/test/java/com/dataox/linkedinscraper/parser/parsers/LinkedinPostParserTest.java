@@ -29,7 +29,7 @@ class LinkedinPostParserTest {
         ActivitiesSource source1 = new ActivitiesSource(POST_URL, loadResource(ACTIVITY_SOURCE));
         LinkedinParser<List<LinkedinActivity>,List<String>> parser1 = new LinkedinActivityParser(parser);
         List<LinkedinActivity> parse = parser1.parse(List.of(source));
-        System.out.println(parse.get(0).getLinkedinPost().getUrl());
+        System.out.println(parse.get(0).getLinkedinPost().getContent());
 
     }
 }

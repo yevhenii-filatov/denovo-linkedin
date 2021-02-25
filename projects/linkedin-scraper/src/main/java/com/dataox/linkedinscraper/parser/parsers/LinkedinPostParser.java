@@ -12,15 +12,13 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.List;
-import java.util.Objects;
 
 import static com.dataox.jsouputils.JsoupUtils.absUrlFromHref;
 import static com.dataox.jsouputils.JsoupUtils.text;
 import static com.dataox.linkedinscraper.parser.utils.ParsingUtils.toElement;
 import static java.lang.Integer.parseInt;
 import static java.util.Objects.nonNull;
-import static org.apache.commons.lang3.StringUtils.substringAfter;
-import static org.apache.commons.lang3.StringUtils.substringBefore;
+import static org.apache.commons.lang3.StringUtils.*;
 
 @Service
 @Slf4j
@@ -51,8 +49,13 @@ public class LinkedinPostParser implements LinkedinParser<LinkedinPost, String> 
         post.setCollectedDate(time);
         post.setItemSource(postElement.html());
         post.setUrl(getActivityUrl(postElement));
-        post.setRelativePublicationDate(parseRelativePublicationDate(postElement));
-        post.setAbsolutePublicationDate(getAbsolutePublicationDate(post.getRelativePublicationDate()));
+
+        String relativePublicationDate = parseRelativePublicationDate(postElement);
+        if (isNotBlank(relativePublicationDate)) {
+            post.setRelativePublicationDate(relativePublicationDate);
+            post.setAbsolutePublicationDate(getAbsolutePublicationDate(post.getRelativePublicationDate()));
+        }
+
         post.setAuthorProfileUrl(parseAuthorProfileUrl(postElement));
         post.setAuthorConnectionDegree(parseAuthorConnectionDegree(postElement));
         post.setAuthorHeadline(parseAuthorHeadline(postElement));
@@ -80,8 +83,6 @@ public class LinkedinPostParser implements LinkedinParser<LinkedinPost, String> 
     }
 
     private Instant getAbsolutePublicationDate(String relativePublicationDate) {
-        Objects.requireNonNull(relativePublicationDate, "Time converter received null relative date " +
-                " in Post parser");
         return timeConverter.getAbsoluteTime(relativePublicationDate);
     }
 
@@ -107,9 +108,17 @@ public class LinkedinPostParser implements LinkedinParser<LinkedinPost, String> 
 
     private String parseContent(Element postElement) {
         String selector = ".feed-shared-text";
-        return isShared(postElement)
+        String content = isShared(postElement)
                 ? text(postElement.select(selector).last())
                 : text(postElement.selectFirst(selector));
+
+        return handleArticle(postElement, content);
+    }
+
+    private String handleArticle(Element postElement, String content) {
+        return nonNull(content)
+                ? content
+                : text(postElement.select(".feed-shared-article__section,.feed-shared-article__description"));
     }
 
     private Boolean isShared(Element postElement) {
