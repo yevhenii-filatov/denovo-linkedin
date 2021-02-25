@@ -84,7 +84,7 @@ public class LinkedinPostParser implements LinkedinParser<LinkedinPost, String> 
 
         return nonNull(date)
                 ? substringBefore(date, " •")
-                : text(postElement.selectFirst(baseSelector + "> span:lt(1)"));
+                : substringBefore(text(postElement.selectFirst(baseSelector + "> span:lt(1)")), " •") ;
     }
 
     private Instant getAbsolutePublicationDate(String relativePublicationDate) {
