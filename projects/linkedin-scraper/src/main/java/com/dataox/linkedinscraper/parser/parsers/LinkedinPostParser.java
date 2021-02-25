@@ -79,7 +79,12 @@ public class LinkedinPostParser implements LinkedinParser<LinkedinPost, String> 
     }
 
     private String parseRelativePublicationDate(Element postElement) {
-        return substringBefore(text(postElement.selectFirst("span.feed-shared-actor__sub-description")), " •");
+        String baseSelector = "span.feed-shared-actor__sub-description";
+        String date = text(postElement.selectFirst(baseSelector + "> span > span:lt(1)"));
+
+        return nonNull(date)
+                ? substringBefore(date, " •")
+                : text(postElement.selectFirst(baseSelector + "> span:lt(1)"));
     }
 
     private Instant getAbsolutePublicationDate(String relativePublicationDate) {
