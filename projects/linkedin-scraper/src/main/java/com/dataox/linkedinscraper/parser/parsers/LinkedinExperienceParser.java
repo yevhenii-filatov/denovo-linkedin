@@ -75,8 +75,13 @@ public class LinkedinExperienceParser implements LinkedinParser<List<LinkedinExp
         experience.setCompanyName(parseCompanyName(educationElement));
         experience.setCompanyProfileUrl(parseCompanyProfileUrl(educationElement));
         experience.setPosition(parsePosition(educationElement));
-        experience.setDateStarted(parseDateStarted(educationElement));
-        experience.setDateFinished(parseDateFinished(educationElement));
+
+        String dateRange = parseDateRange(educationElement);
+        if (isNoneBlank(dateRange)){
+            experience.setDateStarted(getDateStarted(dateRange));
+            experience.setDateFinished(getDateFinished(dateRange));
+        }
+
         experience.setLocation(parseLocation(educationElement));
         experience.setDescription(parseDescription(educationElement));
 
@@ -104,13 +109,11 @@ public class LinkedinExperienceParser implements LinkedinParser<List<LinkedinExp
         return text(experienceElement.selectFirst(".pv-entity__date-range > span + span"));
     }
 
-    private String parseDateStarted(Element experienceElement) {
-        String dateRange = parseDateRange(experienceElement);
+    private String getDateStarted(String dateRange) {
         return substringBefore(dateRange, " – ").trim();
     }
 
-    private String parseDateFinished(Element experienceElement) {
-        String dateRange = parseDateRange(experienceElement);
+    private String getDateFinished(String dateRange) {
         return substringAfter(dateRange, " – ").trim();
     }
 
