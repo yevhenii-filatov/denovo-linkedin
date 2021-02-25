@@ -44,4 +44,6 @@ public class LinkedinProfile {
     private List<LinkedinSkill> linkedinSkills = new ArrayList<>();
 
     private List<LinkedinActivity> linkedinActivities = new ArrayList<>();
+
+    private List<LinkedinAccomplishment> linkedinAccomplishments = new ArrayList<>();
 }

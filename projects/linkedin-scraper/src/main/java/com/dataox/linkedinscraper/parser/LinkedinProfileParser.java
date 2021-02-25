@@ -30,21 +30,23 @@ public class LinkedinProfileParser implements LinkedinParser<LinkedinProfile, Co
     LinkedinLicenseCertificationParser licenseCertificationParser;
     LinkedinRecommendationParser recommendationParser;
     LinkedinVolunteerExperienceParser volunteerExperienceParser;
+    LinkedinAccomplishmentParser accomplishmentParser;
 
     @Override
-    public LinkedinProfile parse(CollectedProfileSourcesDTO source) {
+    public LinkedinProfile parse(CollectedProfileSourcesDTO sourcesDTO) {
         LinkedinProfile linkedinProfile = new LinkedinProfile();
 
-        linkedinProfile.setProfileUrl(source.getProfileUrl());
-        linkedinProfile.setLinkedinActivities(activityParser.parse(source.getActivitySource()));
-        linkedinProfile.setLinkedinBasicProfileInfo(basicProfileInfoParser.parse(getBasicProfileSource(source)));
-        linkedinProfile.setLinkedinEducations(educationParser.parse(source.getEducationsSource()));
-        linkedinProfile.setLinkedinSkills(getAllLinkedinSkills(source));
-        linkedinProfile.setLinkedinExperiences(experienceParser.parse(source.getExperiencesSource()));
-        linkedinProfile.setLinkedinInterests(interestParser.parse(source.getInterestsSources()));
-        linkedinProfile.setLinkedinLicenseCertifications(licenseCertificationParser.parse(source.getLicenseSource()));
-        linkedinProfile.setLinkedinRecommendations(recommendationParser.parse(source.getRecommendationsSources()));
-        linkedinProfile.setLinkedinVolunteerExperiences(volunteerExperienceParser.parse(source.getVolunteersSource()));
+        linkedinProfile.setProfileUrl(sourcesDTO.getProfileUrl());
+        linkedinProfile.setLinkedinActivities(activityParser.parse(sourcesDTO.getActivitySource()));
+        linkedinProfile.setLinkedinBasicProfileInfo(basicProfileInfoParser.parse(getBasicProfileSource(sourcesDTO)));
+        linkedinProfile.setLinkedinEducations(educationParser.parse(sourcesDTO.getEducationsSource()));
+        linkedinProfile.setLinkedinSkills(getAllLinkedinSkills(sourcesDTO));
+        linkedinProfile.setLinkedinExperiences(experienceParser.parse(sourcesDTO.getExperiencesSource()));
+        linkedinProfile.setLinkedinInterests(interestParser.parse(sourcesDTO.getInterestsSources()));
+        linkedinProfile.setLinkedinLicenseCertifications(licenseCertificationParser.parse(sourcesDTO.getLicenseSource()));
+        linkedinProfile.setLinkedinRecommendations(recommendationParser.parse(sourcesDTO.getRecommendationsSources()));
+        linkedinProfile.setLinkedinVolunteerExperiences(volunteerExperienceParser.parse(sourcesDTO.getVolunteersSource()));
+        linkedinProfile.setLinkedinAccomplishments(accomplishmentParser.parse(sourcesDTO.getAccomplishmentsSources()));
 
         return linkedinProfile;
     }

@@ -60,7 +60,6 @@ public class LinkedinCommentParser implements LinkedinParser<List<LinkedinCommen
         comment.setAbsolutePublicationDate(getAbsolutePublicationDate(comment.getRelativePublicationDate()));
         comment.setNumberOfReactions(parseNumberOfReactions(commentElement));
         comment.setNumberOfReplies(parseNumberOfReplies(commentElement));
-        System.out.println(urn);
         comment.setUrl(getCommentUrl(urn));
         setReplyUrl(commentElement, urn, comment);
 
