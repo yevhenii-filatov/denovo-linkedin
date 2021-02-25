@@ -17,6 +17,7 @@ import java.util.stream.Stream;
 
 import static com.dataox.jsouputils.JsoupUtils.text;
 import static com.dataox.linkedinscraper.parser.utils.ParsingUtils.toElement;
+import static com.dataox.linkedinscraper.parser.utils.sources.SkillsSource.SkillEndorsementsSource;
 import static org.apache.commons.lang3.StringUtils.substringBefore;
 import static org.apache.commons.lang3.StringUtils.substringBetween;
 
@@ -47,8 +48,8 @@ public class LinkedinSkillsWithEndorsementParser implements LinkedinParser<List<
                 .map(skillEndorsement -> getLinkedinSkill(skillEndorsement, time, category));
     }
 
-    private LinkedinSkill getLinkedinSkill(String skillEndorsementSource, Instant time, String category) {
-        Element skillElement = toElement(skillEndorsementSource);
+    private LinkedinSkill getLinkedinSkill(SkillEndorsementsSource skillEndorsementSource, Instant time, String category) {
+        Element skillElement = toElement(skillEndorsementSource.getSkillSource());
 
         LinkedinSkill skill = new LinkedinSkill();
         skill.setUpdatedAt(time);
@@ -56,6 +57,7 @@ public class LinkedinSkillsWithEndorsementParser implements LinkedinParser<List<
         skill.setCategory(category);
         skill.setName(parseName(skillElement));
         skill.setNumberOfEndorsements(getNumberOfEndorsements(skillElement));
+        skill.setUrl(skillEndorsementSource.getSkillUrl());
         setEndorsements(skillElement, skill);
 
         return skill;

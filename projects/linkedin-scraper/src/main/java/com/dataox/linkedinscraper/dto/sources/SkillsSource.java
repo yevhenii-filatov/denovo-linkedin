@@ -16,5 +16,5 @@ import java.util.List;
 @AllArgsConstructor
 public class SkillsSource {
     String category;
-    List<String> skillsWithEndorsementsSources;
+    List<SkillEndorsementsSource> skillsWithEndorsementsSources;
 }
