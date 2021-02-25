@@ -19,7 +19,6 @@ import static com.dataox.jsouputils.JsoupUtils.text;
 import static com.dataox.linkedinscraper.parser.utils.ParsingUtils.toElement;
 import static com.dataox.linkedinscraper.parser.utils.sources.SkillsSource.SkillEndorsementsSource;
 import static org.apache.commons.lang3.StringUtils.substringBefore;
-import static org.apache.commons.lang3.StringUtils.substringBetween;
 
 @Service
 @Slf4j
@@ -79,8 +78,6 @@ public class LinkedinSkillsWithEndorsementParser implements LinkedinParser<List<
     }
 
     private int getNumberOfEndorsements(Element skillEndorsementElement) {
-        return Integer.parseInt(
-                substringBetween(parseNameAndEndorsementsNum(skillEndorsementElement), "(", ")")
-        );
+        return Integer.parseInt(parseNameAndEndorsementsNum(skillEndorsementElement).replaceAll("\\D+", ""));
     }
 }
