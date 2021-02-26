@@ -32,7 +32,7 @@ class LinkedinBasicProfileInfoParserTest {
         LinkedinBasicProfileInfo expected = new LinkedinBasicProfileInfo();
         expected.setFullName("Alexander Demchenko");
         expected.setUpdatedAt(actual.getUpdatedAt());
-        expected.setNumberOfConnections("500+ connections");
+        expected.setNumberOfConnections("500+");
         expected.setLocation("Ukraine");
         expected.setAbout(
                 "I am a co-founder of a software company named DataOx engaged in web scraping services and data cleansing technologies. " +

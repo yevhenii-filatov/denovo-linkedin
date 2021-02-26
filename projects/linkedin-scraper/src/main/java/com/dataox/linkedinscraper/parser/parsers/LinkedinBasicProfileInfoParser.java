@@ -53,7 +53,7 @@ public class LinkedinBasicProfileInfoParser implements LinkedinParser<LinkedinBa
     }
 
     private String parseNumberOfConnections(Element headerElement) {
-        return text(headerElement.selectFirst(".inline-block > a > span:contains(connections)"));
+        return substringBefore(text(headerElement.selectFirst("span:contains(connections)")), "connections").trim();
     }
 
     private String parseLocation(Element headerElement) {
