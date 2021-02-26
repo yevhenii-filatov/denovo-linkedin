@@ -30,6 +30,7 @@ public class LinkedinProfileParser implements LinkedinParser<LinkedinProfile, Co
     LinkedinLicenseCertificationParser licenseCertificationParser;
     LinkedinRecommendationParser recommendationParser;
     LinkedinVolunteerExperienceParser volunteerExperienceParser;
+    LinkedinAccomplishmentParser accomplishmentParser;
 
     @Override
     public LinkedinProfile parse(CollectedProfileSourcesDTO source) {
@@ -45,7 +46,7 @@ public class LinkedinProfileParser implements LinkedinParser<LinkedinProfile, Co
         linkedinProfile.setLinkedinLicenseCertifications(licenseCertificationParser.parse(source.getLicenseSource()));
         linkedinProfile.setLinkedinRecommendations(recommendationParser.parse(source.getRecommendationsSources()));
         linkedinProfile.setLinkedinVolunteerExperiences(volunteerExperienceParser.parse(source.getVolunteersSource()));
-
+        linkedinProfile.setLinkedinAccomplishments(accomplishmentParser.parse(source.getAccomplishmentsSources()));
         return linkedinProfile;
     }
 
