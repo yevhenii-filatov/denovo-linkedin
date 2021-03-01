@@ -7,3 +7,10 @@ app:
       token: [ TOKEN ]
   scraper:
     activities-amount: 50
+  linkedin:
+    profile-login: [LOGIN]
+    profile-password: [PASSWORD]
+
+spring:
+  application:
+    name: [NAME]

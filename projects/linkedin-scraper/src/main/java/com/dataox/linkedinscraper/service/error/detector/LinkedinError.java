@@ -1,4 +1,4 @@
-package com.dataox.linkedinscraper.scraping.service.error.detector;
+package com.dataox.linkedinscraper.service.error.detector;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -19,7 +19,8 @@ public enum LinkedinError implements Error {
     OOPS_ITS_NOT_YOU_ITS_US("26", "Unexpected error on Linkedin side", false),
     DONT_HAVE_ACCESS_TO_PROFILE("27", "The profiles of members who are outside your network have limited visibility", false),
     ISNT_QUITE_RIGHT("28","We noticed unusual activity from your account.",false),
-    SOMETHING_WENT_WRONG("29","Something went wrong. Refresh the page",false);
+    SOMETHING_WENT_WRONG("29","Something went wrong. Refresh the page",false),
+    LOGGED_OUT("30", "Linkedin logged out account", false);
 
     String code;
     String message;

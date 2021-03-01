@@ -1,4 +1,4 @@
-package com.dataox.linkedinscraper.scraping.service.error.detector;
+package com.dataox.linkedinscraper.service.error.detector;
 
 public interface Error {
     String getCode();

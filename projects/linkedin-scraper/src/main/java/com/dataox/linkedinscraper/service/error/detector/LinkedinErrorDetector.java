@@ -1,4 +1,4 @@
-package com.dataox.linkedinscraper.scraping.service.error.detector;
+package com.dataox.linkedinscraper.service.error.detector;
 
 import com.dataox.WebDriverUtils;
 import org.openqa.selenium.By;
@@ -20,6 +20,7 @@ public class LinkedinErrorDetector {
     private static final By BAN_HEADING_SELECTOR = By.xpath("//h1[contains(text(),'Your account has been restricted')]");
     private static final By ISNT_QUITE_RIGHT = By.xpath("//main/h1[text()='Something isn’t quite right']");
     private static final By SOMETHING_WENT_WRONG = By.xpath("//h1[text()='Something went wrong']");
+    private static final By LINKEDIN_LOGGED_OUT = By.xpath("//nav[@aria-label='Primary']//a[@class='nav__button-secondary'][text()='Sign in']");
 
     public LinkedinError detect(WebDriver webDriver) {
         if (banDetected(webDriver)) {
@@ -52,7 +53,14 @@ public class LinkedinErrorDetector {
         if (somethingWentWrong(webDriver)) {
             return LinkedinError.SOMETHING_WENT_WRONG;
         }
+        if (linkedinLoggedOut(webDriver)) {
+            return LinkedinError.LOGGED_OUT;
+        }
         return LinkedinError.NO_ERRORS;
+    }
+
+    private boolean linkedinLoggedOut(WebDriver webDriver) {
+        return Objects.nonNull(WebDriverUtils.findElementBy(webDriver, LINKEDIN_LOGGED_OUT));
     }
 
     private boolean somethingWentWrong(WebDriver webDriver) {

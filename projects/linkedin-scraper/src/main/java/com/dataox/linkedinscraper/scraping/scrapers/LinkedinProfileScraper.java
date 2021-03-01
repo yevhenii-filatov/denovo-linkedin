@@ -1,7 +1,11 @@
 package com.dataox.linkedinscraper.scraping.scrapers;
 
 import com.dataox.linkedinscraper.dto.CollectedProfileSourcesDTO;
+import com.dataox.linkedinscraper.scraping.exceptions.ElementNotFoundException;
+import com.dataox.linkedinscraper.scraping.exceptions.LinkedinException;
 import com.dataox.linkedinscraper.scraping.scrapers.subscrapers.*;
+import com.dataox.linkedinscraper.service.error.detector.LinkedinError;
+import com.dataox.linkedinscraper.service.error.detector.LinkedinErrorDetector;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.WebDriver;
@@ -18,6 +22,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class LinkedinProfileScraper {
 
+    private final LinkedinErrorDetector errorDetector;
     private final AboutSectionScraper aboutSectionScraper;
     private final ActivitiesScraper activitiesScraper;
     private final EducationScraper educationScraper;
@@ -34,6 +39,9 @@ public class LinkedinProfileScraper {
     public CollectedProfileSourcesDTO scrape(WebDriver webDriver, String profileUrl) {
         log.info("Scraping profile: {}", profileUrl);
         webDriver.get(profileUrl);
+        LinkedinError linkedinError = errorDetector.detect(webDriver);
+        if (!linkedinError.equals(LinkedinError.NO_ERRORS))
+            throw new LinkedinException(linkedinError.getMessage());
         CollectedProfileSourcesDTO profileSourcesDTO = new CollectedProfileSourcesDTO();
         profileSourcesDTO.setProfileUrl(profileUrl);
         profileSourcesDTO.setHeaderSectionSource(headerSectionScraper.scrape(webDriver));
