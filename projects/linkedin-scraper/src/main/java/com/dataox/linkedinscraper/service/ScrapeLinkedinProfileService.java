@@ -3,8 +3,8 @@ package com.dataox.linkedinscraper.service;
 import com.dataox.ChromeDriverLauncher;
 import com.dataox.linkedinscraper.dto.CollectedProfileSourcesDTO;
 import com.dataox.linkedinscraper.dto.LinkedinProfileToScrapeDTO;
-import com.dataox.linkedinscraper.dto.ScrapedLinkedinProfilesDTO;
-import com.dataox.linkedinscraper.exceptions.ParserException;
+import com.dataox.linkedinscraper.dto.NotScrapedLinkedinProfile;
+import com.dataox.linkedinscraper.dto.ScrapingResultsDTO;
 import com.dataox.linkedinscraper.parser.LinkedinProfileParser;
 import com.dataox.linkedinscraper.parser.dto.LinkedinProfile;
 import com.dataox.linkedinscraper.scraping.scrapers.LinkedinProfileScraper;
@@ -14,7 +14,10 @@ import com.dataox.linkedinscraper.service.error.detector.LinkedinErrorDetector;
 import com.dataox.linkedinscraper.utils.NotificationUtils;
 import com.dataox.linkedinscraper.utils.ObjectUtils;
 import com.dataox.notificationservice.service.TelegramNotificationsServiceProvider;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.springframework.context.ApplicationContext;
@@ -22,16 +25,14 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.dataox.linkedinscraper.service.error.detector.LinkedinError.*;
-import static com.dataox.linkedinscraper.utils.NotificationUtils.createExceptionMessage;
-import static com.dataox.linkedinscraper.utils.NotificationUtils.createLinkedinErrorMessage;
 
 /**
  * @author Dmitriy Lysko
  * @since 01/03/2021
  */
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ScrapeLinkedinProfileService {
@@ -42,103 +43,113 @@ public class ScrapeLinkedinProfileService {
     private final LinkedinErrorDetector errorDetector;
     private final TelegramNotificationsServiceProvider notificationsService;
     private final ApplicationContext applicationContext;
+    private final ObjectMapper objectMapper;
 
-    public ScrapedLinkedinProfilesDTO scrape(List<LinkedinProfileToScrapeDTO> linkedinProfiles) {
+    public ScrapingResultsDTO scrape(List<LinkedinProfileToScrapeDTO> linkedinProfilesToScrape) {
         ChromeDriverLauncher launcher = new ChromeDriverLauncher(chromeOptions);
         WebDriver webDriver = launcher.getWebDriver();
-        loginService.performLogin(webDriver);
-        List<CollectedProfileSourcesDTO> sourcesDTOS = new ArrayList<>();
-        List<String> unavailableProfileUrls = new ArrayList<>();
-        List<String> profileURLs = linkedinProfiles.stream()
-                .map(LinkedinProfileToScrapeDTO::getProfileURL)
-                .collect(Collectors.toList());
-        for (LinkedinProfileToScrapeDTO profile : linkedinProfiles) {
-            try {
-                sourcesDTOS.add(scraper.scrape(webDriver, profile));
-            } catch (Exception e) {
-                LinkedinError linkedinError = errorDetector.detect(webDriver);
-                if (linkedinError.equals(NO_ERRORS)) {
-                    notificationsService.send(NotificationUtils.createExceptionMessage(e, profile.getProfileURL(), applicationContext.getId()));
-                    launcher.close();
-                    throw e;
-                }
-                if (!isExceptionResolved(webDriver, sourcesDTOS, unavailableProfileUrls, profile)) {
-                    launcher.close();
-                    return createLinkedinProfilesDTO(profileURLs, sourcesDTOS, unavailableProfileUrls);
-                }
-            }
-        }
-        launcher.close();
-        return createLinkedinProfilesDTO(profileURLs, sourcesDTOS, unavailableProfileUrls);
-    }
-
-    private ScrapedLinkedinProfilesDTO createLinkedinProfilesDTO(List<String> profileUrls,
-                                                                 List<CollectedProfileSourcesDTO> sourcesDTOS,
-                                                                 List<String> unavailableProfileUrls) {
-        ScrapedLinkedinProfilesDTO scrapedLinkedinProfilesDTO = new ScrapedLinkedinProfilesDTO();
-        List<LinkedinProfile> parsedProfiles = parseProfiles(sourcesDTOS);
-        scrapedLinkedinProfilesDTO.setSuccessfulProfiles(parsedProfiles);
-        scrapedLinkedinProfilesDTO.setUnavailableProfileUrls(unavailableProfileUrls);
-        scrapedLinkedinProfilesDTO.setFailedToScrapeProfileUrls(resolveFailedProfiles(profileUrls, sourcesDTOS));
-        return scrapedLinkedinProfilesDTO;
-    }
-
-    private List<String> resolveFailedProfiles(List<String> profileUrls, List<CollectedProfileSourcesDTO> sourcesDTOS) {
-        List<String> collectedProfileUrls = sourcesDTOS.stream()
-                .map(CollectedProfileSourcesDTO::getProfileUrl)
-                .collect(Collectors.toList());
-        return profileUrls.stream()
-                .filter(s -> !collectedProfileUrls.contains(s))
-                .collect(Collectors.toList());
-    }
-
-    private List<LinkedinProfile> parseProfiles(List<CollectedProfileSourcesDTO> sourcesDTOS) {
-        List<LinkedinProfile> parsedProfiles = new ArrayList<>();
-        for (CollectedProfileSourcesDTO sourceDTO : sourcesDTOS) {
-            try {
-                parsedProfiles.add(parser.parse(sourceDTO));
-            } catch (Exception e) {
-                notificationsService.send(createExceptionMessage(e, sourceDTO.getProfileUrl(), applicationContext.getId()));
-                throw ParserException.exceptionOccurred(e.getClass().getSimpleName(), e.getMessage(), sourceDTO.getProfileUrl());
-            }
-        }
-        return parsedProfiles;
-    }
-
-    private boolean isExceptionResolved(WebDriver webDriver,
-                                        List<CollectedProfileSourcesDTO> sourcesDTOS,
-                                        List<String> unavailableProfileUrls,
-                                        LinkedinProfileToScrapeDTO profile) {
-        LinkedinError linkedinError = errorDetector.detect(webDriver);
-        if (linkedinError.equals(NO_ERRORS)) {
-            return true;
-        }
-        if (linkedinError.equals(LOGGED_OUT)) {
-            notificationsService.send(createLinkedinErrorMessage(linkedinError, applicationContext.getId()));
-            return false;
-        }
-        if (linkedinError.equals(LinkedinError.ISNT_QUITE_RIGHT)) {
-            notificationsService.send(createLinkedinErrorMessage(linkedinError, applicationContext.getId()));
-            return false;
-        }
-        if (ObjectUtils.equalsAny(linkedinError, DONT_HAVE_ACCESS_TO_PROFILE, PROFILE_IS_NOT_AVAILABLE, PAGE_NOT_FOUND)) {
-            unavailableProfileUrls.add(profile.getProfileURL());
-            return true;
-        }
-        if (ObjectUtils.equalsAny(linkedinError, SOMETHING_WENT_WRONG, OOPS_ITS_NOT_YOU_ITS_US)) {
-            return isProfileSuccessfullyReScraped(webDriver, sourcesDTOS, profile);
-        }
-        return false;
-    }
-
-    private boolean isProfileSuccessfullyReScraped(WebDriver webDriver,
-                                                   List<CollectedProfileSourcesDTO> sourcesDTOS,
-                                                   LinkedinProfileToScrapeDTO profile) {
         try {
-            sourcesDTOS.add(scraper.scrape(webDriver, profile));
-            return true;
+            loginService.performLogin(webDriver);
         } catch (Exception e) {
-            return false;
+            LinkedinError linkedinError = errorDetector.detect(webDriver);
+            if (linkedinError.equals(NO_ERRORS))
+                return createScrapedLinkedinProfilesDTO(linkedinProfilesToScrape, e);
+            return createScrapedLinkedinProfilesDTO(linkedinProfilesToScrape, linkedinError);
+        }
+        List<LinkedinProfile> scrapedLinkedinProfiles = new ArrayList<>();
+        List<NotScrapedLinkedinProfile> notScrapedLinkedinProfiles = new ArrayList<>();
+        for (LinkedinProfileToScrapeDTO linkedinProfile : linkedinProfilesToScrape) {
+            try {
+                CollectedProfileSourcesDTO source = scraper.scrape(webDriver, linkedinProfile);
+                scrapedLinkedinProfiles.add(parser.parse(source));
+            } catch (Exception e) {
+                ScrapingResultsDTO scrapingResultsDTO = resolveException(linkedinProfilesToScrape,
+                        webDriver,
+                        scrapedLinkedinProfiles,
+                        notScrapedLinkedinProfiles,
+                        linkedinProfile,
+                        e);
+                if (scrapingResultsDTO != null)
+                    return scrapingResultsDTO;
+            }
+        }
+        return new ScrapingResultsDTO(scrapedLinkedinProfiles, notScrapedLinkedinProfiles);
+    }
+
+    private ScrapingResultsDTO resolveException(List<LinkedinProfileToScrapeDTO> linkedinProfilesToScrape,
+                                                WebDriver webDriver,
+                                                List<LinkedinProfile> scrapedLinkedinProfiles,
+                                                List<NotScrapedLinkedinProfile> notScrapedLinkedinProfiles,
+                                                LinkedinProfileToScrapeDTO linkedinProfile,
+                                                Exception e) {
+        LinkedinError linkedinError = errorDetector.detect(webDriver);
+        if (isScraperShouldStop(linkedinError))
+            return createScrapedLinkedinProfilesDTO(scrapedLinkedinProfiles, linkedinProfilesToScrape, linkedinError);
+        if (isProfileReusable(linkedinError)) {
+            notScrapedLinkedinProfiles.add(createNotScrapedProfile(linkedinError, linkedinProfile.getProfileURL(), false));
+            return null;
+        }
+        if (linkedinError.equals(NO_ERRORS))
+            notScrapedLinkedinProfiles.add(createNotScrapedProfile(e, linkedinProfile.getProfileURL(), true));
+        else
+            notScrapedLinkedinProfiles.add(createNotScrapedProfile(linkedinError, linkedinProfile.getProfileURL(), true));
+        return null;
+    }
+
+    private <T> NotScrapedLinkedinProfile createNotScrapedProfile(T cause, String profileURL, boolean notReusable) {
+        NotScrapedLinkedinProfile notScrapedLinkedinProfile = new NotScrapedLinkedinProfile();
+        notScrapedLinkedinProfile.setProfileURL(profileURL);
+        notScrapedLinkedinProfile.setNotReusable(notReusable);
+        setErrorDescription(cause, profileURL, notScrapedLinkedinProfile);
+        return notScrapedLinkedinProfile;
+    }
+
+    private ScrapingResultsDTO createScrapedLinkedinProfilesDTO(List<LinkedinProfile> scrapedLinkedinProfiles,
+                                                                List<LinkedinProfileToScrapeDTO> linkedinProfilesToScrape,
+                                                                LinkedinError linkedinError) {
+        ScrapingResultsDTO scrapingResultsDTO = new ScrapingResultsDTO();
+        scrapingResultsDTO.setSuccessfulProfiles(scrapedLinkedinProfiles);
+        List<NotScrapedLinkedinProfile> notScrapedLinkedinProfiles = new ArrayList<>();
+        for (LinkedinProfileToScrapeDTO linkedinProfileToScrapeDTO : linkedinProfilesToScrape) {
+            NotScrapedLinkedinProfile notScrapedLinkedinProfile = new NotScrapedLinkedinProfile();
+            notScrapedLinkedinProfile.setProfileURL(linkedinProfileToScrapeDTO.getProfileURL());
+            setErrorDescription(linkedinError, linkedinProfileToScrapeDTO.getProfileURL(), notScrapedLinkedinProfile);
+            notScrapedLinkedinProfile.setNotReusable(false);
+        }
+        scrapingResultsDTO.setNotScrapedLinkedinProfiles(notScrapedLinkedinProfiles);
+        return scrapingResultsDTO;
+    }
+
+    private <T> ScrapingResultsDTO createScrapedLinkedinProfilesDTO(List<LinkedinProfileToScrapeDTO> linkedinProfilesToScrape, T cause) {
+        ScrapingResultsDTO scrapingResults = new ScrapingResultsDTO();
+        List<NotScrapedLinkedinProfile> notScrapedLinkedinProfiles = new ArrayList<>();
+        for (LinkedinProfileToScrapeDTO linkedinProfileToScrapeDTO : linkedinProfilesToScrape) {
+            NotScrapedLinkedinProfile notScrapedLinkedinProfile = new NotScrapedLinkedinProfile();
+            notScrapedLinkedinProfile.setProfileURL(linkedinProfileToScrapeDTO.getProfileURL());
+            notScrapedLinkedinProfile.setNotReusable(false);
+            setErrorDescription(cause, linkedinProfileToScrapeDTO.getProfileURL(), notScrapedLinkedinProfile);
+            notScrapedLinkedinProfiles.add(notScrapedLinkedinProfile);
+        }
+        scrapingResults.setNotScrapedLinkedinProfiles(notScrapedLinkedinProfiles);
+        return scrapingResults;
+    }
+
+    private <T> void setErrorDescription(T cause, String profileURL, NotScrapedLinkedinProfile notScrapedLinkedinProfile) {
+        try {
+            notScrapedLinkedinProfile.setErrorDescription(objectMapper.writeValueAsString(cause));
+        } catch (JsonProcessingException e) {
+            log.error("Failed to write cause as string", e);
+            notificationsService.send(NotificationUtils.createExceptionMessage(e, profileURL, applicationContext.getId()));
+            notScrapedLinkedinProfile.setErrorDescription("Failed to write cause as string using ObjectMapper");
         }
     }
+
+    private boolean isScraperShouldStop(LinkedinError linkedinError) {
+        return ObjectUtils.equalsAny(linkedinError, LOGGED_OUT, ISNT_QUITE_RIGHT, BANNED, RESTRICTED);
+    }
+
+    private boolean isProfileReusable(LinkedinError linkedinError) {
+        return ObjectUtils.equalsAny(linkedinError, UNKNOWN_ERROR, OOPS_ITS_NOT_YOU_ITS_US, SOMETHING_WENT_WRONG);
+    }
+
 }

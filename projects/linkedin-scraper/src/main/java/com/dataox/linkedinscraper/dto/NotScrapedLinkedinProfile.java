@@ -10,12 +10,8 @@ import lombok.experimental.FieldDefaults;
  */
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class LinkedinProfileToScrapeDTO {
+public class NotScrapedLinkedinProfile {
     String profileURL;
-    boolean scrapeLicenses;
-    boolean scrapeVolunteer;
-    boolean scrapeInterests;
-    boolean scrapeRecommendations;
-    boolean scrapeSkills;
-    boolean scrapeActivities;
+    String errorDescription;
+    boolean notReusable;
 }

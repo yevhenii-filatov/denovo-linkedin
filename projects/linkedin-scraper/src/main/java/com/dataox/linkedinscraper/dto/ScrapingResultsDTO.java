@@ -2,7 +2,9 @@ package com.dataox.linkedinscraper.dto;
 
 import com.dataox.linkedinscraper.parser.dto.LinkedinProfile;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 import java.util.List;
@@ -13,8 +15,9 @@ import java.util.List;
  */
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ScrapedLinkedinProfilesDTO {
+@AllArgsConstructor
+@NoArgsConstructor
+public class ScrapingResultsDTO {
     List<LinkedinProfile> successfulProfiles;
-    List<String> unavailableProfileUrls;
-    List<String> failedToScrapeProfileUrls;
+    List<NotScrapedLinkedinProfile> notScrapedLinkedinProfiles;
 }

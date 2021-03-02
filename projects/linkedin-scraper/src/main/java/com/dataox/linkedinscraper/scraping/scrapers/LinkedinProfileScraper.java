@@ -2,16 +2,22 @@ package com.dataox.linkedinscraper.scraping.scrapers;
 
 import com.dataox.linkedinscraper.dto.CollectedProfileSourcesDTO;
 import com.dataox.linkedinscraper.dto.LinkedinProfileToScrapeDTO;
-import com.dataox.linkedinscraper.scraping.exceptions.ElementNotFoundException;
 import com.dataox.linkedinscraper.scraping.exceptions.LinkedinException;
 import com.dataox.linkedinscraper.scraping.scrapers.subscrapers.*;
 import com.dataox.linkedinscraper.service.error.detector.LinkedinError;
 import com.dataox.linkedinscraper.service.error.detector.LinkedinErrorDetector;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
+
+import java.util.Collections;
+import java.util.List;
+
+import static java.util.Collections.emptyList;
+import static org.apache.commons.lang3.StringUtils.EMPTY;
 
 /**
  * @author Dmitriy Lysko
@@ -50,14 +56,18 @@ public class LinkedinProfileScraper {
         profileSourcesDTO.setAboutSectionSource(aboutSectionScraper.scrape(webDriver));
         profileSourcesDTO.setExperiencesSource(experienceScraper.scrape(webDriver));
         profileSourcesDTO.setEducationsSource(educationScraper.scrape(webDriver));
-        profileSourcesDTO.setLicenseSource(licenseScraper.scrape(webDriver));
-        profileSourcesDTO.setVolunteersSource(volunteersScraper.scrape(webDriver));
-        profileSourcesDTO.setSkillsWithEndorsementsSources(skillsWithEndorsementsScraper.scrape(webDriver));
-        profileSourcesDTO.setAllSkillsSource(allSkillsScraper.scrape(webDriver));
-        profileSourcesDTO.setRecommendationsSources(recommendationsScraper.scrape(webDriver));
+        profileSourcesDTO.setLicenseSource(scrapeSafe(webDriver, licenseScraper, EMPTY, profile.isScrapeLicenses()));
+        profileSourcesDTO.setVolunteersSource(scrapeSafe(webDriver, volunteersScraper, EMPTY, profile.isScrapeVolunteer()));
+        profileSourcesDTO.setSkillsWithEndorsementsSources(scrapeSafe(webDriver, skillsWithEndorsementsScraper, emptyList(), profile.isScrapeSkills()));
+        profileSourcesDTO.setAllSkillsSource(scrapeSafe(webDriver, allSkillsScraper, EMPTY, profile.isScrapeSkills()));
+        profileSourcesDTO.setRecommendationsSources(scrapeSafe(webDriver, recommendationsScraper, emptyList(), profile.isScrapeRecommendations()));
         profileSourcesDTO.setAccomplishmentsSources(accomplishmentsScraper.scrape(webDriver));
-        profileSourcesDTO.setInterestsSources(interestsScraper.scrape(webDriver));
-        profileSourcesDTO.setActivitiesSources(activitiesScraper.scrape(webDriver));
+        profileSourcesDTO.setInterestsSources(scrapeSafe(webDriver, interestsScraper, emptyList(), profile.isScrapeInterests()));
+        profileSourcesDTO.setActivitiesSources(scrapeSafe(webDriver, activitiesScraper, emptyList(), profile.isScrapeActivities()));
         return profileSourcesDTO;
+    }
+
+    private <T> T scrapeSafe(WebDriver webDriver, Scraper<T> scraper, T defaultValue, boolean optional) {
+        return optional ? defaultValue : scraper.scrape(webDriver);
     }
 }
