@@ -59,7 +59,7 @@ public class LoginService {
     private void checkForErrors(WebDriver webDriver) {
         LinkedinError linkedinError = errorDetector.detect(webDriver);
         if (linkedinError != LinkedinError.NO_ERRORS) {
-            notificationsService.send(String.format("Scraper name: %s%n%s", applicationContext.getApplicationName(), CANT_LOGIN_MESSAGE));
+            notificationsService.send(String.format("Scraper name: %s%n%s", applicationContext.getId(), CANT_LOGIN_MESSAGE));
             log.error(CANT_LOGIN_MESSAGE + " Error occurred {}", linkedinError);
             throw new LinkedinException(CANT_LOGIN_MESSAGE);
         }

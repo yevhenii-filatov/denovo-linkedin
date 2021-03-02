@@ -51,6 +51,11 @@ public class ScrapeLinkedinProfileService {
             try {
                 sourcesDTOS.add(scraper.scrape(webDriver, profileUrl));
             } catch (Exception e) {
+                LinkedinError linkedinError = errorDetector.detect(webDriver);
+                if (linkedinError.equals(NO_ERRORS)) {
+                    notificationsService.send(NotificationUtils.createExceptionMessage(e, profileUrl, applicationContext.getId()));
+                    throw e;
+                }
                 if (!isExceptionResolved(webDriver, sourcesDTOS, unavailableProfileUrls, profileUrl)) {
                     launcher.close();
                     return createLinkedinProfilesDTO(profileUrls, sourcesDTOS, unavailableProfileUrls);
@@ -87,7 +92,7 @@ public class ScrapeLinkedinProfileService {
             try {
                 parsedProfiles.add(parser.parse(sourceDTO));
             } catch (Exception e) {
-                notificationsService.send(createExceptionMessage(e, sourceDTO.getProfileUrl(), applicationContext.getApplicationName()));
+                notificationsService.send(createExceptionMessage(e, sourceDTO.getProfileUrl(), applicationContext.getId()));
                 throw ParserException.exceptionOccurred(e.getClass().getSimpleName(), e.getMessage(), sourceDTO.getProfileUrl());
             }
         }
@@ -99,12 +104,15 @@ public class ScrapeLinkedinProfileService {
                                         List<String> unavailableProfileUrls,
                                         String profileUrl) {
         LinkedinError linkedinError = errorDetector.detect(webDriver);
+        if (linkedinError.equals(NO_ERRORS)) {
+            return true;
+        }
         if (linkedinError.equals(LOGGED_OUT)) {
-            notificationsService.send(createLinkedinErrorMessage(linkedinError,applicationContext.getApplicationName()));
+            notificationsService.send(createLinkedinErrorMessage(linkedinError, applicationContext.getId()));
             return false;
         }
         if (linkedinError.equals(LinkedinError.ISNT_QUITE_RIGHT)) {
-            notificationsService.send(createLinkedinErrorMessage(linkedinError,applicationContext.getApplicationName()));
+            notificationsService.send(createLinkedinErrorMessage(linkedinError, applicationContext.getId()));
             return false;
         }
         if (ObjectUtils.equalsAny(linkedinError, DONT_HAVE_ACCESS_TO_PROFILE, PROFILE_IS_NOT_AVAILABLE, PAGE_NOT_FOUND)) {
@@ -114,7 +122,6 @@ public class ScrapeLinkedinProfileService {
         if (ObjectUtils.equalsAny(linkedinError, SOMETHING_WENT_WRONG, OOPS_ITS_NOT_YOU_ITS_US)) {
             return isProfileSuccessfullyReScraped(webDriver, sourcesDTOS, profileUrl);
         }
-        notificationsService.send(createLinkedinErrorMessage(linkedinError,applicationContext.getApplicationName()));
         return false;
     }
 
