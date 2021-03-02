@@ -11,7 +11,7 @@ import lombok.experimental.UtilityClass;
 public class NotificationUtils {
 
     public static String createExceptionMessage(Exception e, String profileUrl,String applicationName) {
-        return String.format("Scraper name: %s%nException occurred while scraping profile %s%nException name: %s%nException message:%s",
+        return String.format("Scraper name: %s%nException occurred while scraping profile %s%nException name: %s%nException message: %s",
                 applicationName,
                 profileUrl,
                 e.getClass().getSimpleName(),
@@ -19,7 +19,7 @@ public class NotificationUtils {
     }
 
     public static String createLinkedinErrorMessage(LinkedinError linkedinError, String applicationName) {
-        return String.format("Scraper name:%s%nLinkedin error occurred%nMessage: %s",
+        return String.format("Scraper name: %s%nLinkedin error occurred%nMessage: %s",
                 applicationName,
                 linkedinError.getMessage());
     }

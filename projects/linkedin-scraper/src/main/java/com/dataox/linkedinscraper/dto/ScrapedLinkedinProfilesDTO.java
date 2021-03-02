@@ -13,7 +13,7 @@ import java.util.List;
  */
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class LinkedinProfilesDTO {
+public class ScrapedLinkedinProfilesDTO {
     List<LinkedinProfile> successfulProfiles;
     List<String> unavailableProfileUrls;
     List<String> failedToScrapeProfileUrls;

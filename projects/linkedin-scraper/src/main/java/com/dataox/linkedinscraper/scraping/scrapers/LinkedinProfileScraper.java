@@ -1,6 +1,7 @@
 package com.dataox.linkedinscraper.scraping.scrapers;
 
 import com.dataox.linkedinscraper.dto.CollectedProfileSourcesDTO;
+import com.dataox.linkedinscraper.dto.LinkedinProfileToScrapeDTO;
 import com.dataox.linkedinscraper.scraping.exceptions.ElementNotFoundException;
 import com.dataox.linkedinscraper.scraping.exceptions.LinkedinException;
 import com.dataox.linkedinscraper.scraping.scrapers.subscrapers.*;
@@ -36,14 +37,14 @@ public class LinkedinProfileScraper {
     private final InterestsScraper interestsScraper;
     private final AccomplishmentsScraper accomplishmentsScraper;
 
-    public CollectedProfileSourcesDTO scrape(WebDriver webDriver, String profileUrl) {
-        log.info("Scraping profile: {}", profileUrl);
-        webDriver.get(profileUrl);
+    public CollectedProfileSourcesDTO scrape(WebDriver webDriver, LinkedinProfileToScrapeDTO profile) {
+        log.info("Scraping profile: {}", profile.getProfileURL());
+        webDriver.get(profile.getProfileURL());
         LinkedinError linkedinError = errorDetector.detect(webDriver);
         if (!linkedinError.equals(LinkedinError.NO_ERRORS))
             throw new LinkedinException(linkedinError.getMessage());
         CollectedProfileSourcesDTO profileSourcesDTO = new CollectedProfileSourcesDTO();
-        profileSourcesDTO.setProfileUrl(profileUrl);
+        profileSourcesDTO.setProfileUrl(profile.getProfileURL());
         profileSourcesDTO.setHeaderSectionSource(headerSectionScraper.scrape(webDriver));
         profileSourcesDTO.setProfilePhotoUrl(headerSectionScraper.scrapeProfilePhotoUrl(webDriver));
         profileSourcesDTO.setAboutSectionSource(aboutSectionScraper.scrape(webDriver));
