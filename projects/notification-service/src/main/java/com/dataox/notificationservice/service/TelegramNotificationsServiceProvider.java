@@ -1,35 +1,33 @@
 package com.dataox.notificationservice.service;
 
 import com.dataox.notificationservice.configuration.NotificationsProperties;
-import com.dataox.okhttputils.OkHttpTemplate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
-import java.io.IOException;
+import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.RestTemplate;
 
 @Slf4j
 @RequiredArgsConstructor
 @Service("Telegram-notifications")
 public class TelegramNotificationsServiceProvider implements NotificationsServiceProvider {
-    private static final String REQUEST_URL = "https://api.telegram.org/bot%s/sendMessage?chat_id=%s&text=%s";
+    private static final String REQUEST_URL = "https://api.telegram.org/bot{bot_token}/sendMessage?chat_id={chat_id}&text={text}";
     private final NotificationsProperties notificationsProperties;
-    private final OkHttpTemplate okHttpTemplate;
+    private final RestTemplate restTemplate = new RestTemplate();
 
     @Override
     public void send(String message) {
-        String requestUrl = prepareRequestUrl(message);
+        NotificationsProperties.Telegram telegram = notificationsProperties.getTelegram();
         try {
-            okHttpTemplate.get(requestUrl);
-        } catch (IOException e) {
+            restTemplate.getForObject(REQUEST_URL, String.class,
+                    telegram.getBotToken(),
+                    telegram.getChatId(),
+                    message);
+            log.info("Sent message into telegram");
+        } catch (RestClientException e) {
             log.error("Failed to send telegram message: {}", message);
-            log.error("Due to: {} {}", e.getMessage(), e.getClass().getName());
+            log.error("Exception message: {}", e.getMessage());
         }
     }
 
-    private String prepareRequestUrl(String message) {
-        String token = notificationsProperties.getTelegram().getBotToken();
-        String chatId = notificationsProperties.getTelegram().getChatId();
-        return String.format(REQUEST_URL, token, chatId, message);
-    }
 }
