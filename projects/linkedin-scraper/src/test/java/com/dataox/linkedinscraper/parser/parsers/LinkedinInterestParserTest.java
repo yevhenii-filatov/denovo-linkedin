@@ -24,7 +24,7 @@ class LinkedinInterestParserTest {
         LinkedinParser<List<LinkedinInterest>, List<InterestsSource> > parser = new LinkedinInterestParser();
 
         List<LinkedinInterest> interests = parser.parse(Collections.singletonList(source));
-        interests.forEach(s -> System.out.println(s + "h"));
+        //interests.forEach(s -> System.out.println(s.getName() + "h"));
 
         assertThat(interests.size()).isEqualTo(11);
 
