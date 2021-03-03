@@ -1,10 +1,10 @@
 app:
   chromedriver:
-    path: [ PATH ]
+    path: [PATH]
     headless: false
   captcha:
     anti-captcha:
-      token: [ TOKEN ]
+      token: [TOKEN]
   scraper:
     activities-amount: 50
   linkedin:
@@ -14,3 +14,12 @@ app:
 spring:
   application:
     name: [NAME]
+  rabbitmq:
+    username: [USERNAME]
+    password: [PASSWORD]
+    listener:
+      simple:
+        prefetch: 1
+    template:
+      default-receive-queue: [QUEUE_NAME]
+      receive-timeout: 5

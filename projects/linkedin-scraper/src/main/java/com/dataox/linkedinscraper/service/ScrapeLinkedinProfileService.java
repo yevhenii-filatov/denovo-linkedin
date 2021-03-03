@@ -52,6 +52,7 @@ public class ScrapeLinkedinProfileService {
             loginService.performLogin(webDriver);
         } catch (Exception e) {
             LinkedinError linkedinError = errorDetector.detect(webDriver);
+            launcher.close();
             if (linkedinError.equals(NO_ERRORS))
                 return createScrapedLinkedinProfilesDTO(linkedinProfilesToScrape, e);
             return createScrapedLinkedinProfilesDTO(linkedinProfilesToScrape, linkedinError);
@@ -69,10 +70,13 @@ public class ScrapeLinkedinProfileService {
                         notScrapedLinkedinProfiles,
                         linkedinProfile,
                         e);
-                if (scrapingResultsDTO != null)
+                if (scrapingResultsDTO != null) {
+                    launcher.close();
                     return scrapingResultsDTO;
+                }
             }
         }
+        launcher.close();
         return new ScrapingResultsDTO(scrapedLinkedinProfiles, notScrapedLinkedinProfiles);
     }
 
