@@ -68,6 +68,6 @@ public class LinkedinProfileScraper {
     }
 
     private <T> T scrapeSafe(WebDriver webDriver, Scraper<T> scraper, T defaultValue, boolean optional) {
-        return optional ? defaultValue : scraper.scrape(webDriver);
+        return optional ? scraper.scrape(webDriver) : defaultValue;
     }
 }

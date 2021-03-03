@@ -29,7 +29,7 @@ import static com.dataox.WebDriverUtils.*;
 public class SkillsWithEndorsementsScraper implements Scraper<List<SkillsSource>> {
 
     private static final int SCROLL_STEP = 500;
-    private static final String TOP_CATEGORY_NAME = "Top";
+    private static final String TOP_CATEGORY_NAME = "Skills and Endorsements";
     private static final By SKILLS_POPUP_WINDOW = By.xpath("//div[@role='dialog']");
     private static final By CLOSE_POPUP_SKILL_ENDORSEMENTS_BUTTON = By.xpath("//div[@role='dialog']/button[@aria-label='Dismiss']");
     private static final By SKILLS_CATEGORY_SECTIONS = By.xpath("//div[contains(@class,'pv-skill-category-list')]");
