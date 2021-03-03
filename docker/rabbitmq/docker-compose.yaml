@@ -1,0 +1,18 @@
+version: '3.3'
+
+services:
+  rabbitmq:
+    container_name: rabbitmq
+    image: rabbitmq:management
+    environment:
+      RABBITMQ_DEFAULT_USER: eternal
+      RABBITMQ_DEFAULT_PASS: 1402
+      RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS: -rabbitmq_management load_definitions "/opt/link/definitions.json"
+    restart: always
+    ports:
+      - published: 15672
+        target: 15672
+      - published: 5672
+        target: 5672
+    volumes:
+      - ./definitions.json:/opt/link/definitions.json
