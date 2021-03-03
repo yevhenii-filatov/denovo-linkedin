@@ -45,9 +45,9 @@ public class LinkedinInterestParser implements LinkedinParser<List<LinkedinInter
     }
 
     private Elements splitInterests(Element interestsSectionElement) {
-        return interestsSectionElement.attr("role").equals("dialog")
-                ? interestsSectionElement.select("ul > li.pv-interest-entity")
-                : interestsSectionElement.select("ul > li.entity-list-item");
+        return interestsSectionElement.html().contains("role=\"dialog\"")
+                ? interestsSectionElement.select("ul > li.entity-list-item")
+                : interestsSectionElement.select("ul > li.pv-interest-entity");
     }
 
     private LinkedinInterest getLinkedinInterest(Element interestsElement, Instant time, String type) {
