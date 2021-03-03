@@ -22,4 +22,3 @@ spring:
         prefetch: 1
     template:
       default-receive-queue: [QUEUE_NAME]
-      receive-timeout: 5
