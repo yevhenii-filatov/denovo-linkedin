@@ -49,6 +49,7 @@ public class LinkedinEducationParser implements LinkedinParser<List<LinkedinEduc
         education.setInstitutionProfileUrl(parseInstitutionProfileUrl(educationElement));
         education.setDegree(parseDegree(educationElement));
         education.setFieldOfStudy(parseFieldOfStudy(educationElement));
+        education.setGrade(parseGrade(educationElement));
         education.setStartedYear(parseStartedYear(educationElement));
         education.setFinishedYear(parseFinishedYear(educationElement));
         education.setActivitiesAndSocieties(parseActivitiesAndSocieties(educationElement));
@@ -72,6 +73,10 @@ public class LinkedinEducationParser implements LinkedinParser<List<LinkedinEduc
 
     private String parseFieldOfStudy(Element educationElement) {
         return text(educationElement.selectFirst(".pv-entity__degree-info > p:contains(Field Of Study) > span + span"));
+    }
+
+    private String parseGrade(Element educationElement) {
+        return text(educationElement.selectFirst(".pv-entity__secondary-title > p:contains(Grade) > span + span"));
     }
 
     private String parseStartedYear(Element educationElement) {

@@ -28,7 +28,6 @@ public class LinkedinBasicProfileInfo {
     @Column(name = "header_section_source")
     private String headerSectionSource;
 
-    @NotBlank
     @Column(name = "about_section_source")
     private String aboutSectionSource;
 

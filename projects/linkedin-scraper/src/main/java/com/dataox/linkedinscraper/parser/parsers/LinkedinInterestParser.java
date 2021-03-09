@@ -17,7 +17,6 @@ import java.util.stream.Stream;
 import static com.dataox.jsouputils.JsoupUtils.absUrlFromHref;
 import static com.dataox.jsouputils.JsoupUtils.text;
 import static com.dataox.linkedinscraper.parser.utils.ParsingUtils.toElement;
-import static org.apache.commons.lang3.StringUtils.substringBefore;
 
 @Service
 @Slf4j
@@ -77,6 +76,6 @@ public class LinkedinInterestParser implements LinkedinParser<List<LinkedinInter
     }
 
     private String parseNumberOfFollowers(Element interestsElement) {
-        return substringBefore(text(interestsElement.selectFirst("p.pv-entity__follower-count")), " followers");
+        return text(interestsElement.selectFirst("p.pv-entity__follower-count")).replaceAll("\\D+", "");
     }
 }

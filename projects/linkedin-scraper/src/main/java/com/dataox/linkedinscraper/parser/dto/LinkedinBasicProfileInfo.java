@@ -17,7 +17,6 @@ public class LinkedinBasicProfileInfo {
     @NotBlank
     private String headerSectionSource;
 
-    @NotBlank
     private String aboutSectionSource;
 
     @NotBlank

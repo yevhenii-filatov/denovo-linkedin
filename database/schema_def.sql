@@ -62,7 +62,7 @@ create table if not exists linkedin_basic_profile_info
         constraint basic_profile_info_pk primary key,
     updated_at            timestamp    not null,
     header_section_source text         not null,
-    about_section_source  text         not null,
+    about_section_source  text         null default null,
     full_name             varchar(255) not null,
     number_of_connections varchar(10)  not null,
     location              varchar(100) not null,
@@ -75,21 +75,26 @@ create table if not exists linkedin_basic_profile_info
 );
 create index linkedin_basic_profile_info_linkedin_profile_idx on linkedin_basic_profile_info (linkedin_profile_id);
 
+create type linkedin_job_type as enum (
+    'FULL-TIME',
+    'PART-TIME');
+
 create table if not exists linkedin_experience
 (
-    id                  bigserial    not null
+    id                  bigserial          not null
         constraint experience_pk primary key,
-    updated_at          timestamp    not null,
-    item_source         text         not null,
-    company_name        varchar(100) not null,
-    company_profile_url varchar      null default null,
-    position            varchar(100) not null,
-    date_started        varchar(20)  null default null,
-    date_finished       varchar(20)  null default null,
-    total_duration      varchar(20)  not null,
-    location            varchar(100) null default null,
-    description         text         null default null,
-    linkedin_profile_id bigint       not null
+    updated_at          timestamp          not null,
+    item_source         text               not null,
+    job_type            linkedin_job_type  null default null,
+    company_name        varchar(100)       not null,
+    company_profile_url varchar            null default null,
+    position            varchar(100)       not null,
+    date_started        varchar(20)        null default null,
+    date_finished       varchar(20)        null default null,
+    total_duration      varchar(20)        not null,
+    location            varchar(100)       null default null,
+    description         text               null default null,
+    linkedin_profile_id bigint             not null
         constraint linkedin_experience_linkedin_profile_fk
             references linkedin_profile (id)
             on delete cascade on update cascade
@@ -106,6 +111,7 @@ create table if not exists linkedin_education
     institution_profile_url  varchar     null default null,
     degree                   varchar     null default null,
     field_of_study           varchar     null default null,
+    grade                    varchar     null default null,
     started_year             varchar(20) null default null,
     finished_year            varchar(20) null default null,
     activities_and_societies text        null default null,

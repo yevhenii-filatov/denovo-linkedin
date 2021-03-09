@@ -35,6 +35,7 @@ class LinkedinExperienceParserTest {
         expected1.setUpdatedAt(actual1.getUpdatedAt());
         expected1.setDateStarted("Jan 2015");
         expected1.setDateFinished("Present");
+        expected1.setTotalDuration("6 yrs 2 mos");
         expected1.setLocation("Ukraine");
         expected1.setDescription("Our main focus is on providing high-quality web scraping services and data solutions.");
         expected1.setItemSource("md5:c72880488b5bb13ad4fb640b8bc6fb3a");
@@ -46,6 +47,7 @@ class LinkedinExperienceParserTest {
         expected2.setUpdatedAt(actual2.getUpdatedAt());
         expected2.setDateStarted("Dec 2014");
         expected2.setDateFinished("Jan 2015");
+        expected2.setTotalDuration("2 mos");
         expected2.setLocation("Украина");
         expected2.setDescription("General management and working with data flows");
         expected2.setItemSource("md5:dab806353469c1f32dfc99facbcabc4e");

@@ -11,8 +11,8 @@ import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.dataox.jsouputils.JsoupUtils.text;
@@ -23,7 +23,7 @@ import static org.apache.commons.lang3.StringUtils.substringBetween;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class LinkedinCommentParser implements LinkedinParser<List<LinkedinComment>, String> {
+public class LinkedinCommentParser implements LinkedinParser<Set<LinkedinComment>, String> {
 
     private static final String COMMENT_URL_TEMPLATE = "https://www.linkedin.com/feed/update/urn:li:urnType:ZX?commentUrn=urn%3Ali%3Acomment%3A%28urnType%3AZF%2CZB%29";
     private static final String REPLY_URL_TEMPLATE = "&replyUrn=urn%3Ali%3Acomment%3A%28urnType%3AZX%2CZB%29";
@@ -31,7 +31,7 @@ public class LinkedinCommentParser implements LinkedinParser<List<LinkedinCommen
     private final TimeConverter timeConverter;
 
     @Override
-    public List<LinkedinComment> parse(String source) {
+    public Set<LinkedinComment> parse(String source) {
         if (source.isEmpty()) {
             log.error("received empty source", new EmptySourceException("Comment parser shouldn't receive empty source"));
             return null;
@@ -42,7 +42,7 @@ public class LinkedinCommentParser implements LinkedinParser<List<LinkedinCommen
 
         return splitComments(commentSectionElement).stream()
                 .map(commentElement -> getLinkedinComment(commentElement, time))
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
     }
 
     private Elements splitComments(Element commentSectionElement) {
@@ -109,7 +109,7 @@ public class LinkedinCommentParser implements LinkedinParser<List<LinkedinCommen
     }
 
     private String parseContent(Element commentElement) {
-        return text(commentElement.selectFirst("p.feed-shared-main-content > span"));
+        return text(commentElement.selectFirst("p.feed-shared-main-content"));
     }
 
     private String parseRelativePublicationDate(Element commentElement) {
@@ -125,7 +125,7 @@ public class LinkedinCommentParser implements LinkedinParser<List<LinkedinCommen
     private int parseNumberOfReactions(Element commentElement) {
         String reaction = text(commentElement.selectFirst("img.reactions-icon + span"));
         return isNotBlank(reaction)
-                ? Integer.parseInt(reaction)
+                ? Integer.parseInt(reaction.replaceAll("\\D+", ""))
                 : 0;
     }
 

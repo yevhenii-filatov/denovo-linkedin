@@ -24,7 +24,6 @@ class LinkedinInterestParserTest {
         LinkedinParser<List<LinkedinInterest>, List<InterestsSource> > parser = new LinkedinInterestParser();
 
         List<LinkedinInterest> interests = parser.parse(Collections.singletonList(source));
-        //interests.forEach(s -> System.out.println(s.getName() + "h"));
 
         assertThat(interests.size()).isEqualTo(11);
 
@@ -35,7 +34,7 @@ class LinkedinInterestParserTest {
         expected.setName("Sama");
         expected.setType("Companies");
         expected.setProfileUrl("https://www.linkedin.com/company/sama-ai/");
-        expected.setNumberOfFollowers("31,258");
+        expected.setNumberOfFollowers("31258");
         expected.setHeadline("");
         expected.setItemSource("md5:98cc31993eab6c6ee193ae4962bc20d7");
 
