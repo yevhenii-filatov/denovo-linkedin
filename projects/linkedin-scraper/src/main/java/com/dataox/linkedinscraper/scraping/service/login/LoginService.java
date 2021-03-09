@@ -2,11 +2,13 @@ package com.dataox.linkedinscraper.scraping.service.login;
 
 import com.dataox.captchasolver.CaptchaSolver;
 import com.dataox.linkedinscraper.scraping.configuration.property.LinkedinProperties;
-import com.dataox.linkedinscraper.scraping.exceptions.LinkedinException;
+import com.dataox.linkedinscraper.scraping.exceptions.ElementNotFoundException;
+import com.dataox.linkedinscraper.exceptions.linkedin.LinkedinLoginException;
 import com.dataox.linkedinscraper.service.error.detector.LinkedinError;
 import com.dataox.linkedinscraper.service.error.detector.LinkedinErrorDetector;
-import com.dataox.notificationservice.service.TelegramNotificationsServiceProvider;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -14,7 +16,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
 import static com.dataox.CommonUtils.randomLong;
@@ -28,40 +29,41 @@ import static java.util.Objects.nonNull;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class LoginService {
 
-    private final LinkedinProperties linkedinProperties;
-    private final CaptchaSolver captchaSolver;
-    private final LinkedinErrorDetector errorDetector;
-    private final TelegramNotificationsServiceProvider notificationsService;
-    private final ApplicationContext applicationContext;
-    private static final String LINKEDIN_LOGIN_PAGE_URL = "https://www.linkedin.com/";
-    private static final String CANT_LOGIN_MESSAGE = "Can't login into account.";
-    private static final By LOGIN_INPUT_FIELD = By.xpath("//input[@autocomplete='username']");
-    private static final By PASSWORD_INPUT_FIELD = By.xpath("//input[@autocomplete='current-password']");
-    private static final By SUBMIT_BUTTON = By.xpath("//button[@class='sign-in-form__submit-button'][@type='submit']");
-    private static final By PROFILE_SECTION = By.xpath("//div[contains(@class,'artdeco-card overflow-hidden')]");
-    private static final By CAPTCHA_FORM = By.cssSelector("form#captcha-challenge");
+    LinkedinProperties linkedinProperties;
+    CaptchaSolver captchaSolver;
+    LinkedinErrorDetector errorDetector;
+    static String LINKEDIN_LOGIN_PAGE_URL = "https://www.linkedin.com/";
+    static String CANT_LOGIN_MESSAGE = "Can't login into account.";
+    static By LOGIN_INPUT_FIELD = By.xpath("//input[@autocomplete='username']");
+    static By PASSWORD_INPUT_FIELD = By.xpath("//input[@autocomplete='current-password']");
+    static By SUBMIT_BUTTON = By.xpath("//button[@class='sign-in-form__submit-button'][@type='submit']");
+    static By PROFILE_SECTION = By.xpath("//div[contains(@class,'artdeco-card overflow-hidden')]");
+    static By CAPTCHA_FORM = By.cssSelector("form#captcha-challenge");
 
     public void performLogin(WebDriver webDriver) {
-        webDriver.get(LINKEDIN_LOGIN_PAGE_URL);
-        log.info("Performing login to linkedin with user credentials: {} {}",
-                linkedinProperties.getProfileLogin(),
-                linkedinProperties.getProfilePassword());
-        WebDriverWait wait = new WebDriverWait(webDriver, 60);
-        fillFieldsAndSubmitForm(webDriver);
-        checkForErrors(webDriver);
-        solveCaptcha(webDriver);
-        checkForErrors(webDriver);
-        wait.until(ExpectedConditions.presenceOfElementLocated(PROFILE_SECTION));
+        try {
+            webDriver.get(LINKEDIN_LOGIN_PAGE_URL);
+            log.info("Performing login to linkedin with user credentials: {} {}",
+                    linkedinProperties.getProfileLogin(),
+                    linkedinProperties.getProfilePassword());
+            WebDriverWait wait = new WebDriverWait(webDriver, 60);
+            fillFieldsAndSubmitForm(webDriver);
+            solveCaptcha(webDriver);
+            checkForErrors(webDriver);
+            wait.until(ExpectedConditions.presenceOfElementLocated(PROFILE_SECTION));
+        } catch (Exception e) {
+            throw new LinkedinLoginException(e);
+        }
     }
 
     private void checkForErrors(WebDriver webDriver) {
         LinkedinError linkedinError = errorDetector.detect(webDriver);
         if (linkedinError != LinkedinError.NO_ERRORS) {
-            notificationsService.send(String.format("Scraper name: %s%n%s", applicationContext.getId(), CANT_LOGIN_MESSAGE));
             log.error(CANT_LOGIN_MESSAGE + " Error occurred {}", linkedinError);
-            throw new LinkedinException(CANT_LOGIN_MESSAGE);
+            throw LinkedinLoginException.failedToLogin(linkedinProperties.getProfileLogin(), linkedinProperties.getProfilePassword(), linkedinError);
         }
     }
 
@@ -73,10 +75,14 @@ public class LoginService {
     }
 
     private void fillFieldsAndSubmitForm(WebDriver webDriver) {
-        WebElement loginInputField = webDriver.findElement(LOGIN_INPUT_FIELD);
-        WebElement passwordInputField = webDriver.findElement(PASSWORD_INPUT_FIELD);
+        WebElement loginInputField = findWebElementBy(webDriver, LOGIN_INPUT_FIELD)
+                .orElseThrow(() -> ElementNotFoundException.create("Login input field"));
+        WebElement passwordInputField = findWebElementBy(webDriver, PASSWORD_INPUT_FIELD)
+                .orElseThrow(() -> ElementNotFoundException.create("Password input field"));
+        WebElement submitButton = findWebElementBy(webDriver, SUBMIT_BUTTON)
+                .orElseThrow(() -> ElementNotFoundException.create("Submit login form button"));
         enterDataIntoTextFieldWithKeyboard(loginInputField, linkedinProperties.getProfileLogin());
         enterDataIntoTextFieldWithKeyboard(passwordInputField, linkedinProperties.getProfilePassword());
-        clickOnElement(webDriver.findElement(SUBMIT_BUTTON), new Actions(webDriver), randomLong(1500, 2500));
+        clickOnElement(submitButton, new Actions(webDriver), randomLong(1500, 2500));
     }
 }

@@ -13,7 +13,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.Element;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -85,7 +84,7 @@ public class RecommendationsScraper implements Scraper<List<RecommendationsSourc
 
     private void openRecommendationsTab(WebDriver webDriver, Actions actions, By recommendationsTabSelector) {
         WebElement recommendationsTab = findWebElementBy(webDriver, recommendationsTabSelector)
-                .orElseThrow(() -> ElementNotFoundException.notFound("Recommendations tab"));
+                .orElseThrow(() -> ElementNotFoundException.create("Recommendations tab"));
         scrollToAndClickOnElement(webDriver, actions, recommendationsTab);
         randomSleep(2500, 4500);
     }

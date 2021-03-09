@@ -34,7 +34,7 @@ public class HeaderSectionScraper implements Scraper<String> {
         WebDriverWait wait = new WebDriverWait(webDriver, 30);
         wait.until(ExpectedConditions.presenceOfElementLocated(HEADER_SELECTOR));
         WebElement headerSection = findWebElementBy(webDriver, HEADER_SELECTOR)
-                .orElseThrow(() -> ElementNotFoundException.notFound("Header section"));
+                .orElseThrow(() -> ElementNotFoundException.create("Header section"));
         log.info("Scraping header section");
         return getElementHtml(headerSection);
     }
@@ -52,7 +52,7 @@ public class HeaderSectionScraper implements Scraper<String> {
         clickOnElement(croppedProfilePhoto, actions);
         wait.until(ExpectedConditions.presenceOfElementLocated(FULL_PROFILE_PHOTO));
         WebElement fullProfilePhoto = findWebElementBy(webDriver, FULL_PROFILE_PHOTO)
-                .orElseThrow(() -> ElementNotFoundException.notFound("Full profile photo"));
+                .orElseThrow(() -> ElementNotFoundException.create("Full profile photo"));
         String profilePhotoUrl = fullProfilePhoto.getAttribute("src");
         randomSleep(3500, 5000);
         closePopUp(actions, webDriver);
@@ -61,7 +61,7 @@ public class HeaderSectionScraper implements Scraper<String> {
 
     private void closePopUp(Actions actions, WebDriver webDriver) {
         WebElement closeButton = findWebElementBy(webDriver, CLOSE_POPUP_BUTTON)
-                .orElseThrow(() -> ElementNotFoundException.notFound("Close full profile photo button"));
+                .orElseThrow(() -> ElementNotFoundException.create("Close full profile photo button"));
         clickOnElement(closeButton, actions, randomLong(750, 1500));
     }
 }

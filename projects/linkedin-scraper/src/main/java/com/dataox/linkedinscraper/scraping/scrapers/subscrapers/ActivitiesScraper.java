@@ -47,7 +47,7 @@ public class ActivitiesScraper implements Scraper<List<String>> {
         WebDriverWait wait = new WebDriverWait(webDriver, 20);
         wait.until(ExpectedConditions.presenceOfElementLocated(SEE_ALL_ACTIVITIES_BUTTON));
         WebElement seeAllButton = findWebElementBy(webDriver, SEE_ALL_ACTIVITIES_BUTTON)
-                .orElseThrow(() -> ElementNotFoundException.notFound("See all activity button"));
+                .orElseThrow(() -> ElementNotFoundException.create("See all activity button"));
         log.info("Scraping activities");
         Actions action = new Actions(webDriver);
         scrollToAndClickOnElement(webDriver, action, seeAllButton);
@@ -80,7 +80,7 @@ public class ActivitiesScraper implements Scraper<List<String>> {
 
     private void checkIsPostsEmpty(List<WebElement> posts) {
         if (posts.isEmpty())
-            throw ElementNotFoundException.notFound("Activity posts");
+            throw ElementNotFoundException.create("Activity posts");
     }
 
 }

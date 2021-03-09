@@ -10,7 +10,7 @@ public class ElementNotFoundException extends RuntimeException {
         super(message);
     }
 
-    public static ElementNotFoundException notFound(String what) {
+    public static ElementNotFoundException create(String what) {
         return new ElementNotFoundException(String.format("Not found: %s%n", what));
     }
 }

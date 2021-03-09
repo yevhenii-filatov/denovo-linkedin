@@ -15,13 +15,17 @@ public class NotificationUtils {
                 applicationName,
                 profileUrl,
                 e.getClass().getSimpleName(),
-                e.getMessage());
+                e.getLocalizedMessage());
     }
 
     public static String createLinkedinErrorMessage(LinkedinError linkedinError, String applicationName) {
         return String.format("Scraper name: %s%nLinkedin error occurred%nMessage: %s",
                 applicationName,
                 linkedinError.getMessage());
+    }
+
+    public static String createScraperStoppedMessage(Exception e, String applicationName) {
+        return String.format("Scraper name: %s%nScraper has been stopped%nException message: %s%n", applicationName, e.getMessage());
     }
 
 }

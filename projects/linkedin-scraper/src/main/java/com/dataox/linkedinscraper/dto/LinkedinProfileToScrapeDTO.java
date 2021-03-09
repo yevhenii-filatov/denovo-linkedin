@@ -19,6 +19,7 @@ public class LinkedinProfileToScrapeDTO implements Serializable {
     boolean scrapeVolunteer;
     boolean scrapeInterests;
     boolean scrapeRecommendations;
+    boolean scrapeAccomplishments;
     boolean scrapeSkills;
     boolean scrapeActivities;
 }

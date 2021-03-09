@@ -1,7 +1,9 @@
 package com.dataox.linkedinscraper.dto;
 
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 /**
@@ -10,8 +12,10 @@ import lombok.experimental.FieldDefaults;
  */
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@AllArgsConstructor
+@NoArgsConstructor
 public class NotScrapedLinkedinProfile {
     String profileURL;
     String errorDescription;
-    boolean notReusable;
+    boolean reusable;
 }

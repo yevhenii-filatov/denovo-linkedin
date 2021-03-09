@@ -85,7 +85,7 @@ public class SkillsWithEndorsementsScraper implements Scraper<List<SkillsSource>
 
     private SkillsSource collectSkillsFromCategory(WebDriver webDriver, WebDriverWait wait, Actions actions, WebElement skillCategorySection) {
         String category = findWebElementFromParentBy(skillCategorySection, CATEGORY_NAME)
-                .orElseThrow(() -> ElementNotFoundException.notFound("Category name"))
+                .orElseThrow(() -> ElementNotFoundException.create("Category name"))
                 .getText();
         List<SkillEndorsementsSource> sources = new ArrayList<>();
         List<WebElement> endorsementsInCategory = skillCategorySection.findElements(ENDORSEMENTS_IN_CATEGORY_BUTTON);
@@ -104,7 +104,7 @@ public class SkillsWithEndorsementsScraper implements Scraper<List<SkillsSource>
         randomSleep(1500, 2000);
         scrollEndorsements(webDriver);
         WebElement endorsementsWindow = findWebElementBy(webDriver, SKILLS_POPUP_WINDOW)
-                .orElseThrow(() -> ElementNotFoundException.notFound("Endorsements popup window"));
+                .orElseThrow(() -> ElementNotFoundException.create("Endorsements popup window"));
         sources.add(new SkillEndorsementsSource(webDriver.getCurrentUrl(), getElementHtml(endorsementsWindow)));
         closeEndorsementsPopup(webDriver, actions);
         randomSleep(750, 1500);
@@ -113,13 +113,13 @@ public class SkillsWithEndorsementsScraper implements Scraper<List<SkillsSource>
 
     private void scrollEndorsements(WebDriver webDriver) {
         WebElement scrollingArea = findWebElementBy(webDriver, POPUP_SCROLLING_AREA)
-                .orElseThrow(() -> ElementNotFoundException.notFound("Endorsements popup scrolling area"));
+                .orElseThrow(() -> ElementNotFoundException.create("Endorsements popup scrolling area"));
         scrollToTheBottomOfElement(webDriver, scrollingArea, SCROLL_STEP);
     }
 
     private void closeEndorsementsPopup(WebDriver webDriver, Actions actions) {
         WebElement closeButton = findWebElementBy(webDriver, CLOSE_POPUP_SKILL_ENDORSEMENTS_BUTTON)
-                .orElseThrow(() -> ElementNotFoundException.notFound("Close popup skill endorsements button"));
+                .orElseThrow(() -> ElementNotFoundException.create("Close popup skill endorsements button"));
         clickOnElement(closeButton, actions);
     }
 

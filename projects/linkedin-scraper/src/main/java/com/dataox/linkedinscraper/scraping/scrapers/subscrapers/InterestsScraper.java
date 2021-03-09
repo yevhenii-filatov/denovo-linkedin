@@ -68,22 +68,22 @@ public class InterestsScraper implements Scraper<List<InterestsSource>> {
         clickSeeAllButton(webDriver, wait, actions);
         List<WebElement> interestsTabs = webDriver.findElements(TAB_LIST);
         if (interestsTabs.isEmpty())
-            throw ElementNotFoundException.notFound("Interests tabs");
+            throw ElementNotFoundException.create("Interests tabs");
 
         for (WebElement tab : interestsTabs) {
             clickOnElement(tab, actions);
             randomSleep(1500, 2000);
             WebElement scrollingArea = findWebElementBy(webDriver, POPUP_SCROLLING_AREA)
-                    .orElseThrow(() -> ElementNotFoundException.notFound("Interests tab scrolling area"));
+                    .orElseThrow(() -> ElementNotFoundException.create("Interests tab scrolling area"));
             scrollToTheBottomOfElement(webDriver, scrollingArea, SCROLL_STEP);
             WebElement interestsPopup = findWebElementBy(webDriver, POPUP_INTERESTS_WINDOW)
-                    .orElseThrow(() -> ElementNotFoundException.notFound("Interests popup window"));
+                    .orElseThrow(() -> ElementNotFoundException.create("Interests popup window"));
             String group = tab.getText();
             interestsSources.add(new InterestsSource(group, getElementHtml(interestsPopup)));
             randomSleep(1500, 4000);
         }
         WebElement closePopupButton = findWebElementBy(webDriver, CLOSE_POPUP_BUTTON)
-                .orElseThrow(() -> ElementNotFoundException.notFound("Close interests popup window button"));
+                .orElseThrow(() -> ElementNotFoundException.create("Close interests popup window button"));
         clickOnElement(closePopupButton, actions);
         return interestsSources;
     }
@@ -91,7 +91,7 @@ public class InterestsScraper implements Scraper<List<InterestsSource>> {
 
     private void clickSeeAllButton(WebDriver webDriver, WebDriverWait wait, Actions actions) {
         WebElement seeAllButton = findWebElementBy(webDriver, SEE_ALL_BUTTON)
-                .orElseThrow(() -> ElementNotFoundException.notFound("See all interests button"));
+                .orElseThrow(() -> ElementNotFoundException.create("See all interests button"));
         scrollToElement(webDriver, seeAllButton, 450);
         randomSleep(2500, 4500);
         clickOnElement(seeAllButton, actions);

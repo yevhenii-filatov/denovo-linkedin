@@ -38,7 +38,7 @@ public class VolunteersScraper implements Scraper<String> {
         openAllVolunteersExperience(webDriver);
         randomSleep(1250, 3000);
         volunteersSection = findWebElementBy(webDriver, VOLUNTEERS_SECTION)
-                .orElseThrow(() -> ElementNotFoundException.notFound("Volunteers section"));
+                .orElseThrow(() -> ElementNotFoundException.create("Volunteers section"));
         return getElementHtml(volunteersSection);
     }
 
