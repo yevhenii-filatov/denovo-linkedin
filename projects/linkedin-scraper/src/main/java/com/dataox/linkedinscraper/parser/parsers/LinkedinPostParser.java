@@ -11,7 +11,7 @@ import org.jsoup.nodes.Element;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.util.List;
+import java.util.Set;
 
 import static com.dataox.jsouputils.JsoupUtils.absUrlFromHref;
 import static com.dataox.jsouputils.JsoupUtils.text;
@@ -146,8 +146,8 @@ public class LinkedinPostParser implements LinkedinParser<LinkedinPost, String> 
 
     private void setComments(Element postElement, LinkedinPost linkedinPost) {
         Element commentElement = postElement.selectFirst(".feed-shared-update-v2__comments-container");
-        List<LinkedinComment> comments = commentParser.parse(commentElement.html());
-        linkedinPost.setLinkedinComments(comments);
+        Set<LinkedinComment> comments = commentParser.parse(commentElement.html());
+        linkedinPost.setLinkedinComments((comments));
     }
 
     private boolean isCommentsPresent(Element postElement) {

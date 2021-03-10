@@ -17,6 +17,8 @@ public class LinkedinExperience {
     @NotBlank
     private String itemSource;
 
+    private String jobType;
+
     @NotBlank
     private String companyName;
 
@@ -31,6 +33,8 @@ public class LinkedinExperience {
 
     @NotBlank
     private String dateFinished;
+
+    private String totalDuration;
 
     private String location;
 

@@ -2,6 +2,8 @@ package com.dataox.linkedinscraper.parser.parsers;
 
 import com.dataox.linkedinscraper.parser.LinkedinParser;
 import com.dataox.linkedinscraper.parser.dto.LinkedinActivity;
+import com.dataox.linkedinscraper.parser.dto.LinkedinComment;
+import com.dataox.linkedinscraper.parser.dto.LinkedinPost;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.nodes.Element;
@@ -10,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.dataox.jsouputils.JsoupUtils.text;
@@ -32,9 +35,14 @@ public class LinkedinActivityParser implements LinkedinParser<List<LinkedinActiv
 
         Instant time = Instant.now();
 
-        return source.stream()
+        List<LinkedinActivity> activities = source.stream()
                 .map(activitySource -> getLinkedinActivity(time, activitySource))
                 .collect(Collectors.toList());
+
+
+        makePostsUniqAndCombineComments(activities);
+
+        return activities;
     }
 
     private LinkedinActivity getLinkedinActivity(Instant time, String source) {
@@ -46,6 +54,20 @@ public class LinkedinActivityParser implements LinkedinParser<List<LinkedinActiv
         activity.setLinkedinPost(postParser.parse(source));
 
         return activity;
+    }
+
+    private void makePostsUniqAndCombineComments(List<LinkedinActivity> activities) {
+        for (int i = 0; i < activities.size(); i++) {
+            LinkedinPost post = activities.get(i).getLinkedinPost();
+            for (int j = i + 1; j < activities.size(); j++) {
+                LinkedinActivity activity = activities.get(j);
+                if (post.equals(activity.getLinkedinPost())) {
+                    Set<LinkedinComment> linkedinComments = activities.remove(j).getLinkedinPost().getLinkedinComments();
+                    post.getLinkedinComments().addAll(linkedinComments);
+                    --j;
+                }
+            }
+        }
     }
 
     private String parseType(Element activityElement) {

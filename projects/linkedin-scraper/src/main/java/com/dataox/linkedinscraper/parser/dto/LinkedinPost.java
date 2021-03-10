@@ -7,8 +7,8 @@ import lombok.NoArgsConstructor;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -46,5 +46,5 @@ public class LinkedinPost {
 
     private int numberOfReactions;
 
-    private List<LinkedinComment> linkedinComments = new ArrayList<>();
+    private Set<LinkedinComment> linkedinComments = new HashSet<>();
 }

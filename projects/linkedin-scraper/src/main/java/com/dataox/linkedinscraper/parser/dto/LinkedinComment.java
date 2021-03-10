@@ -1,6 +1,7 @@
 package com.dataox.linkedinscraper.parser.dto;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
@@ -9,6 +10,7 @@ import java.time.Instant;
 
 @Data
 @NoArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class LinkedinComment {
 
     private String url;
@@ -17,6 +19,7 @@ public class LinkedinComment {
     private String itemSource;
 
     @NotBlank
+    @EqualsAndHashCode.Include
     private String content;
 
     @NotBlank
@@ -28,7 +31,9 @@ public class LinkedinComment {
     @NotNull
     private Instant absolutePublicationDate;
 
+    @EqualsAndHashCode.Include
     private int numberOfReactions;
 
+    @EqualsAndHashCode.Include
     private int numberOfReplies;
 }

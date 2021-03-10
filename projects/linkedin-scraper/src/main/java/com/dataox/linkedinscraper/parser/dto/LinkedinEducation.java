@@ -26,6 +26,8 @@ public class LinkedinEducation {
 
     private String fieldOfStudy;
 
+    private String grade;
+
     private String startedYear;
 
     private String finishedYear;

@@ -40,6 +40,9 @@ public class LinkedinEducation {
     @Column(name = "field_of_study")
     private String fieldOfStudy;
 
+    @Column(name = "grade")
+    private String grade;
+
     @Column(name = "started_year")
     private String startedYear;
 

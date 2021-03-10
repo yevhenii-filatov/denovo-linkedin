@@ -67,25 +67,31 @@ public class LinkedinExperienceParser implements LinkedinParser<List<LinkedinExp
         return experienceElement.select(".pv-entity__position-group.mt2 > li");
     }
 
-    private LinkedinExperience getLinkedinExperience(Element educationElement, Instant time) {
+    private LinkedinExperience getLinkedinExperience(Element experienceElement, Instant time) {
         LinkedinExperience experience = new LinkedinExperience();
 
         experience.setUpdatedAt(time);
-        experience.setItemSource(educationElement.html());
-        experience.setCompanyName(parseCompanyName(educationElement));
-        experience.setCompanyProfileUrl(parseCompanyProfileUrl(educationElement));
-        experience.setPosition(parsePosition(educationElement));
+        experience.setItemSource(experienceElement.html());
+        experience.setJobType(parseJobType(experienceElement));
+        experience.setCompanyName(parseCompanyName(experienceElement));
+        experience.setCompanyProfileUrl(parseCompanyProfileUrl(experienceElement));
+        experience.setPosition(parsePosition(experienceElement));
 
-        String dateRange = parseDateRange(educationElement);
+        String dateRange = parseDateRange(experienceElement);
         if (isNoneBlank(dateRange)){
             experience.setDateStarted(getDateStarted(dateRange));
             experience.setDateFinished(getDateFinished(dateRange));
+            experience.setTotalDuration(parseTotalDuration(experienceElement));
         }
 
-        experience.setLocation(parseLocation(educationElement));
-        experience.setDescription(parseDescription(educationElement));
+        experience.setLocation(parseLocation(experienceElement));
+        experience.setDescription(parseDescription(experienceElement));
 
         return experience;
+    }
+
+    private String parseJobType(Element experienceElement) {
+        return text(experienceElement.selectFirst("span.pv-entity__secondary-title"));
     }
 
     private String parseCompanyName(Element experienceElement) {
@@ -115,6 +121,10 @@ public class LinkedinExperienceParser implements LinkedinParser<List<LinkedinExp
 
     private String getDateFinished(String dateRange) {
         return substringAfter(dateRange, " – ").trim();
+    }
+
+    private String parseTotalDuration(Element experienceElement) {
+        return text(experienceElement.selectFirst("h4:contains(Employment Duration) > span + span"));
     }
 
     private String parseLocation(Element experienceElement) {
