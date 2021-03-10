@@ -3,6 +3,7 @@ package com.dataox.linkedinscraper.parser.dto;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.Max;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.Instant;
@@ -21,6 +22,7 @@ public class LinkedinRecommendation {
     private String type;
 
     @NotBlank
+    @Max(255)
     private String personFullName;
 
     @NotBlank

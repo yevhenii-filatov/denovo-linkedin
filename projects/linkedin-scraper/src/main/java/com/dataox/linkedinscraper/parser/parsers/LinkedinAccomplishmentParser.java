@@ -15,7 +15,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.dataox.jsouputils.JsoupUtils.text;
-import static org.apache.commons.lang3.StringUtils.substringAfter;
 
 @Slf4j
 @Service
@@ -64,10 +63,16 @@ public class LinkedinAccomplishmentParser implements LinkedinParser<List<Linkedi
     }
 
     private String parseTitle(Element accomplishmentElement) {
-        return substringAfter(text(accomplishmentElement.selectFirst(".pv-accomplishment-entity__title")), "title");
+        return accomplishmentElement.selectFirst(".pv-accomplishment-entity__title").ownText();
     }
 
     private String parseDescription(Element accomplishmentElement) {
-        return text(accomplishmentElement.selectFirst(".pv-accomplishment-entity__description"));
+        Element description = accomplishmentElement.selectFirst(".pv-accomplishment-entity__description");
+        String text = description != null
+                ? text(description)
+                : text(accomplishmentElement.selectFirst(".pv-accomplishment-entity__proficiency"));
+
+        return text + " " + text(accomplishmentElement.select(".pv-accomplishment-entity__date"))
+                + " " + text(accomplishmentElement.select(".pv-accomplishment-entity__issuer"));
     }
 }

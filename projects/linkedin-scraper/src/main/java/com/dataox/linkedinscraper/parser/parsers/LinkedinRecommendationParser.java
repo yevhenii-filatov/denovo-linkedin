@@ -37,7 +37,7 @@ public class LinkedinRecommendationParser implements LinkedinParser<List<Linkedi
     }
 
     private Stream<LinkedinRecommendation> resolveRecommendationsByType(Instant time, RecommendationsSource recommendationsSource) {
-        Element recommendationSectionElement = toElement(recommendationsSource.getSource());
+        Element recommendationSectionElement = toElement(recommendationsSource.getSource()).selectFirst(".artdeco-tabpanel.active");
 
         return splitRecommendation(recommendationSectionElement).stream()
                 .map(recommendationElement ->

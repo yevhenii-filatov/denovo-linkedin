@@ -91,7 +91,7 @@ create table if not exists linkedin_experience
     position            varchar(100)       not null,
     date_started        varchar(20)        null default null,
     date_finished       varchar(20)        null default null,
-    total_duration      varchar(20)        not null,
+    total_duration      varchar(20)        null default null,
     location            varchar(100)       null default null,
     description         text               null default null,
     linkedin_profile_id bigint             not null

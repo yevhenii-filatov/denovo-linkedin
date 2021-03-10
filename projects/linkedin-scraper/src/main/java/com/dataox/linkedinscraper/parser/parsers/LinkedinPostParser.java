@@ -92,7 +92,10 @@ public class LinkedinPostParser implements LinkedinParser<LinkedinPost, String> 
     }
 
     private String parseAuthorProfileUrl(Element postElement) {
-        return absUrlFromHref(postElement.selectFirst("a[data-control-name=actor_container]"));
+       return isShared(postElement)
+                ? absUrlFromHref(postElement.selectFirst("a[data-control-name=original_share_actor_container]"))
+                : absUrlFromHref(postElement.selectFirst("a[data-control-name=actor_container]"));
+        //return absUrlFromHref(postElement.selectFirst(selector));
     }
 
     private String parseAuthorConnectionDegree(Element postElement) {
