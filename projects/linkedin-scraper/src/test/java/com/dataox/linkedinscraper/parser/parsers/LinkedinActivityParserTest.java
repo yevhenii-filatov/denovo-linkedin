@@ -25,26 +25,13 @@ class LinkedinActivityParserTest {
 
         List<String> activitySource = Jsoup.parse(source).select(".occludable-update.ember-view").stream()
                 .map(Element::html)
-                .filter(s -> s.contains("It was the big day. The video was finally finished."))
                 .collect(Collectors.toList());
 
         LinkedinParser<List<LinkedinActivity>,List<String>> parser1 = new LinkedinActivityParser(postParser);
         List<LinkedinActivity> activities = parser1.parse(activitySource);
-        System.out.println(activities.size()+ " size");
-        System.out.println(activities.stream()
-                .filter(s -> s.getLinkedinPost().getContent().contains("It was the big day. The video was finally finished."))
-                .count() + " count");
-
-        System.out.println(activities.stream()
-                .filter(s -> s.getLinkedinPost().getContent().contains("It was the big day. The video was finally finished."))
-                .flatMap(ss -> ss.getLinkedinPost().getLinkedinComments().stream())
-                .count() + " count comments");
 
 
-        activities.stream()
-                .filter(s -> s.getLinkedinPost().getContent().contains("It was the big day. The video was finally finished."))
-                .flatMap(ss -> ss.getLinkedinPost().getLinkedinComments().stream())
-                .forEachOrdered(sss -> System.out.println(sss.getContent()));
+        activities.forEach(activitiess -> System.out.println(activitiess.getLinkedinPost().getAuthorProfileUrl()));
 
 
     }
