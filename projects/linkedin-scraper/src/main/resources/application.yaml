@@ -20,5 +20,6 @@ spring:
     listener:
       simple:
         prefetch: 1
+        acknowledge-mode: none
     template:
       default-receive-queue: [QUEUE_NAME]

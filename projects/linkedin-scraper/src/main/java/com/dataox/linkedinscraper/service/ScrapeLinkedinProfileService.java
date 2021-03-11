@@ -66,14 +66,10 @@ public class ScrapeLinkedinProfileService {
             }
         } catch (LinkedinException e) {
             addTheRestOfProfilesToNotScrapedList(currentProfileToScrape, linkedinProfilesToScrape, notScraped);
-            stopRabbitListener();
+            rabbitListenerEndpointRegistry.stop();
             notificationsService.send(NotificationUtils.createScraperStoppedMessage(e, applicationContext.getId()));
         }
         return new ScrapingResultsDTO(successfullyScraped, notScraped);
-    }
-
-    private void stopRabbitListener() {
-        rabbitListenerEndpointRegistry.stop();
     }
 
     private void addTheRestOfProfilesToNotScrapedList(LinkedinProfileToScrapeDTO currentProfileToScrape,
