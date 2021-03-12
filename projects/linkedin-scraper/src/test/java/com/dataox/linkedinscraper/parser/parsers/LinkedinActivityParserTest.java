@@ -31,7 +31,7 @@ class LinkedinActivityParserTest {
         List<LinkedinActivity> activities = parser1.parse(activitySource);
 
 
-        activities.forEach(activitiess -> System.out.println(activitiess.getLinkedinPost().getAuthorProfileUrl()));
+        System.out.println(activities.get(2).getLinkedinPost().getContent());;
 
 
     }

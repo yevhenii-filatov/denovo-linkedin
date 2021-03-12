@@ -76,7 +76,7 @@ public class LinkedinEducationParser implements LinkedinParser<List<LinkedinEduc
     }
 
     private String parseGrade(Element educationElement) {
-        return text(educationElement.selectFirst(".pv-entity__secondary-title > p:contains(Grade) > span + span"));
+        return text(educationElement.selectFirst(".pv-entity__secondary-title:contains(Grade) > span + span"));
     }
 
     private String parseStartedYear(Element educationElement) {

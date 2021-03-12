@@ -67,12 +67,14 @@ public class LinkedinAccomplishmentParser implements LinkedinParser<List<Linkedi
     }
 
     private String parseDescription(Element accomplishmentElement) {
-        Element description = accomplishmentElement.selectFirst(".pv-accomplishment-entity__description");
-        String text = description != null
-                ? text(description)
-                : text(accomplishmentElement.selectFirst(".pv-accomplishment-entity__proficiency"));
+        String description = text(accomplishmentElement.select(
+                ".pv-accomplishment-entity__publisher," +
+                        ".pv-accomplishment-entity__description," +
+                        ".pv-accomplishment-entity__proficiency"
+        ));
+        description += " " + text(accomplishmentElement.select(".pv-accomplishment-entity__date"))
+                + "; " + text(accomplishmentElement.select(".pv-accomplishment-entity__issuer"));
 
-        return text + " " + text(accomplishmentElement.select(".pv-accomplishment-entity__date"))
-                + " " + text(accomplishmentElement.select(".pv-accomplishment-entity__issuer"));
+        return description.replaceAll("null", "").trim();
     }
 }

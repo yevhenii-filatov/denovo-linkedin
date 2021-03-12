@@ -59,6 +59,7 @@ public class LinkedinExperienceParser implements LinkedinParser<List<LinkedinExp
                     LinkedinExperience experience = getLinkedinExperience(innerElement, time);
                     experience.setCompanyName(parseCompanyName(element));
                     experience.setCompanyProfileUrl(parseCompanyProfileUrl(element));
+                    experience.setJobType(parseJobTypeForMultiplePositions(element));
                     return experience;
                 });
     }
@@ -78,7 +79,7 @@ public class LinkedinExperienceParser implements LinkedinParser<List<LinkedinExp
         experience.setPosition(parsePosition(experienceElement));
 
         String dateRange = parseDateRange(experienceElement);
-        if (isNoneBlank(dateRange)){
+        if (isNoneBlank(dateRange)) {
             experience.setDateStarted(getDateStarted(dateRange));
             experience.setDateFinished(getDateFinished(dateRange));
             experience.setTotalDuration(parseTotalDuration(experienceElement));
@@ -92,6 +93,10 @@ public class LinkedinExperienceParser implements LinkedinParser<List<LinkedinExp
 
     private String parseJobType(Element experienceElement) {
         return text(experienceElement.selectFirst("span.pv-entity__secondary-title"));
+    }
+
+    private String parseJobTypeForMultiplePositions(Element experienceElement) {
+        return text(experienceElement.selectFirst(".pv-entity__position-group.mt2 > li .pv-entity__summary-info-v2 > h4.t-14.t-black.t-normal"));
     }
 
     private String parseCompanyName(Element experienceElement) {
@@ -132,6 +137,9 @@ public class LinkedinExperienceParser implements LinkedinParser<List<LinkedinExp
     }
 
     private String parseDescription(Element experienceElement) {
-        return text(experienceElement.selectFirst(".pv-entity__extra-details"));
+        String description = text(experienceElement.selectFirst(".pv-entity__extra-details"));
+        return nonNull(description)
+                ? description.replaceAll("see less", "")
+                : null;
     }
 }
