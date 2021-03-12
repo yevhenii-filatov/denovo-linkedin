@@ -24,7 +24,11 @@ import static org.apache.commons.lang3.StringUtils.*;
 @Slf4j
 @RequiredArgsConstructor
 public class LinkedinPostParser implements LinkedinParser<LinkedinPost, String> {
-    private final static String BASE_URL = "https://www.linkedin.com/feed/update/";
+    private static final String BASE_URL = "https://www.linkedin.com/feed/update/";
+    private static final String CONTENT_SELECTOR = ".feed-shared-text";
+    private static final String SHARED_URL_SELECTOR = "a[data-control-name=actor_container]";
+    private static final String CONNECTION_DEGREE_SELECTOR = ".feed-shared-actor__supplementary-actor-info";
+    private static final String AUTHOR_HEADLINE_SELECTOR = ".feed-shared-actor__description";
 
     private final TimeConverter timeConverter;
     private final LinkedinCommentParser commentParser;
@@ -67,6 +71,8 @@ public class LinkedinPostParser implements LinkedinParser<LinkedinPost, String> 
             setComments(postElement, post);
         }
 
+        handleDoubleContent(postElement,post);
+
         return post;
     }
 
@@ -84,7 +90,7 @@ public class LinkedinPostParser implements LinkedinParser<LinkedinPost, String> 
 
         return nonNull(date)
                 ? substringBefore(date, " •")
-                : substringBefore(text(postElement.selectFirst(baseSelector + "> span:lt(1)")), " •") ;
+                : substringBefore(text(postElement.selectFirst(baseSelector + "> span:lt(1)")), " •");
     }
 
     private Instant getAbsolutePublicationDate(String relativePublicationDate) {
@@ -92,33 +98,29 @@ public class LinkedinPostParser implements LinkedinParser<LinkedinPost, String> 
     }
 
     private String parseAuthorProfileUrl(Element postElement) {
-       return isShared(postElement)
+        return isShared(postElement)
                 ? absUrlFromHref(postElement.selectFirst("a[data-control-name=original_share_actor_container]"))
-                : absUrlFromHref(postElement.selectFirst("a[data-control-name=actor_container]"));
-        //return absUrlFromHref(postElement.selectFirst(selector));
+                : absUrlFromHref(postElement.selectFirst(SHARED_URL_SELECTOR));
     }
 
     private String parseAuthorConnectionDegree(Element postElement) {
-        String selector = ".feed-shared-actor__supplementary-actor-info";
         String connectionDegree = isShared(postElement)
-                ? text(postElement.select(selector).last())
-                : text(postElement.selectFirst(selector));
+                ? text(postElement.select(CONNECTION_DEGREE_SELECTOR).last())
+                : text(postElement.selectFirst(CONNECTION_DEGREE_SELECTOR));
 
         return substringAfter(connectionDegree, "•");
     }
 
     private String parseAuthorHeadline(Element postElement) {
-        String selector = ".feed-shared-actor__description";
         return isShared(postElement)
-                ? text(postElement.select(selector).last())
-                : text(postElement.selectFirst(selector));
+                ? text(postElement.select(AUTHOR_HEADLINE_SELECTOR).last())
+                : text(postElement.selectFirst(AUTHOR_HEADLINE_SELECTOR));
     }
 
     private String parseContent(Element postElement) {
-        String selector = ".feed-shared-text";
         String content = isShared(postElement)
-                ? text(postElement.select(selector).last())
-                : text(postElement.selectFirst(selector));
+                ? text(postElement.select(CONTENT_SELECTOR).last())
+                : text(postElement.selectFirst(CONTENT_SELECTOR));
 
         return handleArticle(postElement, content);
     }
@@ -155,5 +157,18 @@ public class LinkedinPostParser implements LinkedinParser<LinkedinPost, String> 
 
     private boolean isCommentsPresent(Element postElement) {
         return nonNull(postElement.selectFirst(".feed-shared-update-v2__comments-container"));
+    }
+
+    private void handleDoubleContent(Element postElement, LinkedinPost post) {
+        String mainContent = text(postElement.selectFirst(CONTENT_SELECTOR));
+
+        if (isShared(postElement) && isNoneBlank(mainContent)) {
+            String originContent = "\nOriginal post: " + post.getContent();
+            String bothContents = mainContent.concat(originContent);
+            post.setContent(bothContents);
+            post.setAuthorProfileUrl(absUrlFromHref(postElement.selectFirst(SHARED_URL_SELECTOR)));
+            post.setAuthorHeadline(text(postElement.selectFirst(AUTHOR_HEADLINE_SELECTOR)));
+            post.setAuthorConnectionDegree(text(postElement.selectFirst(CONNECTION_DEGREE_SELECTOR)));
+        }
     }
 }
