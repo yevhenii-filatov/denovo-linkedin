@@ -269,6 +269,7 @@ create table if not exists linkedin_post
     relative_publication_date varchar(20),
     collected_date            timestamp   not null,
     absolute_publication_date timestamp,
+    author_name               varchar     not null,
     author_profile_url        varchar     not null,
     author_connection_degree  varchar     not null,
     author_headline           varchar     not null,

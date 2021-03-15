@@ -39,6 +39,10 @@ public class LinkedinPost {
     private Instant absolutePublicationDate;
 
     @NotBlank
+    @Column(name = "author_profile")
+    private String authorProfileName;
+
+    @NotBlank
     @Column(name = "author_profile_url")
     private String authorProfileUrl;
 
@@ -61,7 +65,7 @@ public class LinkedinPost {
 
     @NotNull
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "linkedin_activity_id",referencedColumnName = "id")
+    @JoinColumn(name = "linkedin_activity_id", referencedColumnName = "id")
     private LinkedinActivity linkedinActivity;
 
     @OneToMany(mappedBy = "linkedinPost", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
