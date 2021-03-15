@@ -31,6 +31,9 @@ public class LinkedinPost {
     @NotNull
     private Instant absolutePublicationDate;
 
+    @NotBlank
+    private String authorProfileName;
+
     @EqualsAndHashCode.Include
     @NotBlank
     private String authorProfileUrl;

@@ -29,6 +29,7 @@ public class LinkedinPostParser implements LinkedinParser<LinkedinPost, String> 
     private static final String SHARED_URL_SELECTOR = "a[data-control-name=actor_container]";
     private static final String CONNECTION_DEGREE_SELECTOR = ".feed-shared-actor__supplementary-actor-info";
     private static final String AUTHOR_HEADLINE_SELECTOR = ".feed-shared-actor__description";
+    private static final String AUTHOR_NAME_SELECTOR = ".feed-shared-actor__name";
 
     private final TimeConverter timeConverter;
     private final LinkedinCommentParser commentParser;
@@ -60,6 +61,7 @@ public class LinkedinPostParser implements LinkedinParser<LinkedinPost, String> 
             post.setAbsolutePublicationDate(getAbsolutePublicationDate(post.getRelativePublicationDate()));
         }
 
+        post.setAuthorProfileName(parseAuthorName(postElement));
         post.setAuthorProfileUrl(parseAuthorProfileUrl(postElement));
         post.setAuthorConnectionDegree(parseAuthorConnectionDegree(postElement));
         post.setAuthorHeadline(parseAuthorHeadline(postElement));
@@ -71,7 +73,7 @@ public class LinkedinPostParser implements LinkedinParser<LinkedinPost, String> 
             setComments(postElement, post);
         }
 
-        handleDoubleContent(postElement,post);
+        handleDoubleContent(postElement, post);
 
         return post;
     }
@@ -95,6 +97,12 @@ public class LinkedinPostParser implements LinkedinParser<LinkedinPost, String> 
 
     private Instant getAbsolutePublicationDate(String relativePublicationDate) {
         return timeConverter.getAbsoluteTime(relativePublicationDate);
+    }
+
+    private String parseAuthorName(Element postElement) {
+        return isShared(postElement)
+                ? text(postElement.select(AUTHOR_NAME_SELECTOR).last())
+                : text(postElement.selectFirst(AUTHOR_NAME_SELECTOR));
     }
 
     private String parseAuthorProfileUrl(Element postElement) {
@@ -169,6 +177,7 @@ public class LinkedinPostParser implements LinkedinParser<LinkedinPost, String> 
             post.setAuthorProfileUrl(absUrlFromHref(postElement.selectFirst(SHARED_URL_SELECTOR)));
             post.setAuthorHeadline(text(postElement.selectFirst(AUTHOR_HEADLINE_SELECTOR)));
             post.setAuthorConnectionDegree(text(postElement.selectFirst(CONNECTION_DEGREE_SELECTOR)));
+            post.setAuthorProfileName(text(postElement.selectFirst(AUTHOR_NAME_SELECTOR)));
         }
     }
 }

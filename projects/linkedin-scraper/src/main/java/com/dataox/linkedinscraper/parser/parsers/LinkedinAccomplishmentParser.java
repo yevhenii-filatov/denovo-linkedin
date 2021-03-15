@@ -73,7 +73,7 @@ public class LinkedinAccomplishmentParser implements LinkedinParser<List<Linkedi
                         ".pv-accomplishment-entity__proficiency"
         ));
         description += " " + text(accomplishmentElement.select(".pv-accomplishment-entity__date"))
-                + "; " + text(accomplishmentElement.select(".pv-accomplishment-entity__issuer"));
+                + " " + text(accomplishmentElement.select(".pv-accomplishment-entity__issuer"));
 
         return description.replaceAll("null", "").trim();
     }
