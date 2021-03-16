@@ -28,7 +28,6 @@ public class LinkedinBasicProfileInfo {
     @Column(name = "header_section_source")
     private String headerSectionSource;
 
-    @NotBlank
     @Column(name = "about_section_source")
     private String aboutSectionSource;
 
@@ -36,9 +35,13 @@ public class LinkedinBasicProfileInfo {
     @Column(name = "full_name")
     private String fullName;
 
-    @NotEmpty
+    @NotBlank
     @Column(name = "number_of_connections")
-    private int numberOfConnections;
+    private String numberOfConnections;
+
+    @NotEmpty
+    @Column(name = "location")
+    private String location;
 
     @Column(name = "cached_image_url")
     private String cachedImageUrl;

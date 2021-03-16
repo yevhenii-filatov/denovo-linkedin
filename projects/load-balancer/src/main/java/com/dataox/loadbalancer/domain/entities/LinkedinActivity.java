@@ -7,8 +7,6 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
 
 @Data
 @Entity
@@ -34,6 +32,6 @@ public class LinkedinActivity {
     @JoinColumn(name = "linkedin_profile_id",referencedColumnName = "id")
     private LinkedinProfile linkedinProfile;
 
-    @OneToMany(mappedBy = "linkedinActivity", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<LinkedinPost> linkedinPosts = new ArrayList<>();
+    @OneToOne(mappedBy = "linkedinActivity", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private LinkedinPost linkedinPost;
 }

@@ -1,27 +1,33 @@
 package com.dataox.linkedinscraper.dto;
 
+import com.dataox.linkedinscraper.dto.sources.InterestsSource;
+import com.dataox.linkedinscraper.dto.sources.RecommendationsSource;
+import com.dataox.linkedinscraper.dto.sources.SkillsSource;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author Dmitriy Lysko
  * @since 28/01/2021
  */
 @Data
-@FieldDefaults(makeFinal = true,level = AccessLevel.PRIVATE)
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class CollectedProfileSourcesDTO {
+    String profileUrl;
+    String profilePhotoUrl;
     String headerSectionSource;
     String aboutSectionSource;
-    String educationsSource;
     String experiencesSource;
-    String recommendationsSource;
-    String skillsSource;
+    String educationsSource;
     String licenseSource;
     String volunteersSource;
-    Map<String,String> interestsSources;
+    String allSkillsSource;
+    List<String> accomplishmentsSources;
+    List<SkillsSource> skillsWithEndorsementsSources;
+    List<RecommendationsSource> recommendationsSources;
+    List<InterestsSource> interestsSources;
     List<String> activitiesSources;
 }

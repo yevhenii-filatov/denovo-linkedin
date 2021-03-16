@@ -1,5 +1,6 @@
 package com.dataox.loadbalancer.domain.entities;
 
+import com.dataox.loadbalancer.domain.types.LinkedinJobType;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -27,6 +28,11 @@ public class LinkedinExperience {
     @Column(name = "item_source")
     private String itemSource;
 
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(name = "job_type")
+    private LinkedinJobType linkedinInterestType;
+
     @NotBlank
     @Column(name = "company_name")
     private String companyName;
@@ -52,6 +58,9 @@ public class LinkedinExperience {
 
     @Column(name = "description")
     private String description;
+
+    @Column(name = "total_duration")
+    private String totalDuration;
 
     @NotNull
     @ManyToOne

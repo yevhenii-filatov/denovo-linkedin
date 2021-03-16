@@ -28,7 +28,6 @@ public class LinkedinPost {
     @Column(name = "item_source")
     private String itemSource;
 
-    @NotBlank
     @Column(name = "relative_publication_date")
     private String relativePublicationDate;
 
@@ -36,9 +35,12 @@ public class LinkedinPost {
     @Column(name = "collected_date")
     private Instant collectedDate;
 
-    @NotNull
     @Column(name = "absolute_publication_date")
     private Instant absolutePublicationDate;
+
+    @NotBlank
+    @Column(name = "author_profile")
+    private String authorProfileName;
 
     @NotBlank
     @Column(name = "author_profile_url")
@@ -62,8 +64,8 @@ public class LinkedinPost {
     private int numberOfReactions;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "linkedin_activity_id",referencedColumnName = "id")
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "linkedin_activity_id", referencedColumnName = "id")
     private LinkedinActivity linkedinActivity;
 
     @OneToMany(mappedBy = "linkedinPost", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)

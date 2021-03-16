@@ -1,1 +1,25 @@
+app:
+  chromedriver:
+    path: [PATH]
+    headless: false
+  captcha:
+    anti-captcha:
+      token: [TOKEN]
+  scraper:
+    activities-amount: 50
+  linkedin:
+    profile-login: [LOGIN]
+    profile-password: [PASSWORD]
 
+spring:
+  application:
+    name: [NAME]
+  rabbitmq:
+    username: [USERNAME]
+    password: [PASSWORD]
+    listener:
+      simple:
+        prefetch: 1
+        acknowledge-mode: none
+    template:
+      default-receive-queue: [QUEUE_NAME]

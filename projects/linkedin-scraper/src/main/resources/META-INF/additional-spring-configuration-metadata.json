@@ -1,0 +1,18 @@
+{
+  "properties": [
+    {
+      "name": "app.scraper.activities-amount",
+      "type": "java.lang.Integer",
+      "description": "Amount of activities posts to take."
+    },
+    {
+      "name": "app.linkedin.profile-login",
+      "type": "java.lang.String",
+      "description": "Linkedin profile login."
+    },
+    {
+      "name": "app.linkedin.profile-password",
+      "type": "java.lang.String",
+      "description": "Linkedin profile password."
+    }
+  ] }
