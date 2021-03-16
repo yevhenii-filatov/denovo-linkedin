@@ -1,0 +1,10 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://[HOST]:[PORT]/denovo_linkedin
+    username: [USER]
+    password: [PASSWORD]
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: none
