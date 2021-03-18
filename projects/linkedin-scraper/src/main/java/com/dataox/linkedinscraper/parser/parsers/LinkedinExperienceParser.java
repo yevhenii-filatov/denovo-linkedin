@@ -2,6 +2,8 @@ package com.dataox.linkedinscraper.parser.parsers;
 
 import com.dataox.linkedinscraper.parser.LinkedinParser;
 import com.dataox.linkedinscraper.parser.dto.LinkedinExperience;
+import com.dataox.linkedinscraper.parser.utils.TimeConverter;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -21,7 +23,10 @@ import static org.apache.commons.lang3.StringUtils.*;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class LinkedinExperienceParser implements LinkedinParser<List<LinkedinExperience>, String> {
+
+    private final TimeConverter timeConverter;
 
     @Override
     public List<LinkedinExperience> parse(String source) {
@@ -82,6 +87,8 @@ public class LinkedinExperienceParser implements LinkedinParser<List<LinkedinExp
         if (isNoneBlank(dateRange)) {
             experience.setDateStarted(getDateStarted(dateRange));
             experience.setDateFinished(getDateFinished(dateRange));
+            experience.setDateStartedTimestamp(timeConverter.toLocalDate(experience.getDateStarted()));
+            experience.setDateFinishedTimestamp(timeConverter.toLocalDate(experience.getDateFinished()));
             experience.setTotalDuration(parseTotalDuration(experienceElement));
         }
 

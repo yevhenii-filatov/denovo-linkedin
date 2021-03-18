@@ -7,6 +7,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.Instant;
+import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
@@ -35,9 +36,17 @@ public class LinkedinExperience {
     @Max(20)
     private String dateStarted;
 
+    @NotNull
+    @Max(20)
+    private LocalDate dateStartedTimestamp;
+
     @NotBlank
     @Max(20)
     private String dateFinished;
+
+    @NotNull
+    @Max(20)
+    private LocalDate dateFinishedTimestamp;
 
     @Max(20)
     private String totalDuration;
