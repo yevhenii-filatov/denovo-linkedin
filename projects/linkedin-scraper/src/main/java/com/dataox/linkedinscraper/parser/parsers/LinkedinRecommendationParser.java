@@ -54,7 +54,7 @@ public class LinkedinRecommendationParser implements LinkedinParser<List<Linkedi
 
         recommendation.setUpdatedAt(time);
         recommendation.setItemSource(recommendationElement.html());
-        recommendation.setType(type);
+        recommendation.setLinkedinRecommendationType(type);
         recommendation.setPersonFullName(parsePersonFullName(recommendationElement));
         recommendation.setPersonProfileUrl(parseProfileUrl(recommendationElement));
         recommendation.setPersonHeadline(parsePersonHeadLine(recommendationElement));

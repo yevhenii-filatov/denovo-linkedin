@@ -1,10 +1,26 @@
 spring:
   datasource:
     url: jdbc:postgresql://[HOST]:[PORT]/denovo_linkedin
-    username: [USER]
-    password: [PASSWORD]
+    username: [ USER ]
+    password: [ PASSWORD ]
     driver-class-name: org.postgresql.Driver
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: none
+  rabbitmq:
+    username: eternal
+    password: 1402
+    template:
+      routing-key: linked-profiles
+
+server:
+  servlet:
+    context-path: /api/v1/
+
+app:
+  scraping:
+    batch-size: 1
+logging:
+  level:
+    sql: info

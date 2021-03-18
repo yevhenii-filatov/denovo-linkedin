@@ -3,6 +3,8 @@ package com.dataox.loadbalancer.domain.entities;
 import com.dataox.loadbalancer.domain.types.LinkedinJobType;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -28,10 +30,9 @@ public class LinkedinExperience {
     @Column(name = "item_source")
     private String itemSource;
 
-    @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "job_type")
-    private LinkedinJobType linkedinInterestType;
+    private LinkedinJobType linkedinJobType;
 
     @NotBlank
     @Column(name = "company_name")

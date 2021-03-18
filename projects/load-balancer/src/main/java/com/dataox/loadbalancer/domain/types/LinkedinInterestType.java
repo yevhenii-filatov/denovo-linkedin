@@ -4,5 +4,7 @@ public enum LinkedinInterestType {
     INFLUENCER,
     COMPANY,
     GROUP,
-    SCHOOL
+    SCHOOL,
+    DEFAULT;
+
 }

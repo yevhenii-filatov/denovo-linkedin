@@ -23,7 +23,7 @@ public class LinkedinInterest {
     private String name;
 
     @NotNull
-    private String type;
+    private String linkedinInterestType;
 
     @NotBlank
     private String profileUrl;

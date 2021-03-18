@@ -19,7 +19,7 @@ public class LinkedinRecommendation {
     private String itemSource;
 
     @NotNull
-    private String type;
+    private String linkedinRecommendationType;
 
     @NotBlank
     @Max(255)

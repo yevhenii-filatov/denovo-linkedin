@@ -32,7 +32,7 @@ class LinkedinRecommendationParserTest {
 
         LinkedinRecommendation expected = new LinkedinRecommendation();
         expected.setUpdatedAt(actual.getUpdatedAt());
-        expected.setType("Given");
+        expected.setLinkedinRecommendationType("Given");
         expected.setPersonFullName("Dmitry Stril");
         expected.setPersonProfileUrl("https://www.linkedin.com/in/dmitrystril/");
         expected.setPersonHeadline("Software Developer");
