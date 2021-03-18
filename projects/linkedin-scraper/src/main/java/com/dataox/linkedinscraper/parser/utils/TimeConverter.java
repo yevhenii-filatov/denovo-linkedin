@@ -13,6 +13,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static com.dataox.linkedinscraper.parser.utils.ParsingUtils.*;
+import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 @Service
@@ -35,6 +36,9 @@ public class TimeConverter {
     }
 
     public LocalDate toLocalDate(String date) {
+        if (isBlank(date)) {
+            return null;
+        }
         String capitalizedDate = capitalizeFirstLetter(date);
         return parseExactDate(capitalizedDate);
 

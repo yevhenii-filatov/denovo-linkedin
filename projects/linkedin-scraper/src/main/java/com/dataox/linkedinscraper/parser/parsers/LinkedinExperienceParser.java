@@ -88,7 +88,9 @@ public class LinkedinExperienceParser implements LinkedinParser<List<LinkedinExp
             experience.setDateStarted(getDateStarted(dateRange));
             experience.setDateFinished(getDateFinished(dateRange));
             experience.setDateStartedTimestamp(timeConverter.toLocalDate(experience.getDateStarted()));
-            experience.setDateFinishedTimestamp(timeConverter.toLocalDate(experience.getDateFinished()));
+            if(!experience.getDateFinished().equals("Present")) {
+                experience.setDateFinishedTimestamp(timeConverter.toLocalDate(experience.getDateFinished()));
+            }
             experience.setTotalDuration(parseTotalDuration(experienceElement));
         }
 
