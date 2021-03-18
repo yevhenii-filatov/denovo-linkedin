@@ -8,6 +8,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.Instant;
+import java.time.LocalDate;
 
 @Data
 @Entity
@@ -49,9 +50,17 @@ public class LinkedinExperience {
     @Column(name = "date_started")
     private String dateStarted;
 
+    @NotNull
+    @Column(name = "date_started_timestamp")
+    private LocalDate dateStartedTimestamp;
+
     @NotBlank
     @Column(name = "date_finished")
     private String dateFinished;
+
+    @NotNull
+    @Column(name = "date_finished_timestamp")
+    private LocalDate dateFinishedTimestamp;
 
     @Column(name = "location")
     private String location;

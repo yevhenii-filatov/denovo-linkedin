@@ -4,7 +4,7 @@ package com.dataox.linkedinscraper.parser.dto;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.naming.directory.SearchResult;
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.Instant;
@@ -27,23 +27,33 @@ public class LinkedinProfile {
     @NotBlank
     private String profileUrl;
 
+    @Valid
     private LinkedinBasicProfileInfo linkedinBasicProfileInfo;
 
-    private List<LinkedinExperience> linkedinExperiences = new ArrayList<>();
+    @Valid
+    private List<@Valid LinkedinExperience> linkedinExperiences = new ArrayList<>();
 
+    @Valid
     private List<LinkedinEducation> linkedinEducations = new ArrayList<>();
 
+    @Valid
     private List<LinkedinRecommendation> linkedinRecommendations = new ArrayList<>();
 
+    @Valid
     private List<LinkedinLicenseCertification> linkedinLicenseCertifications = new ArrayList<>();
 
+    @Valid
     private List<LinkedinVolunteerExperience> linkedinVolunteerExperiences = new ArrayList<>();
 
+    @Valid
     private List<LinkedinInterest> linkedinInterests = new ArrayList<>();
 
+    @Valid
     private List<LinkedinSkill> linkedinSkills = new ArrayList<>();
 
+    @Valid
     private List<LinkedinActivity> linkedinActivities = new ArrayList<>();
 
+    @Valid
     private List<LinkedinAccomplishment> linkedinAccomplishments = new ArrayList<>();
 }
