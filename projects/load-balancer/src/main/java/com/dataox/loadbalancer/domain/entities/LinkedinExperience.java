@@ -59,7 +59,6 @@ public class LinkedinExperience {
     @Column(name = "date_finished")
     private String dateFinished;
 
-    @NotNull
     @Column(name = "date_finished_timestamp")
     private LocalDate dateFinishedTimestamp;
 

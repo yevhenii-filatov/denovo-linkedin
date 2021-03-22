@@ -10,6 +10,7 @@ import com.dataox.linkedinscraper.exceptions.linkedin.LinkedinParsingException;
 import com.dataox.linkedinscraper.exceptions.linkedin.LinkedinScrapingException;
 import com.dataox.linkedinscraper.parser.LinkedinProfileParser;
 import com.dataox.linkedinscraper.parser.dto.LinkedinProfile;
+import com.dataox.linkedinscraper.parser.dto.SearchResult;
 import com.dataox.linkedinscraper.scraping.scrapers.LinkedinProfileScraper;
 import com.dataox.linkedinscraper.scraping.service.login.LoginService;
 import com.dataox.linkedinscraper.service.error.detector.LinkedinError;
@@ -96,23 +97,31 @@ public class ScrapeLinkedinProfileService {
         return new NotScrapedLinkedinProfile(profileURL, StringUtils.EMPTY, true);
     }
 
-    private LinkedinProfile scrapeSingleProfile(LinkedinProfileToScrapeDTO profile, WebDriver webDriver, List<NotScrapedLinkedinProfile> notScraped) {
+    private LinkedinProfile scrapeSingleProfile(LinkedinProfileToScrapeDTO profileToScrape, WebDriver webDriver, List<NotScrapedLinkedinProfile> notScraped) {
         try {
-            CollectedProfileSourcesDTO sources = scraper.scrape(webDriver, profile);
-            return parser.parse(sources);
+            CollectedProfileSourcesDTO sources = scraper.scrape(webDriver, profileToScrape);
+            LinkedinProfile parsedProfile = parser.parse(sources);
+            seatSearchResults(profileToScrape, parsedProfile);
+            return parsedProfile;
         } catch (LinkedinScrapingException e) {
             LinkedinError linkedinError = errorDetector.detect(webDriver);
             boolean isProfileReusable = isProfileReusable(linkedinError);
             boolean isScraperShouldStop = isScraperShouldStop(linkedinError);
             e.setLinkedinError(linkedinError);
-            handleParsingAndScrapingException(profile.getProfileURL(), e, isProfileReusable, notScraped);
+            handleParsingAndScrapingException(profileToScrape.getProfileURL(), e, isProfileReusable, notScraped);
             if (isScraperShouldStop)
                 throw e;
             return null;
         } catch (LinkedinParsingException e) {
-            handleParsingAndScrapingException(profile.getProfileURL(), e, false, notScraped);
+            handleParsingAndScrapingException(profileToScrape.getProfileURL(), e, false, notScraped);
             throw e;
         }
+    }
+
+    private void seatSearchResults(LinkedinProfileToScrapeDTO profile, LinkedinProfile linkedinProfile) {
+        SearchResult searchResult = new SearchResult();
+        searchResult.setId(profile.getSearchResultId());
+        linkedinProfile.setSearchResult(searchResult);
     }
 
     private void handleParsingAndScrapingException(String profileUrl,

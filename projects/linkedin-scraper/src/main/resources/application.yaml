@@ -19,7 +19,9 @@ spring:
     password: [PASSWORD]
     listener:
       simple:
-        prefetch: 1
+        prefetch: 0
         acknowledge-mode: none
+      direct:
+        prefetch: 0
     template:
       default-receive-queue: [QUEUE_NAME]

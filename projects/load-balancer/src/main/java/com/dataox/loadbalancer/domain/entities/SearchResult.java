@@ -6,7 +6,6 @@ import lombok.*;
 import javax.persistence.*;
 import java.time.Instant;
 
-
 @Getter
 @Setter
 @Builder
@@ -37,10 +36,6 @@ public class SearchResult {
     @ManyToOne
     @JoinColumn(name = "initial_data_record_id")
     private InitialData initialDataRecord;
-
-    @ManyToOne
-    @JoinColumn(name = "scraping_batch_id",nullable = true)
-    private ScrapingBatch scrapingBatch;
 
     @OneToOne(mappedBy = "searchResult", orphanRemoval = true, fetch = FetchType.LAZY)
     LinkedinProfile linkedinProfile;

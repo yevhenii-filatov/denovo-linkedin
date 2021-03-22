@@ -21,6 +21,7 @@ public class DTOConverter {
         profileToScrapeDTO.setScrapeLicenses(true);
         profileToScrapeDTO.setScrapeAccomplishments(true);
         profileToScrapeDTO.setScrapeRecommendations(true);
+        profileToScrapeDTO.setSearchResultId(searchResult.getId());
         return profileToScrapeDTO;
     }
 }

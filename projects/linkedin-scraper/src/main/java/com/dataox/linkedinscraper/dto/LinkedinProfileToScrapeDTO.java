@@ -14,6 +14,7 @@ import java.io.Serializable;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class LinkedinProfileToScrapeDTO implements Serializable {
     private static final long serialVersionUID = 1L;
+    Long searchResultId;
     String profileURL;
     boolean scrapeLicenses;
     boolean scrapeVolunteer;

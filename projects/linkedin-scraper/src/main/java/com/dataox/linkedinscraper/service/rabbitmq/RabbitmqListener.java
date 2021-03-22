@@ -46,7 +46,6 @@ public class RabbitmqListener {
             okHttpTemplate.request(request);
         } catch (IOException e) {
             e.printStackTrace();
-            Thread.sleep(1500000);
         }
     }
 }
