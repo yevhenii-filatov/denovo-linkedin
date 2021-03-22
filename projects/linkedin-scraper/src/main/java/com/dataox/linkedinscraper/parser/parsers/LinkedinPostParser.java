@@ -171,7 +171,7 @@ public class LinkedinPostParser implements LinkedinParser<LinkedinPost, String> 
         String mainContent = text(postElement.selectFirst(CONTENT_SELECTOR));
 
         if (isShared(postElement) && isNoneBlank(mainContent)) {
-            String originContent = "\nOriginal post: " + post.getContent();
+            String originContent = "\n!zxz9119origpstehh8!: " + post.getContent();
             String bothContents = mainContent.concat(originContent);
             post.setContent(bothContents);
             post.setAuthorProfileUrl(absUrlFromHref(postElement.selectFirst(SHARED_URL_SELECTOR)));
