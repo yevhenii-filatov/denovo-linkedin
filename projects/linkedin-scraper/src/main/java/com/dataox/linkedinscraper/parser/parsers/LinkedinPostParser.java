@@ -58,7 +58,9 @@ public class LinkedinPostParser implements LinkedinParser<LinkedinPost, String> 
         String relativePublicationDate = parseRelativePublicationDate(postElement);
         if (isNotBlank(relativePublicationDate)) {
             post.setRelativePublicationDate(relativePublicationDate);
-            post.setAbsolutePublicationDate(getAbsolutePublicationDate(post.getRelativePublicationDate()));
+            if (isNotBlank(getDigits(relativePublicationDate))) {
+                post.setAbsolutePublicationDate(getAbsolutePublicationDate(post.getRelativePublicationDate()));
+            }
         }
 
         post.setAuthorProfileName(parseAuthorName(postElement));
