@@ -21,6 +21,7 @@ public class LinkedinErrorDetector {
     private static final By ISNT_QUITE_RIGHT = By.xpath("//main/h1[text()='Something isn’t quite right']");
     private static final By SOMETHING_WENT_WRONG = By.xpath("//h1[text()='Something went wrong']");
     private static final By LINKEDIN_LOGGED_OUT = By.xpath("//nav[@aria-label='Primary']//a[@class='nav__button-secondary'][text()='Sign in']");
+    private static final By ADD_A_PHONE_NUMBER = By.xpath("//h2[text()='Add a phone number for security']");
 
     public LinkedinError detect(WebDriver webDriver) {
         if (banDetected(webDriver)) {
@@ -56,7 +57,14 @@ public class LinkedinErrorDetector {
         if (linkedinLoggedOut(webDriver)) {
             return LinkedinError.LOGGED_OUT;
         }
+        if (addAPhoneNumber(webDriver)) {
+            return LinkedinError.ADD_A_PHONE_NUMBER;
+        }
         return LinkedinError.NO_ERRORS;
+    }
+
+    private boolean addAPhoneNumber(WebDriver webDriver) {
+        return Objects.nonNull(WebDriverUtils.findElementBy(webDriver, ADD_A_PHONE_NUMBER));
     }
 
     private boolean linkedinLoggedOut(WebDriver webDriver) {

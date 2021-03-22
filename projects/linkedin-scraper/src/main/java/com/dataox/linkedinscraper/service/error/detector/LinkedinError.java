@@ -20,7 +20,8 @@ public enum LinkedinError implements Error {
     DONT_HAVE_ACCESS_TO_PROFILE("27", "The profiles of members who are outside your network have limited visibility", false),
     ISNT_QUITE_RIGHT("28","We noticed unusual activity from your account.",false),
     SOMETHING_WENT_WRONG("29","Something went wrong. Refresh the page",false),
-    LOGGED_OUT("30", "Linkedin logged out account", false);
+    LOGGED_OUT("30", "Linkedin logged out account", false),
+    ADD_A_PHONE_NUMBER("31", "Add a phone number for security", false);
 
     String code;
     String message;

@@ -2,10 +2,12 @@ package com.dataox.linkedinscraper.parser.parsers;
 
 import com.dataox.linkedinscraper.parser.LinkedinParser;
 import com.dataox.linkedinscraper.parser.dto.LinkedinExperience;
+import com.dataox.linkedinscraper.parser.utils.TimeConverter;
 import org.junit.jupiter.api.Test;
 import org.springframework.util.DigestUtils;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 
 import static com.dataox.linkedinscraper.parser.ParsingTestUtils.hashedStingComparator;
@@ -19,7 +21,8 @@ class LinkedinExperienceParserTest {
     @Test
     void shouldParse() throws IOException {
         String source = loadResource(EXPERIENCE_SOURCE);
-        LinkedinParser<List<LinkedinExperience>, String> parser = new LinkedinExperienceParser();
+        TimeConverter timeConverter = new TimeConverter();
+        LinkedinParser<List<LinkedinExperience>, String> parser = new LinkedinExperienceParser(timeConverter);
 
         List<LinkedinExperience> experiences = parser.parse(source);
 
@@ -34,6 +37,7 @@ class LinkedinExperienceParserTest {
         expected1.setCompanyProfileUrl("https://www.linkedin.com/company/dataox/");
         expected1.setUpdatedAt(actual1.getUpdatedAt());
         expected1.setDateStarted("Jan 2015");
+        expected1.setDateStartedTimestamp(LocalDate.parse("2015-01-01"));
         expected1.setDateFinished("Present");
         expected1.setTotalDuration("6 yrs 2 mos");
         expected1.setLocation("Ukraine");
@@ -47,6 +51,8 @@ class LinkedinExperienceParserTest {
         expected2.setUpdatedAt(actual2.getUpdatedAt());
         expected2.setDateStarted("Dec 2014");
         expected2.setDateFinished("Jan 2015");
+        expected2.setDateStartedTimestamp(LocalDate.parse("2014-12-01"));
+        expected2.setDateFinishedTimestamp(LocalDate.parse("2015-01-01"));
         expected2.setTotalDuration("2 mos");
         expected2.setLocation("Украина");
         expected2.setDescription("General management and working with data flows");

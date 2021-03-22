@@ -40,7 +40,7 @@ public class LinkedinActivityParser implements LinkedinParser<List<LinkedinActiv
                 .collect(Collectors.toList());
 
 
-        makePostsUniqAndCombineComments(activities);
+        //makePostsUniqAndCombineComments(activities);
 
         return activities;
     }

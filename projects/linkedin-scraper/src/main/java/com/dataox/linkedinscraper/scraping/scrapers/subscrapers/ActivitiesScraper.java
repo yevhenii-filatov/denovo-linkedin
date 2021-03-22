@@ -6,6 +6,7 @@ import com.dataox.linkedinscraper.scraping.scrapers.Scraper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -44,24 +45,33 @@ public class ActivitiesScraper implements Scraper<List<String>> {
 
     @Override
     public List<String> scrape(WebDriver webDriver) {
-        WebDriverWait wait = new WebDriverWait(webDriver, 20);
+        WebDriverWait wait = new WebDriverWait(webDriver, 60);
         wait.until(ExpectedConditions.presenceOfElementLocated(SEE_ALL_ACTIVITIES_BUTTON));
         WebElement seeAllButton = findWebElementBy(webDriver, SEE_ALL_ACTIVITIES_BUTTON)
                 .orElseThrow(() -> ElementNotFoundException.create("See all activity button"));
         log.info("Scraping activities");
         Actions action = new Actions(webDriver);
         scrollToAndClickOnElement(webDriver, action, seeAllButton);
+        try {
+            waitPageToLoad(wait);
+        } catch (TimeoutException e) {
+            executeJavascript(webDriver,"window.scrollBy(0,1000)");
+            waitPageToLoad(wait);
+        }
+        WebElement emptyActivitiesMessage = findElementBy(webDriver, EMPTY_ACTIVITIES);
+        if (nonNull(emptyActivitiesMessage))
+            return emptyList();
+        return collectActivities(webDriver);
+    }
+
+    private void waitPageToLoad(WebDriverWait wait) {
         wait.until(ExpectedConditions.or(
                 ExpectedConditions.presenceOfElementLocated(ACTIVITY_POSTS),
                 ExpectedConditions.presenceOfElementLocated(EMPTY_ACTIVITIES)
         ));
-        WebElement emptyActivitiesMessage = findElementBy(webDriver, EMPTY_ACTIVITIES);
-        if (nonNull(emptyActivitiesMessage))
-            return emptyList();
-        return collectActivities(webDriver, wait);
     }
 
-    private List<String> collectActivities(WebDriver webDriver, WebDriverWait wait) {
+    private List<String> collectActivities(WebDriver webDriver) {
         List<String> activitiesSources = new ArrayList<>();
         WebElement currentPost;
 
