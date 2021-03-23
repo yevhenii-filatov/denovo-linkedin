@@ -4,6 +4,7 @@ import com.dataox.linkedinscraper.parser.LinkedinParser;
 import com.dataox.linkedinscraper.parser.dto.LinkedinActivity;
 import com.dataox.linkedinscraper.parser.dto.LinkedinComment;
 import com.dataox.linkedinscraper.parser.dto.LinkedinPost;
+import com.dataox.linkedinscraper.parser.service.mappers.LinkedinActivityMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.nodes.Element;
@@ -25,6 +26,7 @@ import static java.util.Objects.nonNull;
 public class LinkedinActivityParser implements LinkedinParser<List<LinkedinActivity>, List<String>> {
 
     private final LinkedinPostParser postParser;
+    private final LinkedinActivityMapper mapper;
 
     @Override
     public List<LinkedinActivity> parse(List<String> source) {
@@ -50,7 +52,8 @@ public class LinkedinActivityParser implements LinkedinParser<List<LinkedinActiv
         Element activityElement = toElement(source);
 
         activity.setUpdatedAt(time);
-        activity.setType(parseType(activityElement).toUpperCase());
+        String type = parseType(activityElement);
+        activity.setLinkedinActivityType(mapper.map(type));
         activity.setLinkedinPost(postParser.parse(source));
 
         return activity;

@@ -1,5 +1,6 @@
 package com.dataox.linkedinscraper.parser.dto;
 
+import com.dataox.linkedinscraper.parser.dto.types.LinkedinJobType;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -19,7 +20,7 @@ public class LinkedinExperience {
     @NotBlank
     private String itemSource;
 
-    private String jobType;
+    private LinkedinJobType linkedinJobType;
 
     @NotBlank
     @Max(100)

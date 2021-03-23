@@ -3,6 +3,7 @@ package com.dataox.linkedinscraper.parser.parsers;
 import com.dataox.linkedinscraper.parser.LinkedinParser;
 import com.dataox.linkedinscraper.parser.dto.LinkedinActivity;
 import com.dataox.linkedinscraper.parser.dto.LinkedinPost;
+import com.dataox.linkedinscraper.parser.service.mappers.LinkedinActivityMapper;
 import com.dataox.linkedinscraper.parser.utils.TimeConverter;
 import com.dataox.linkedinscraper.parser.utils.sources.ActivitiesSource;
 import org.junit.jupiter.api.Test;
@@ -27,7 +28,7 @@ class LinkedinPostParserTest {
         System.out.println(post.getLinkedinComments().size());
 
         ActivitiesSource source1 = new ActivitiesSource(POST_URL, loadResource(ACTIVITY_SOURCE));
-        LinkedinParser<List<LinkedinActivity>,List<String>> parser1 = new LinkedinActivityParser(parser);
+        LinkedinParser<List<LinkedinActivity>,List<String>> parser1 = new LinkedinActivityParser(parser,new LinkedinActivityMapper());
         List<LinkedinActivity> parse = parser1.parse(List.of(source));
         System.out.println(parse.get(0).getLinkedinPost().getAbsolutePublicationDate());
 

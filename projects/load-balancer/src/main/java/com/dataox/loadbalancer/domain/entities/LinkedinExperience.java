@@ -32,7 +32,7 @@ public class LinkedinExperience {
     @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "job_type")
-    private LinkedinJobType linkedinInterestType;
+    private LinkedinJobType linkedinJobType;
 
     @NotBlank
     @Column(name = "company_name")
