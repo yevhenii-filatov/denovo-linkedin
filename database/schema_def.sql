@@ -81,20 +81,22 @@ create type linkedin_job_type as enum (
 
 create table if not exists linkedin_experience
 (
-    id                  bigserial          not null
+    id                      bigserial          not null
         constraint experience_pk primary key,
-    updated_at          timestamp          not null,
-    item_source         text               not null,
-    job_type            linkedin_job_type  null default null,
-    company_name        varchar(100)       not null,
-    company_profile_url varchar            null default null,
-    position            varchar(100)       not null,
-    date_started        varchar(20)        null default null,
-    date_finished       varchar(20)        null default null,
-    total_duration      varchar(20)        null default null,
-    location            varchar(100)       null default null,
-    description         text               null default null,
-    linkedin_profile_id bigint             not null
+    updated_at              timestamp          not null,
+    item_source             text               not null,
+    job_type                linkedin_job_type  null default null,
+    company_name            varchar(100)       not null,
+    company_profile_url     varchar            null default null,
+    position                varchar(100)       not null,
+    date_started            varchar(20)        null default null,
+    date_started_timestamp  varchar            null default null,
+    date_finished           varchar(20)        null default null,
+    date_finished_timestamp varchar            null default null,
+    total_duration          varchar(20)        null default null,
+    location                varchar(100)       null default null,
+    description             text               null default null,
+    linkedin_profile_id     bigint             not null
         constraint linkedin_experience_linkedin_profile_fk
             references linkedin_profile (id)
             on delete cascade on update cascade
