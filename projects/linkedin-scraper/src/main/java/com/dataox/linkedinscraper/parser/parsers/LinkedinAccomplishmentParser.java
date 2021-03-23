@@ -36,7 +36,7 @@ public class LinkedinAccomplishmentParser implements LinkedinParser<List<Linkedi
     }
 
     private Stream<LinkedinAccomplishment> getAccomplishmentsWithinType(Instant time, Element accomplishmentSectionElement) {
-        String type = parseType(accomplishmentSectionElement);
+        String type = parseType(accomplishmentSectionElement).toUpperCase();
 
         return splitAccomplishment(accomplishmentSectionElement).stream()
                 .map(accomplishmentElement -> getLinkedinAccomplishment(time, accomplishmentElement, type));

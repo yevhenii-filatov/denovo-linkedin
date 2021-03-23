@@ -78,7 +78,13 @@ public class LinkedinExperienceParser implements LinkedinParser<List<LinkedinExp
 
         experience.setUpdatedAt(time);
         experience.setItemSource(experienceElement.html());
-        experience.setJobType(parseJobType(experienceElement));
+        String jobType = parseJobType(experienceElement);
+
+        if (nonNull(jobType)) {
+            jobType = jobType.toUpperCase();
+        }
+
+        experience.setJobType(jobType);
         experience.setCompanyName(parseCompanyName(experienceElement));
         experience.setCompanyProfileUrl(parseCompanyProfileUrl(experienceElement));
         experience.setPosition(parsePosition(experienceElement));

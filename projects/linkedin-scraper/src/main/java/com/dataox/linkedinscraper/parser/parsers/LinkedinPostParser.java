@@ -75,7 +75,7 @@ public class LinkedinPostParser implements LinkedinParser<LinkedinPost, String> 
             setComments(postElement, post);
         }
 
-        handleDoubleContent(postElement, post);
+        handleDoublePost(postElement, post);
 
         return post;
     }
@@ -169,17 +169,21 @@ public class LinkedinPostParser implements LinkedinParser<LinkedinPost, String> 
         return nonNull(postElement.selectFirst(".feed-shared-update-v2__comments-container"));
     }
 
-    private void handleDoubleContent(Element postElement, LinkedinPost post) {
+    private void handleDoublePost(Element postElement, LinkedinPost post) {
         String mainContent = text(postElement.selectFirst(CONTENT_SELECTOR));
 
         if (isShared(postElement) && isNoneBlank(mainContent)) {
             String originContent = "\n!zxz9119origpstehh8!: " + post.getContent();
             String bothContents = mainContent.concat(originContent);
-            post.setContent(bothContents);
-            post.setAuthorProfileUrl(absUrlFromHref(postElement.selectFirst(SHARED_URL_SELECTOR)));
-            post.setAuthorHeadline(text(postElement.selectFirst(AUTHOR_HEADLINE_SELECTOR)));
-            post.setAuthorConnectionDegree(text(postElement.selectFirst(CONNECTION_DEGREE_SELECTOR)));
-            post.setAuthorProfileName(text(postElement.selectFirst(AUTHOR_NAME_SELECTOR)));
+            setMainPost(postElement, post, bothContents);
         }
+    }
+
+    private void setMainPost(Element postElement, LinkedinPost post, String bothContents) {
+        post.setContent(bothContents);
+        post.setAuthorProfileUrl(absUrlFromHref(postElement.selectFirst(SHARED_URL_SELECTOR)));
+        post.setAuthorHeadline(text(postElement.selectFirst(AUTHOR_HEADLINE_SELECTOR)));
+        post.setAuthorConnectionDegree(text(postElement.selectFirst(CONNECTION_DEGREE_SELECTOR)));
+        post.setAuthorProfileName(text(postElement.selectFirst(AUTHOR_NAME_SELECTOR)));
     }
 }
