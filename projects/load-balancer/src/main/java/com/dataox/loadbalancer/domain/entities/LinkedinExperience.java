@@ -46,19 +46,15 @@ public class LinkedinExperience {
     @Column(name = "position")
     private String position;
 
-    @NotBlank
     @Column(name = "date_started")
     private String dateStarted;
 
-    @NotNull
     @Column(name = "date_started_timestamp")
     private LocalDate dateStartedTimestamp;
 
-    @NotBlank
     @Column(name = "date_finished")
     private String dateFinished;
 
-    @NotNull
     @Column(name = "date_finished_timestamp")
     private LocalDate dateFinishedTimestamp;
 

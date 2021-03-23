@@ -13,9 +13,11 @@
     <version>1.0</version>
     <name>linkedin-scraper</name>
     <description>Scraper for linkedin profiles</description>
+
     <properties>
         <java.version>11</java.version>
     </properties>
+
     <repositories>
         <repository>
             <id>denovo-linkedin</id>
@@ -27,15 +29,29 @@
         </repository>
     </repositories>
 
+
     <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-amqp</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -49,14 +65,40 @@
 
         <dependency>
             <groupId>com.dataox</groupId>
+            <artifactId>selenium-utils</artifactId>
+            <version>1.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.dataox</groupId>
+            <artifactId>captcha-solver</artifactId>
+            <version>1.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.dataox</groupId>
+            <artifactId>okhttp-utils</artifactId>
+            <version>1.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.dataox</groupId>
+            <artifactId>notification-service</artifactId>
+            <version>1.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.dataox</groupId>
             <artifactId>jsoup-utils</artifactId>
             <version>1.0</version>
         </dependency>
+
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
             <version>2.6</version>
         </dependency>
+
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-collections4</artifactId>

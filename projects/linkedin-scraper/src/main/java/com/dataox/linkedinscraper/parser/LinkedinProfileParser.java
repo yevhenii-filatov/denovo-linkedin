@@ -1,10 +1,11 @@
 package com.dataox.linkedinscraper.parser;
 
+import com.dataox.linkedinscraper.dto.CollectedProfileSourcesDTO;
+import com.dataox.linkedinscraper.dto.sources.SkillsSource;
 import com.dataox.linkedinscraper.parser.dto.LinkedinProfile;
 import com.dataox.linkedinscraper.parser.dto.LinkedinSkill;
+import com.dataox.linkedinscraper.exceptions.linkedin.LinkedinParsingException;
 import com.dataox.linkedinscraper.parser.parsers.*;
-import com.dataox.linkedinscraper.parser.utils.CollectedProfileSourcesDTO;
-import com.dataox.linkedinscraper.parser.utils.sources.SkillsSource;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -33,22 +34,25 @@ public class LinkedinProfileParser implements LinkedinParser<LinkedinProfile, Co
     LinkedinAccomplishmentParser accomplishmentParser;
 
     @Override
-    public LinkedinProfile parse(CollectedProfileSourcesDTO sourcesDTO) {
-        LinkedinProfile linkedinProfile = new LinkedinProfile();
+    public LinkedinProfile parse(CollectedProfileSourcesDTO source) {
+        try {
+            LinkedinProfile linkedinProfile = new LinkedinProfile();
 
-        linkedinProfile.setProfileUrl(sourcesDTO.getProfileUrl());
-        linkedinProfile.setLinkedinActivities(activityParser.parse(sourcesDTO.getActivitySource()));
-        linkedinProfile.setLinkedinBasicProfileInfo(basicProfileInfoParser.parse(getBasicProfileSource(sourcesDTO)));
-        linkedinProfile.setLinkedinEducations(educationParser.parse(sourcesDTO.getEducationsSource()));
-        linkedinProfile.setLinkedinSkills(getAllLinkedinSkills(sourcesDTO));
-        linkedinProfile.setLinkedinExperiences(experienceParser.parse(sourcesDTO.getExperiencesSource()));
-        linkedinProfile.setLinkedinInterests(interestParser.parse(sourcesDTO.getInterestsSources()));
-        linkedinProfile.setLinkedinLicenseCertifications(licenseCertificationParser.parse(sourcesDTO.getLicenseSource()));
-        linkedinProfile.setLinkedinRecommendations(recommendationParser.parse(sourcesDTO.getRecommendationsSources()));
-        linkedinProfile.setLinkedinVolunteerExperiences(volunteerExperienceParser.parse(sourcesDTO.getVolunteersSource()));
-        linkedinProfile.setLinkedinAccomplishments(accomplishmentParser.parse(sourcesDTO.getAccomplishmentsSources()));
-
-        return linkedinProfile;
+            linkedinProfile.setProfileUrl(source.getProfileUrl());
+            linkedinProfile.setLinkedinActivities(activityParser.parse(source.getActivitiesSources()));
+            linkedinProfile.setLinkedinBasicProfileInfo(basicProfileInfoParser.parse(getBasicProfileSource(source)));
+            linkedinProfile.setLinkedinEducations(educationParser.parse(source.getEducationsSource()));
+            linkedinProfile.setLinkedinSkills(getAllLinkedinSkills(source));
+            linkedinProfile.setLinkedinExperiences(experienceParser.parse(source.getExperiencesSource()));
+            linkedinProfile.setLinkedinInterests(interestParser.parse(source.getInterestsSources()));
+            linkedinProfile.setLinkedinLicenseCertifications(licenseCertificationParser.parse(source.getLicenseSource()));
+            linkedinProfile.setLinkedinRecommendations(recommendationParser.parse(source.getRecommendationsSources()));
+            linkedinProfile.setLinkedinVolunteerExperiences(volunteerExperienceParser.parse(source.getVolunteersSource()));
+            linkedinProfile.setLinkedinAccomplishments(accomplishmentParser.parse(source.getAccomplishmentsSources()));
+            return linkedinProfile;
+        } catch (Exception e) {
+            throw new LinkedinParsingException(e);
+        }
     }
 
     private List<String> getBasicProfileSource(CollectedProfileSourcesDTO source) {

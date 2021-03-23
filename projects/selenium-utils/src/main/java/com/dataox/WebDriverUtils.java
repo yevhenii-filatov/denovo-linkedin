@@ -8,6 +8,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.util.List;
 import java.util.Optional;
 
+import static com.dataox.CommonUtils.randomSleep;
 import static com.dataox.WebDriverUtils.ScrollingDirection.*;
 
 /**
@@ -29,11 +30,9 @@ public final class WebDriverUtils {
         }
     }
 
-    public static void enterDataIntoTextFieldWithKeyboard(WebElement field, String data) {
-        for (char symbol : data.toCharArray()) {
-            field.sendKeys(String.valueOf(symbol));
-            CommonUtils.randomSleep(100, 500);
-        }
+    public static Optional<WebElement> findWebElementBy(WebDriver webDriver, By by) {
+        List<WebElement> elements = webDriver.findElements(by);
+        return elements.isEmpty() ? Optional.empty() : Optional.of(elements.get(0));
     }
 
     public static WebElement findElementBy(WebDriver webDriver, By by) {
@@ -41,6 +40,23 @@ public final class WebDriverUtils {
         return elements.isEmpty()
                 ? null
                 : elements.get(0);
+    }
+
+    public static Optional<WebElement> findWebElementFromParentBy(WebElement parent, By by) {
+        WebElement element;
+        try {
+            element = parent.findElement(by);
+        } catch (NoSuchElementException e) {
+            return Optional.empty();
+        }
+        return Optional.of(element);
+    }
+
+    public static void enterDataIntoTextFieldWithKeyboard(WebElement field, String data) {
+        for (char symbol : data.toCharArray()) {
+            field.sendKeys(String.valueOf(symbol));
+            randomSleep(100, 500);
+        }
     }
 
     public static void executeJavascript(WebDriver webDriver, String script, Object... args) {
@@ -75,9 +91,22 @@ public final class WebDriverUtils {
         executeJavascript(webDriver, String.format("window.scrollBy(0, %d)", stepPx));
     }
 
+    public static void scrollToAndClickOnElement(WebDriver webDriver, Actions actions, WebElement webElement) {
+        scrollToAndClickOnElement(webDriver, actions, webElement, CommonUtils.randomLong(750, 1500), 400);
+    }
+
+    public static void scrollToAndClickOnElement(WebDriver webDriver,
+                                                 Actions actions,
+                                                 WebElement webElement,
+                                                 Long clickPause,
+                                                 int topPanelHeight) {
+        scrollToElement(webDriver, webElement, topPanelHeight);
+        clickOnElement(webElement, actions, clickPause);
+    }
+
     public static void scrollToElement(WebDriver webDriver, WebElement webElement, int topPanelHeight) {
         int elementY = webElement.getLocation().getY();
-        elementY -=topPanelHeight;
+        elementY -= topPanelHeight;
         scrollTo(webDriver, elementY);
     }
 
@@ -87,19 +116,36 @@ public final class WebDriverUtils {
     }
 
     public static void scrollTo(WebDriver webDriver, int desiredScrollY) {
-        int amountOfSteps = 25;
+        int amountOfSteps = 30;
         Long currentScrollY = getScrollY(webDriver);
         int step = (int) (Math.abs((desiredScrollY - currentScrollY)) / amountOfSteps);
         ScrollingDirection scrollingDirection = currentScrollY > desiredScrollY ? UP : DOWN;
         for (int i = 0; i < amountOfSteps; i++) {
             scroll(webDriver, scrollingDirection, step);
-            CommonUtils.randomSleep(150, 250);
+            randomSleep(75, 125);
         }
     }
 
     public static Long getScrollY(WebDriver webDriver) {
         JavascriptExecutor js = (JavascriptExecutor) webDriver;
         return (Long) js.executeScript("return scrollY");
+    }
+
+    public static void scrollToTheBottomOfElement(WebDriver webDriver, WebElement scrollingElement, int scrollStop) {
+        int desiredScrollY = 0;
+        Long beforeScroll;
+        Long afterScroll;
+        do {
+            beforeScroll = getCurrentScrollYInElement(webDriver, scrollingElement);
+            executeJavascript(webDriver, "arguments[0].scrollTop=arguments[1]", scrollingElement, desiredScrollY += scrollStop);
+            afterScroll = getCurrentScrollYInElement(webDriver, scrollingElement);
+            randomSleep(1500, 2500);
+        } while (!beforeScroll.equals(afterScroll));
+    }
+
+    public static Long getCurrentScrollYInElement(WebDriver webDriver, WebElement scrollingElement) {
+        JavascriptExecutor js = (JavascriptExecutor) webDriver;
+        return (Long) js.executeScript("return arguments[0].scrollTop", scrollingElement);
     }
 
     public static String getElementHtml(WebElement webElement) {
@@ -121,8 +167,12 @@ public final class WebDriverUtils {
         element.sendKeys(Keys.DELETE);
     }
 
-    public static void clickOnElement(WebElement elementToClick, Actions actions,Long pause) {
+    public static void clickOnElement(WebElement elementToClick, Actions actions, Long pause) {
         actions.moveToElement(elementToClick).pause(pause).click().perform();
+    }
+
+    public static void clickOnElement(WebElement elementToClick, Actions actions) {
+        actions.moveToElement(elementToClick).pause(CommonUtils.randomLong(750, 1500)).click().perform();
     }
 
     public enum ScrollingDirection {
