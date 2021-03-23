@@ -50,7 +50,7 @@ public class LinkedinActivityParser implements LinkedinParser<List<LinkedinActiv
         Element activityElement = toElement(source);
 
         activity.setUpdatedAt(time);
-        activity.setType(parseType(activityElement));
+        activity.setType(parseType(activityElement).toUpperCase());
         activity.setLinkedinPost(postParser.parse(source));
 
         return activity;
