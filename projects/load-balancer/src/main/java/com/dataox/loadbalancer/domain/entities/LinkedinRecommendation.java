@@ -28,7 +28,7 @@ public class LinkedinRecommendation {
     @Column(name = "item_source")
     private String itemSource;
 
-//    @NotNull
+    @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "type")
     private LinkedinRecommendationType linkedinRecommendationType;

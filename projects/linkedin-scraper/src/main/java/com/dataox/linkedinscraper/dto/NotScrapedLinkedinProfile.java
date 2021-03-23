@@ -15,7 +15,7 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @NoArgsConstructor
 public class NotScrapedLinkedinProfile {
-    String profileURL;
+    LinkedinProfileToScrapeDTO profileToScrapeDTO;
     String errorDescription;
     boolean reusable;
 }

@@ -20,7 +20,7 @@ server:
 
 app:
   scraping:
-    batch-size: 1
+    batch-size: 5
 logging:
   level:
     sql: info

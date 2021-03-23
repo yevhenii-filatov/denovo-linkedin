@@ -29,21 +29,9 @@ public class DataLoaderService {
             SearchResult searchResult = searchResultRepository.findById(searchResultId)
                     .orElseThrow(() -> new RecordNotFoundException("Search result with searchResultId " + searchResultId + " not found in database"));
             linkedinProfile.setSearchResult(searchResult);
-            reSetLinkedinProfile(linkedinProfile);
+            MapperService.reSetLinkedinProfile(linkedinProfile);
         }
         linkedinProfileRepository.saveAll(linkedinProfiles);
     }
 
-    private void reSetLinkedinProfile(LinkedinProfile linkedinProfile) {
-        linkedinProfile.getLinkedinAccomplishments().forEach(linkedinAccomplishment -> linkedinAccomplishment.setLinkedinProfile(linkedinProfile));
-        linkedinProfile.getLinkedinActivities().forEach(linkedinActivity -> linkedinActivity.setLinkedinProfile(linkedinProfile));
-        linkedinProfile.getLinkedinBasicProfileInfo().setLinkedinProfile(linkedinProfile);
-        linkedinProfile.getLinkedinEducations().forEach(linkedinEducation -> linkedinEducation.setLinkedinProfile(linkedinProfile));
-        linkedinProfile.getLinkedinExperiences().forEach(linkedinExperience -> linkedinExperience.setLinkedinProfile(linkedinProfile));
-        linkedinProfile.getLinkedinInterests().forEach(linkedinInterest -> linkedinInterest.setLinkedinProfile(linkedinProfile));
-        linkedinProfile.getLinkedinLicenseCertifications().forEach(linkedinLicenseCertification -> linkedinLicenseCertification.setLinkedinProfile(linkedinProfile));
-        linkedinProfile.getLinkedinRecommendations().forEach(recommendation -> recommendation.setLinkedinProfile(linkedinProfile));
-        linkedinProfile.getLinkedinSkills().forEach(linkedinSkill -> linkedinSkill.setLinkedinProfile(linkedinProfile));
-        linkedinProfile.getLinkedinVolunteerExperiences().forEach(linkedinVolunteerExperience -> linkedinVolunteerExperience.setLinkedinProfile(linkedinProfile));
-    }
 }

@@ -1,7 +1,6 @@
 package com.dataox.loadbalancer.web.controller;
 
 import com.dataox.linkedinscraper.dto.ScrapingResultsDTO;
-import com.dataox.loadbalancer.service.DataLoaderService;
 import com.dataox.loadbalancer.service.ScrapingService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -19,14 +18,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/scraping")
 @RequiredArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE,makeFinal = true)
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ServicesController {
     ScrapingService scrapingService;
-    DataLoaderService dataLoaderService;
 
     @PostMapping("/receive/scraped")
     public ResponseEntity<String> receiveScrapedProfiles(@RequestBody ScrapingResultsDTO scrapingResultsDTO) {
-        dataLoaderService.saveLinkedinProfiles(scrapingResultsDTO.getSuccessfulProfiles());
+        scrapingService.processScrapingResults(scrapingResultsDTO);
         return ResponseEntity.ok("Fine");
     }
+
+
 }

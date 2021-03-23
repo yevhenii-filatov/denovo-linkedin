@@ -54,7 +54,7 @@ public class LinkedinInterestParser implements LinkedinParser<List<LinkedinInter
 
         interest.setUpdatedAt(time);
         interest.setItemSource(interestsElement.html());
-        interest.setType(type.toUpperCase());
+        interest.setLinkedinInterestType(type.toUpperCase());
         interest.setName(parseName(interestsElement));
         interest.setProfileUrl(parseProfileUrl(interestsElement));
         interest.setHeadline(parseHeadline(interestsElement));
