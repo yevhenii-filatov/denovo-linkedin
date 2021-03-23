@@ -32,7 +32,7 @@ class LinkedinInterestParserTest {
         LinkedinInterest expected = new LinkedinInterest();
         expected.setUpdatedAt(actual.getUpdatedAt());
         expected.setName("Sama");
-        expected.setType("Companies");
+        expected.setType("COMPANIES");
         expected.setProfileUrl("https://www.linkedin.com/company/sama-ai/");
         expected.setNumberOfFollowers("31258");
         expected.setHeadline("");
