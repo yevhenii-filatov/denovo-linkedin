@@ -3,6 +3,9 @@ package com.dataox.linkedinscraper.parser.parsers;
 import com.dataox.linkedinscraper.dto.sources.RecommendationsSource;
 import com.dataox.linkedinscraper.parser.LinkedinParser;
 import com.dataox.linkedinscraper.parser.dto.LinkedinRecommendation;
+import com.dataox.linkedinscraper.parser.service.mappers.LinkedinRecommendationMapper;
+import com.dataox.linkedinscraper.parser.utils.sources.RecommendationsSource;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -19,8 +22,11 @@ import static com.dataox.jsouputils.JsoupUtils.text;
 import static com.dataox.linkedinscraper.parser.utils.ParsingUtils.toElement;
 
 @Service
+@RequiredArgsConstructor
 @Slf4j
 public class LinkedinRecommendationParser implements LinkedinParser<List<LinkedinRecommendation>, List<RecommendationsSource>> {
+
+    private final LinkedinRecommendationMapper mapper;
 
     @Override
     public List<LinkedinRecommendation> parse(List<RecommendationsSource> source) {
@@ -54,7 +60,7 @@ public class LinkedinRecommendationParser implements LinkedinParser<List<Linkedi
 
         recommendation.setUpdatedAt(time);
         recommendation.setItemSource(recommendationElement.html());
-        recommendation.setType(type);
+        recommendation.setLinkedinRecommendationType(mapper.map(type));
         recommendation.setPersonFullName(parsePersonFullName(recommendationElement));
         recommendation.setPersonProfileUrl(parseProfileUrl(recommendationElement));
         recommendation.setPersonHeadline(parsePersonHeadLine(recommendationElement));

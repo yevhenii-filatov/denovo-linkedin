@@ -3,6 +3,9 @@ package com.dataox.linkedinscraper.parser.parsers;
 import com.dataox.linkedinscraper.dto.sources.InterestsSource;
 import com.dataox.linkedinscraper.parser.LinkedinParser;
 import com.dataox.linkedinscraper.parser.dto.LinkedinInterest;
+import com.dataox.linkedinscraper.parser.dto.types.LinkedinInterestType;
+import com.dataox.linkedinscraper.parser.service.mappers.LinkedinInterestMapper;
+import com.dataox.linkedinscraper.parser.utils.sources.InterestsSource;v
 import org.junit.jupiter.api.Test;
 import org.springframework.util.DigestUtils;
 
@@ -21,7 +24,7 @@ class LinkedinInterestParserTest {
     @Test
     void shouldParse() throws IOException {
         InterestsSource source = new InterestsSource("Companies", loadResource(COMPANIES_SOURCE));
-        LinkedinParser<List<LinkedinInterest>, List<InterestsSource> > parser = new LinkedinInterestParser();
+        LinkedinParser<List<LinkedinInterest>, List<InterestsSource> > parser = new LinkedinInterestParser(new LinkedinInterestMapper());
 
         List<LinkedinInterest> interests = parser.parse(Collections.singletonList(source));
 
@@ -32,7 +35,7 @@ class LinkedinInterestParserTest {
         LinkedinInterest expected = new LinkedinInterest();
         expected.setUpdatedAt(actual.getUpdatedAt());
         expected.setName("Sama");
-        expected.setType("COMPANIES");
+        expected.setLinkedinInterestType(LinkedinInterestType.COMPANY);
         expected.setProfileUrl("https://www.linkedin.com/company/sama-ai/");
         expected.setNumberOfFollowers("31258");
         expected.setHeadline("");

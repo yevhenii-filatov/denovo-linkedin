@@ -1,5 +1,6 @@
 package com.dataox.linkedinscraper.parser.dto;
 
+import com.dataox.linkedinscraper.parser.dto.types.LinkedinRecommendationType;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -19,7 +20,7 @@ public class LinkedinRecommendation {
     private String itemSource;
 
     @NotNull
-    private String type;
+    private LinkedinRecommendationType linkedinRecommendationType;
 
     @NotBlank
     @Max(255)
