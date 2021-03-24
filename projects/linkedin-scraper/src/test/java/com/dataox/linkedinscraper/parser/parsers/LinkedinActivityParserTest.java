@@ -2,6 +2,7 @@ package com.dataox.linkedinscraper.parser.parsers;
 
 import com.dataox.linkedinscraper.parser.LinkedinParser;
 import com.dataox.linkedinscraper.parser.dto.LinkedinActivity;
+import com.dataox.linkedinscraper.parser.service.mappers.LinkedinActivityMapper;
 import com.dataox.linkedinscraper.parser.utils.TimeConverter;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
@@ -27,11 +28,11 @@ class LinkedinActivityParserTest {
                 .map(Element::html)
                 .collect(Collectors.toList());
 
-        LinkedinParser<List<LinkedinActivity>,List<String>> parser1 = new LinkedinActivityParser(postParser);
+        LinkedinParser<List<LinkedinActivity>,List<String>> parser1 = new LinkedinActivityParser(postParser,new LinkedinActivityMapper());
         List<LinkedinActivity> activities = parser1.parse(activitySource);
 
 
-        System.out.println(activities.get(3).getType());;
+        System.out.println(activities.get(3).getLinkedinActivityType());
 
 
     }

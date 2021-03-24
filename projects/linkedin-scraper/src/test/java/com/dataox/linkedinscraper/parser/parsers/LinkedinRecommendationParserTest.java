@@ -3,6 +3,9 @@ package com.dataox.linkedinscraper.parser.parsers;
 import com.dataox.linkedinscraper.dto.sources.RecommendationsSource;
 import com.dataox.linkedinscraper.parser.LinkedinParser;
 import com.dataox.linkedinscraper.parser.dto.LinkedinRecommendation;
+import com.dataox.linkedinscraper.parser.dto.types.LinkedinRecommendationType;
+import com.dataox.linkedinscraper.parser.service.mappers.LinkedinRecommendationMapper;
+import com.dataox.linkedinscraper.parser.utils.sources.RecommendationsSource;
 import org.junit.jupiter.api.Test;
 import org.springframework.util.DigestUtils;
 
@@ -22,7 +25,7 @@ class LinkedinRecommendationParserTest {
     void shouldParse() throws IOException {
         String source = loadResource(RECOMMENDATION_SOURCE);
         RecommendationsSource typeSource = new RecommendationsSource("Given", source);
-        LinkedinParser<List<LinkedinRecommendation>, List<RecommendationsSource>> parser = new LinkedinRecommendationParser();
+        LinkedinParser<List<LinkedinRecommendation>, List<RecommendationsSource>> parser = new LinkedinRecommendationParser(new LinkedinRecommendationMapper());
 
         List<LinkedinRecommendation> recommendations = parser.parse(Collections.singletonList(typeSource));
 
@@ -32,7 +35,7 @@ class LinkedinRecommendationParserTest {
 
         LinkedinRecommendation expected = new LinkedinRecommendation();
         expected.setUpdatedAt(actual.getUpdatedAt());
-        expected.setLinkedinRecommendationType("Given");
+        expected.setLinkedinRecommendationType(LinkedinRecommendationType.GIVEN);
         expected.setPersonFullName("Dmitry Stril");
         expected.setPersonProfileUrl("https://www.linkedin.com/in/dmitrystril/");
         expected.setPersonHeadline("Software Developer");

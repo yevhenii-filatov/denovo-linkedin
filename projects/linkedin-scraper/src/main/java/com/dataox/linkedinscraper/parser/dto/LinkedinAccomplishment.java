@@ -1,5 +1,6 @@
 package com.dataox.linkedinscraper.parser.dto;
 
+import com.dataox.linkedinscraper.parser.dto.types.LinkedinAccomplishmentType;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -22,6 +23,5 @@ public class LinkedinAccomplishment {
     private String description;
 
     @NotNull
-    private String type;
-
+    private LinkedinAccomplishmentType linkedinAccomplishmentType;
 }

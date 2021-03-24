@@ -2,6 +2,8 @@ package com.dataox.linkedinscraper.parser.parsers;
 
 import com.dataox.linkedinscraper.parser.LinkedinParser;
 import com.dataox.linkedinscraper.parser.dto.LinkedinAccomplishment;
+import com.dataox.linkedinscraper.parser.dto.types.LinkedinAccomplishmentType;
+import com.dataox.linkedinscraper.parser.service.mappers.LinkedinAccomplishmentMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.util.DigestUtils;
@@ -22,7 +24,7 @@ class LinkedinAccomplishmentParserTest {
 
     @BeforeEach
     void setUp() {
-        parser = new LinkedinAccomplishmentParser();
+        parser = new LinkedinAccomplishmentParser(new LinkedinAccomplishmentMapper());
     }
 
     @Test
@@ -36,7 +38,7 @@ class LinkedinAccomplishmentParserTest {
         LinkedinAccomplishment expected = new LinkedinAccomplishment();
         expected.setTitle("English");
         expected.setDescription("Professional working proficiency");
-        expected.setType("LANGUAGES");
+        expected.setLinkedinAccomplishmentType(LinkedinAccomplishmentType.LANGUAGES);
         expected.setUpdatedAt(actual.getUpdatedAt());
         expected.setItemSource("md5:039df0e010fce96f95eb084e5e534e48");
 
@@ -71,7 +73,7 @@ class LinkedinAccomplishmentParserTest {
                         " Whether your business has ten employees or ten thousand, Blitzscaling is the essential playbook for winning " +
                         "in a world where speed is the only competitive advantage that matters. publication date Oct 9, 2018"
         );
-        expected.setType("PUBLICATIONS");
+        expected.setLinkedinAccomplishmentType(LinkedinAccomplishmentType.PUBLICATIONS);
         expected.setUpdatedAt(actual.getUpdatedAt());
         expected.setItemSource("md5:f8b6b2dc45e15fbc063e37c4c39d9b0b");
 
@@ -106,7 +108,7 @@ class LinkedinAccomplishmentParserTest {
                         "the interest, honor, dignity, and happiness of a free, independent, and virtuous people.” " +
                         "honor date Apr 2018 honor issuer Academy of Arts and Sciences"
         );
-        expected.setType("Honors & Awards".toUpperCase());
+        expected.setLinkedinAccomplishmentType(LinkedinAccomplishmentType.HONORS_AND_AWARDS);
         expected.setUpdatedAt(actual.getUpdatedAt());
         expected.setItemSource("md5:499be0652fd45e41113b5c4b69d1727b");
 
@@ -131,7 +133,7 @@ class LinkedinAccomplishmentParserTest {
         LinkedinAccomplishment expected = new LinkedinAccomplishment();
         expected.setTitle("GM’s Inclusion Advisory Board");
         expected.setDescription("organization date Jun 2020 – Present");
-        expected.setType("ORGANIZATIONS");
+        expected.setLinkedinAccomplishmentType(LinkedinAccomplishmentType.ORGANIZATIONS);;
         expected.setUpdatedAt(actual.getUpdatedAt());
         expected.setItemSource("md5:3a3a6441d00727db906f0761bd73abf6");
 

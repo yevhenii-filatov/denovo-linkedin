@@ -1,5 +1,6 @@
 package com.dataox.linkedinscraper.parser.dto;
 
+import com.dataox.linkedinscraper.parser.dto.types.LinkedinActivityType;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -14,7 +15,7 @@ public class LinkedinActivity {
     private Instant updatedAt;
 
     @NotNull
-    private String type;
+    private LinkedinActivityType linkedinActivityType;
 
     @NotNull
     private LinkedinPost linkedinPost;

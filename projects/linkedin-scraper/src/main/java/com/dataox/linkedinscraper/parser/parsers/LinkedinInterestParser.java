@@ -3,6 +3,9 @@ package com.dataox.linkedinscraper.parser.parsers;
 import com.dataox.linkedinscraper.dto.sources.InterestsSource;
 import com.dataox.linkedinscraper.parser.LinkedinParser;
 import com.dataox.linkedinscraper.parser.dto.LinkedinInterest;
+import com.dataox.linkedinscraper.parser.service.mappers.LinkedinInterestMapper;
+import com.dataox.linkedinscraper.parser.utils.sources.InterestsSource;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -19,8 +22,11 @@ import static com.dataox.jsouputils.JsoupUtils.text;
 import static com.dataox.linkedinscraper.parser.utils.ParsingUtils.toElement;
 
 @Service
+@RequiredArgsConstructor
 @Slf4j
 public class LinkedinInterestParser implements LinkedinParser<List<LinkedinInterest>, List<InterestsSource>> {
+
+    private final LinkedinInterestMapper mapper;
 
     @Override
     public List<LinkedinInterest> parse(List<InterestsSource> source) {
@@ -54,7 +60,7 @@ public class LinkedinInterestParser implements LinkedinParser<List<LinkedinInter
 
         interest.setUpdatedAt(time);
         interest.setItemSource(interestsElement.html());
-        interest.setLinkedinInterestType(type.toUpperCase());
+        interest.setLinkedinInterestType(mapper.map(type));
         interest.setName(parseName(interestsElement));
         interest.setProfileUrl(parseProfileUrl(interestsElement));
         interest.setHeadline(parseHeadline(interestsElement));
