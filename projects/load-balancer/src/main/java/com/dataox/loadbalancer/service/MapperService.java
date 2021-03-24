@@ -1,5 +1,7 @@
 package com.dataox.loadbalancer.service;
 
+import com.dataox.loadbalancer.domain.entities.LinkedinActivity;
+import com.dataox.loadbalancer.domain.entities.LinkedinPost;
 import com.dataox.loadbalancer.domain.entities.LinkedinProfile;
 import lombok.experimental.UtilityClass;
 
@@ -21,5 +23,11 @@ public class MapperService {
         linkedinProfile.getLinkedinRecommendations().forEach(recommendation -> recommendation.setLinkedinProfile(linkedinProfile));
         linkedinProfile.getLinkedinSkills().forEach(linkedinSkill -> linkedinSkill.setLinkedinProfile(linkedinProfile));
         linkedinProfile.getLinkedinVolunteerExperiences().forEach(linkedinVolunteerExperience -> linkedinVolunteerExperience.setLinkedinProfile(linkedinProfile));
+        for (LinkedinActivity linkedinActivity : linkedinProfile.getLinkedinActivities()) {
+            linkedinActivity.setLinkedinProfile(linkedinProfile);
+            LinkedinPost linkedinPost = linkedinActivity.getLinkedinPost();
+            linkedinPost.setLinkedinActivity(linkedinActivity);
+            linkedinPost.getLinkedinComments().forEach(linkedinComment -> linkedinComment.setLinkedinPost(linkedinPost));
+        }
     }
 }

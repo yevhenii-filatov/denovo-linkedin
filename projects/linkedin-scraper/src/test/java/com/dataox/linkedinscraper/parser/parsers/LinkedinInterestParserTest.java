@@ -5,7 +5,6 @@ import com.dataox.linkedinscraper.parser.LinkedinParser;
 import com.dataox.linkedinscraper.parser.dto.LinkedinInterest;
 import com.dataox.linkedinscraper.parser.dto.types.LinkedinInterestType;
 import com.dataox.linkedinscraper.parser.service.mappers.LinkedinInterestMapper;
-import com.dataox.linkedinscraper.parser.utils.sources.InterestsSource;v
 import org.junit.jupiter.api.Test;
 import org.springframework.util.DigestUtils;
 

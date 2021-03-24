@@ -16,11 +16,11 @@ public class DTOConverter {
         LinkedinProfileToScrapeDTO profileToScrapeDTO = new LinkedinProfileToScrapeDTO();
         profileToScrapeDTO.setProfileURL(searchResult.getUrl());
         profileToScrapeDTO.setScrapeSkills(true);
-        profileToScrapeDTO.setScrapeActivities(false);
-        profileToScrapeDTO.setScrapeInterests(false);
+        profileToScrapeDTO.setScrapeActivities(true);
+        profileToScrapeDTO.setScrapeInterests(true);
         profileToScrapeDTO.setScrapeVolunteer(true);
         profileToScrapeDTO.setScrapeLicenses(true);
-        profileToScrapeDTO.setScrapeAccomplishments(false);
+        profileToScrapeDTO.setScrapeAccomplishments(true);
         profileToScrapeDTO.setScrapeRecommendations(true);
         profileToScrapeDTO.setSearchResultId(searchResult.getId());
         return profileToScrapeDTO;
@@ -36,5 +36,19 @@ public class DTOConverter {
         notReusableProfile.setScrapeVolunteer(profileToScrapeDTO.isScrapeVolunteer());
         notReusableProfile.setScrapeRecommendations(profileToScrapeDTO.isScrapeRecommendations());
         return notReusableProfile;
+    }
+
+    public static LinkedinProfileToScrapeDTO toScrapeDTO(LinkedinNotReusableProfile notReusableProfile) {
+        LinkedinProfileToScrapeDTO profileToScrapeDTO = new LinkedinProfileToScrapeDTO();
+        profileToScrapeDTO.setScrapeAccomplishments(notReusableProfile.isScrapeAccomplishments());
+        profileToScrapeDTO.setScrapeActivities(notReusableProfile.isScrapeActivities());
+        profileToScrapeDTO.setScrapeInterests(notReusableProfile.isScrapeInterests());
+        profileToScrapeDTO.setScrapeLicenses(notReusableProfile.isScrapeLicenses());
+        profileToScrapeDTO.setScrapeSkills(notReusableProfile.isScrapeSkills());
+        profileToScrapeDTO.setScrapeVolunteer(notReusableProfile.isScrapeVolunteer());
+        profileToScrapeDTO.setScrapeRecommendations(notReusableProfile.isScrapeRecommendations());
+        profileToScrapeDTO.setProfileURL(notReusableProfile.getSearchResult().getUrl());
+        profileToScrapeDTO.setSearchResultId(notReusableProfile.getSearchResult().getId());
+        return profileToScrapeDTO;
     }
 }

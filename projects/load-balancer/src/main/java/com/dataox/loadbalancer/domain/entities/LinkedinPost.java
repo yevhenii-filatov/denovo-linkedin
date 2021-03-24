@@ -46,7 +46,7 @@ public class LinkedinPost {
     @Column(name = "author_profile_url")
     private String authorProfileUrl;
 
-    @NotBlank
+//    @NotBlank Change this field in database to not null
     @Column(name = "author_connection_degree")
     private String authorConnectionDegree;
 

@@ -57,7 +57,18 @@ public class ScrapingService {
             startScraping(searchedAndFoundInitialData);
         if (!notSearchedInitialData.isEmpty())
             triggerGoogleSearch(notSearchedInitialData);
+    }
 
+    public void rescrapeFixedProfiles(List<Long> notReusableProfileIds) {
+        List<LinkedinNotReusableProfile> fixedProfiles = notReusableProfileRepository.findAllById(notReusableProfileIds);
+        if (fixedProfiles.isEmpty())
+            throw new DataNotFoundException("Not reusable profile records, with given ids " + notReusableProfileIds + " not found in database");
+        List<LinkedinProfileToScrapeDTO> profileToScrapeDTOS = fixedProfiles.stream()
+                .map(DTOConverter::toScrapeDTO)
+                .collect(Collectors.toList());
+        List<List<LinkedinProfileToScrapeDTO>> splittedProfiles = ListUtils.partition(profileToScrapeDTOS, scrapingProperties.getBatchSize());
+        sendToQueue(splittedProfiles);
+        notReusableProfileRepository.deleteAll(fixedProfiles);
     }
 
     public void processScrapingResults(ScrapingResultsDTO scrapingResultsDTO) {

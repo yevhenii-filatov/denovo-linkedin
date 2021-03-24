@@ -4,7 +4,6 @@ import com.dataox.linkedinscraper.dto.sources.InterestsSource;
 import com.dataox.linkedinscraper.parser.LinkedinParser;
 import com.dataox.linkedinscraper.parser.dto.LinkedinInterest;
 import com.dataox.linkedinscraper.parser.service.mappers.LinkedinInterestMapper;
-import com.dataox.linkedinscraper.parser.utils.sources.InterestsSource;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.nodes.Element;

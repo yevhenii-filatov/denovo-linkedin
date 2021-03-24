@@ -7,7 +7,8 @@ public enum LinkedinInterestType {
     INFLUENCER("Influencers"),
     COMPANY("Companies"),
     GROUP("Groups"),
-    SCHOOL("Schools");
+    SCHOOL("Schools"),
+    DEFAULT("DEFAULT");
 
     private final String type;
 

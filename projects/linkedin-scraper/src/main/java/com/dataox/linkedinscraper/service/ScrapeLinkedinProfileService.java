@@ -17,6 +17,7 @@ import com.dataox.linkedinscraper.service.error.detector.LinkedinError;
 import com.dataox.linkedinscraper.service.error.detector.LinkedinErrorDetector;
 import com.dataox.linkedinscraper.utils.NotificationUtils;
 import com.dataox.notificationservice.service.TelegramNotificationsServiceProvider;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -50,7 +51,8 @@ public class ScrapeLinkedinProfileService {
     private final LinkedinErrorDetector errorDetector;
     private final TelegramNotificationsServiceProvider notificationsService;
     private final ApplicationContext applicationContext;
-    private final RabbitListenerEndpointRegistry rabbitListenerEndpointRegistry;
+    @Getter
+    private boolean isWorking = true;
 
     public ScrapingResultsDTO scrape(List<LinkedinProfileToScrapeDTO> linkedinProfilesToScrape) {
         List<LinkedinProfile> successfullyScraped = new ArrayList<>();
@@ -67,7 +69,7 @@ public class ScrapeLinkedinProfileService {
             }
         } catch (LinkedinException e) {
             addTheRestOfProfilesToNotScrapedList(currentProfileToScrape, linkedinProfilesToScrape, notScraped);
-            rabbitListenerEndpointRegistry.stop();
+            this.isWorking = false;
             notificationsService.send(NotificationUtils.createScraperStoppedMessage(e, applicationContext.getId()));
         }
         return new ScrapingResultsDTO(successfullyScraped, notScraped);
