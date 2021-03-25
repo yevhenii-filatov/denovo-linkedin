@@ -4,8 +4,8 @@ import lombok.Getter;
 
 @Getter
 public enum LinkedinRecommendationType {
-    RECEIVED("Received"),
-    GIVEN("Given");
+    RECEIVED("RECEIVED"),
+    GIVEN("GIVEN");
 
     private final String type;
 
