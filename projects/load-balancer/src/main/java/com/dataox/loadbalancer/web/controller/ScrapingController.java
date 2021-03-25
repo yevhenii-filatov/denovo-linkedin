@@ -1,5 +1,6 @@
 package com.dataox.loadbalancer.web.controller;
 
+import com.dataox.loadbalancer.domain.dto.LinkedinProfileToUpdateDTO;
 import com.dataox.loadbalancer.exception.DataNotFoundException;
 import com.dataox.loadbalancer.service.ScrapingService;
 import lombok.AccessLevel;
@@ -22,7 +23,8 @@ import java.util.List;
 public class ScrapingController {
     ScrapingService scrapingService;
 
-    @PostMapping("/initial")
+    // received; body; user
+    @PostMapping("/initial")// request_body_class - StartInitialScrapingDTO
     public ResponseEntity<String> startInitialScraping(@RequestBody List<Long> denovoIds) {
         scrapingService.startInitialScraping(denovoIds);
         return ResponseEntity.ok("NICE");
@@ -32,6 +34,12 @@ public class ScrapingController {
     public ResponseEntity<String> rescrapeFixedProfiles(@RequestBody List<Long> notReusableProfileIds) {
         scrapingService.rescrapeFixedProfiles(notReusableProfileIds);
         return ResponseEntity.ok("NICE");
+    }
+
+    @PostMapping("/update")
+    public ResponseEntity<String> updateProfile(@RequestBody List<LinkedinProfileToUpdateDTO> profileToUpdateDTOS) {
+        scrapingService.updateProfiles(profileToUpdateDTOS);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body("NICE");
     }
 
     @ExceptionHandler(DataNotFoundException.class)

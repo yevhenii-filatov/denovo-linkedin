@@ -1,9 +1,15 @@
 package com.dataox.loadbalancer.service;
 
 import com.dataox.linkedinscraper.dto.LinkedinProfileToScrapeDTO;
+import com.dataox.loadbalancer.domain.dto.LinkedinProfileToUpdateDTO;
 import com.dataox.loadbalancer.domain.entities.LinkedinNotReusableProfile;
+import com.dataox.loadbalancer.domain.entities.LinkedinProfile;
 import com.dataox.loadbalancer.domain.entities.SearchResult;
+import com.dataox.loadbalancer.exception.DTONotFoundException;
 import lombok.experimental.UtilityClass;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Dmitriy Lysko
@@ -49,6 +55,37 @@ public class DTOConverter {
         profileToScrapeDTO.setScrapeRecommendations(notReusableProfile.isScrapeRecommendations());
         profileToScrapeDTO.setProfileURL(notReusableProfile.getSearchResult().getUrl());
         profileToScrapeDTO.setSearchResultId(notReusableProfile.getSearchResult().getId());
+        return profileToScrapeDTO;
+    }
+
+    public static List<LinkedinProfileToScrapeDTO> convertToProfileToScrapeDTOS(List<LinkedinProfileToUpdateDTO> profileToUpdateDTOS,
+                                                                                List<LinkedinProfile> toUpdateProfiles) {
+        List<LinkedinProfileToScrapeDTO> profileToScrapeDTOS = new ArrayList<>();
+        LinkedinProfileToUpdateDTO profileToUpdateDTO;
+        for (LinkedinProfile toUpdateProfile : toUpdateProfiles) {
+            Long profileId = toUpdateProfile.getId();
+            SearchResult searchResult = toUpdateProfile.getSearchResult();
+            profileToUpdateDTO = profileToUpdateDTOS.stream()
+                    .filter(linkedinProfileToUpdateDTO -> linkedinProfileToUpdateDTO.getLinkedinProfileId().equals(profileId))
+                    .findFirst()
+                    .orElseThrow(() -> new DTONotFoundException("profileToUpdateDTO with required profile id was not found"));
+            LinkedinProfileToScrapeDTO linkedinProfileToScrapeDTO = DTOConverter.toScrapeDTO(profileToUpdateDTO);
+            linkedinProfileToScrapeDTO.setProfileURL(searchResult.getUrl());
+            linkedinProfileToScrapeDTO.setSearchResultId(searchResult.getId());
+            profileToScrapeDTOS.add(linkedinProfileToScrapeDTO);
+        }
+        return profileToScrapeDTOS;
+    }
+
+    public static LinkedinProfileToScrapeDTO toScrapeDTO(LinkedinProfileToUpdateDTO profileToUpdateDTO) {
+        LinkedinProfileToScrapeDTO profileToScrapeDTO = new LinkedinProfileToScrapeDTO();
+        profileToScrapeDTO.setScrapeAccomplishments(profileToUpdateDTO.isScrapeAccomplishments());
+        profileToScrapeDTO.setScrapeActivities(profileToUpdateDTO.isScrapeActivities());
+        profileToScrapeDTO.setScrapeInterests(profileToUpdateDTO.isScrapeInterests());
+        profileToScrapeDTO.setScrapeLicenses(profileToUpdateDTO.isScrapeLicenses());
+        profileToScrapeDTO.setScrapeSkills(profileToUpdateDTO.isScrapeSkills());
+        profileToScrapeDTO.setScrapeVolunteer(profileToUpdateDTO.isScrapeVolunteer());
+        profileToScrapeDTO.setScrapeRecommendations(profileToUpdateDTO.isScrapeRecommendations());
         return profileToScrapeDTO;
     }
 }

@@ -39,14 +39,13 @@ public class LinkedinPost {
     private Instant absolutePublicationDate;
 
     @NotBlank
-    @Column(name = "author_profile")
+    @Column(name = "author_name")
     private String authorProfileName;
 
     @NotBlank
     @Column(name = "author_profile_url")
     private String authorProfileUrl;
 
-//    @NotBlank Change this field in database to not null
     @Column(name = "author_connection_degree")
     private String authorConnectionDegree;
 
