@@ -23,8 +23,7 @@ import java.util.List;
 public class ScrapingController {
     ScrapingService scrapingService;
 
-    // received; body; user
-    @PostMapping("/initial")// request_body_class - StartInitialScrapingDTO
+    @PostMapping("/initial")
     public ResponseEntity<String> startInitialScraping(@RequestBody List<Long> denovoIds) {
         scrapingService.startInitialScraping(denovoIds);
         return ResponseEntity.ok("NICE");
@@ -44,6 +43,6 @@ public class ScrapingController {
 
     @ExceptionHandler(DataNotFoundException.class)
     public ResponseEntity<String> notFoundExceptionHandler(DataNotFoundException e) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage() + "\nScraping not started");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage() + "\nScraping was not started");
     }
 }

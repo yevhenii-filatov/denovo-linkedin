@@ -1,5 +1,7 @@
 package com.dataox.loadbalancer.domain.entities;
 
+import com.dataox.linkedinscraper.dto.OptionalFieldsContainer;
+import com.dataox.loadbalancer.domain.converter.OptionalFieldsConverter;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -34,30 +36,7 @@ public class LinkedinNotReusableProfile {
     SearchResult searchResult;
 
     @NotNull
-    @Column(name = "scrape_licenses")
-    boolean scrapeLicenses;
-
-    @NotNull
-    @Column(name = "scrape_volunteer")
-    boolean scrapeVolunteer;
-
-    @NotNull
-    @Column(name = "scrape_interests")
-    boolean scrapeInterests;
-
-    @NotNull
-    @Column(name = "scrape_recommendations")
-    boolean scrapeRecommendations;
-
-    @NotNull
-    @Column(name = "scrape_accomplishments")
-    boolean scrapeAccomplishments;
-
-    @NotNull
-    @Column(name = "scrape_skills")
-    boolean scrapeSkills;
-
-    @NotNull
-    @Column(name = "scrape_activities")
-    boolean scrapeActivities;
+    @Column(name = "optional_fields")
+    @Convert(converter = OptionalFieldsConverter.class)
+    OptionalFieldsContainer optionalFieldsContainer;
 }

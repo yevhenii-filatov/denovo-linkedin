@@ -10,13 +10,11 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -60,19 +58,6 @@ public class Runner implements ApplicationRunner {
                 e.printStackTrace();
             }
         }
-    }
-
-    private LinkedinProfileToScrapeDTO getLinkedinProfileToScrapeDTO(String profileURL) {
-        LinkedinProfileToScrapeDTO profile = new LinkedinProfileToScrapeDTO();
-        profile.setProfileURL(profileURL);
-        profile.setScrapeRecommendations(true);
-        profile.setScrapeLicenses(true);
-        profile.setScrapeVolunteer(true);
-        profile.setScrapeInterests(true);
-        profile.setScrapeAccomplishments(true);
-        profile.setScrapeSkills(true);
-        profile.setScrapeActivities(true);
-        return profile;
     }
 
     private void removeSources(LinkedinProfile profile) {

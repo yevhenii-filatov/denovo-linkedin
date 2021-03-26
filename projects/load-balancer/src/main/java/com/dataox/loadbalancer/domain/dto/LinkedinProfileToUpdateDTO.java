@@ -1,5 +1,6 @@
 package com.dataox.loadbalancer.domain.dto;
 
+import com.dataox.linkedinscraper.dto.OptionalFieldsContainer;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
@@ -12,11 +13,5 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class LinkedinProfileToUpdateDTO {
     Long linkedinProfileId;
-    boolean scrapeLicenses;
-    boolean scrapeVolunteer;
-    boolean scrapeInterests;
-    boolean scrapeRecommendations;
-    boolean scrapeAccomplishments;
-    boolean scrapeSkills;
-    boolean scrapeActivities;
+    OptionalFieldsContainer optionalFieldsContainer;
 }
