@@ -4,8 +4,7 @@ import com.dataox.linkedinscraper.dto.sources.InterestsSource;
 import com.dataox.linkedinscraper.parser.LinkedinParser;
 import com.dataox.linkedinscraper.parser.dto.LinkedinInterest;
 import com.dataox.linkedinscraper.parser.dto.types.LinkedinInterestType;
-import com.dataox.linkedinscraper.parser.service.mappers.LinkedinInterestMapper;
-import com.dataox.linkedinscraper.parser.utils.sources.InterestsSource;v
+import com.dataox.linkedinscraper.parser.service.mappers.LinkedinInterestTypeMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.util.DigestUtils;
 
@@ -24,7 +23,7 @@ class LinkedinInterestParserTest {
     @Test
     void shouldParse() throws IOException {
         InterestsSource source = new InterestsSource("Companies", loadResource(COMPANIES_SOURCE));
-        LinkedinParser<List<LinkedinInterest>, List<InterestsSource> > parser = new LinkedinInterestParser(new LinkedinInterestMapper());
+        LinkedinParser<List<LinkedinInterest>, List<InterestsSource> > parser = new LinkedinInterestParser(new LinkedinInterestTypeMapper());
 
         List<LinkedinInterest> interests = parser.parse(Collections.singletonList(source));
 

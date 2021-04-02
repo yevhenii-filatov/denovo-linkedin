@@ -9,12 +9,12 @@ import java.util.Arrays;
 
 @Service
 @Slf4j
-public class LinkedinAccomplishmentMapper {
+public class LinkedinAccomplishmentTypeMapper {
 
     public LinkedinAccomplishmentType map(String type) {
         log.debug("Type to map: {}", type);
         return Arrays.stream(LinkedinAccomplishmentType.values())
                 .filter(linkedinType-> linkedinType.getType().equals(type))
-                .findFirst().orElseThrow(() -> new LinkedinTypeMappingException("failed to map: " + type));
+                .findFirst().orElseThrow(() -> new LinkedinTypeMappingException("failed map LinkedinAccomplishmentType: " + type));
     }
 }

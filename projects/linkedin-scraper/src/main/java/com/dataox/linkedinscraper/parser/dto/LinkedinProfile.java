@@ -31,7 +31,7 @@ public class LinkedinProfile {
     private LinkedinBasicProfileInfo linkedinBasicProfileInfo;
 
     @Valid
-    private List<@Valid LinkedinExperience> linkedinExperiences = new ArrayList<>();
+    private List<LinkedinExperience> linkedinExperiences = new ArrayList<>();
 
     @Valid
     private List<LinkedinEducation> linkedinEducations = new ArrayList<>();
