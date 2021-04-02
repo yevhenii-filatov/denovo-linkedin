@@ -2,8 +2,8 @@ package com.dataox.linkedinscraper.parser.parsers;
 
 import com.dataox.linkedinscraper.parser.LinkedinParser;
 import com.dataox.linkedinscraper.parser.dto.LinkedinExperience;
-import com.dataox.linkedinscraper.parser.service.mappers.LinkedinJobMapper;
-import com.dataox.linkedinscraper.parser.utils.TimeConverter;
+import com.dataox.linkedinscraper.parser.service.mappers.LinkedinJobTypeMapper;
+import com.dataox.linkedinscraper.parser.service.TimeConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.nodes.Element;
@@ -28,7 +28,7 @@ import static org.apache.commons.lang3.StringUtils.*;
 public class LinkedinExperienceParser implements LinkedinParser<List<LinkedinExperience>, String> {
 
     private final TimeConverter timeConverter;
-    private final LinkedinJobMapper mapper;
+    private final LinkedinJobTypeMapper mapper;
 
     @Override
     public List<LinkedinExperience> parse(String source) {
@@ -81,11 +81,8 @@ public class LinkedinExperienceParser implements LinkedinParser<List<LinkedinExp
 
         experience.setUpdatedAt(time);
         experience.setItemSource(experienceElement.html());
-
         String jobType = parseJobType(experienceElement);
-
         setJobTypeIfPresent(experience, jobType);
-
         experience.setCompanyName(parseCompanyName(experienceElement));
         experience.setCompanyProfileUrl(parseCompanyProfileUrl(experienceElement));
         experience.setPosition(parsePosition(experienceElement));

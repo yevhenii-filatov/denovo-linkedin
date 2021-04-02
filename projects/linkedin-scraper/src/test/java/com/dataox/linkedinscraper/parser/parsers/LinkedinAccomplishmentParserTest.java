@@ -3,7 +3,7 @@ package com.dataox.linkedinscraper.parser.parsers;
 import com.dataox.linkedinscraper.parser.LinkedinParser;
 import com.dataox.linkedinscraper.parser.dto.LinkedinAccomplishment;
 import com.dataox.linkedinscraper.parser.dto.types.LinkedinAccomplishmentType;
-import com.dataox.linkedinscraper.parser.service.mappers.LinkedinAccomplishmentMapper;
+import com.dataox.linkedinscraper.parser.service.mappers.LinkedinAccomplishmentTypeMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.util.DigestUtils;
@@ -24,7 +24,7 @@ class LinkedinAccomplishmentParserTest {
 
     @BeforeEach
     void setUp() {
-        parser = new LinkedinAccomplishmentParser(new LinkedinAccomplishmentMapper());
+        parser = new LinkedinAccomplishmentParser(new LinkedinAccomplishmentTypeMapper());
     }
 
     @Test
