@@ -15,4 +15,6 @@ public interface SearchResultRepository extends JpaRepository<SearchResult, Long
     List<SearchResult> findAllByUrlIn(List<String> profileUrls);
 
     SearchResult findByUrl(String profileUrl);
+
+    List<SearchResult> findAllByIdIn(List<Long> searchResultIdsIn);
 }

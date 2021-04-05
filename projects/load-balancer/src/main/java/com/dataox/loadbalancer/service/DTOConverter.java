@@ -2,10 +2,12 @@ package com.dataox.loadbalancer.service;
 
 import com.dataox.linkedinscraper.dto.LinkedinProfileToScrapeDTO;
 import com.dataox.linkedinscraper.dto.OptionalFieldsContainer;
-import com.dataox.loadbalancer.domain.dto.LinkedinProfileToUpdateDTO;
+import com.dataox.loadbalancer.domain.entities.InitialData;
 import com.dataox.loadbalancer.domain.entities.LinkedinNotReusableProfile;
 import com.dataox.loadbalancer.domain.entities.LinkedinProfile;
 import com.dataox.loadbalancer.domain.entities.SearchResult;
+import com.dataox.loadbalancer.dto.InitialDataDTO;
+import com.dataox.loadbalancer.dto.LinkedinProfileToUpdateDTO;
 import com.dataox.loadbalancer.exception.DTONotFoundException;
 import lombok.experimental.UtilityClass;
 
@@ -19,7 +21,7 @@ import java.util.List;
 @UtilityClass
 public class DTOConverter {
 
-    public static LinkedinProfileToScrapeDTO profileToInitialScrapeDTO(SearchResult searchResult) {
+    public static LinkedinProfileToScrapeDTO searchResultToInitialScrapeDTO(SearchResult searchResult) {
         LinkedinProfileToScrapeDTO profileToScrapeDTO = new LinkedinProfileToScrapeDTO();
         profileToScrapeDTO.setProfileURL(searchResult.getUrl());
         OptionalFieldsContainer optionalFieldsContainer = new OptionalFieldsContainer();
@@ -60,7 +62,7 @@ public class DTOConverter {
                     .filter(linkedinProfileToUpdateDTO -> linkedinProfileToUpdateDTO.getLinkedinProfileId().equals(profileId))
                     .findFirst()
                     .orElseThrow(() -> new DTONotFoundException("profileToUpdateDTO with required profile id was not found"));
-            LinkedinProfileToScrapeDTO linkedinProfileToScrapeDTO = DTOConverter.toScrapeDTO(profileToUpdateDTO);
+            LinkedinProfileToScrapeDTO linkedinProfileToScrapeDTO = toScrapeDTO(profileToUpdateDTO);
             linkedinProfileToScrapeDTO.setProfileURL(searchResult.getUrl());
             linkedinProfileToScrapeDTO.setSearchResultId(searchResult.getId());
             profileToScrapeDTOS.add(linkedinProfileToScrapeDTO);
@@ -72,5 +74,31 @@ public class DTOConverter {
         LinkedinProfileToScrapeDTO profileToScrapeDTO = new LinkedinProfileToScrapeDTO();
         profileToScrapeDTO.setOptionalFieldsContainer(profileToUpdateDTO.getOptionalFieldsContainer());
         return profileToScrapeDTO;
+    }
+
+    public static List<InitialData> toInitialData(List<InitialDataDTO> initialDataDTOS) {
+        List<InitialData> initialDataList = new ArrayList<>();
+        for (InitialDataDTO initialDataDTO : initialDataDTOS) {
+            InitialData initialData = new InitialData();
+            initialData.setDenovoId(initialDataDTO.getDenovoId());
+            initialData.setFirstName(initialDataDTO.getFirstName());
+            initialData.setLastName(initialDataDTO.getLastName());
+            initialData.setFirmName(initialDataDTO.getFirmName());
+            initialData.setSearched(false);
+            initialDataList.add(initialData);
+        }
+        return initialDataList;
+    }
+
+    public static List<LinkedinProfileToScrapeDTO> toMinimalScrapeDTOS(List<SearchResult> searchResults) {
+        List<LinkedinProfileToScrapeDTO> profilesToScrape = new ArrayList<>();
+        for (SearchResult searchResult : searchResults) {
+            LinkedinProfileToScrapeDTO profileToScrapeDTO = new LinkedinProfileToScrapeDTO();
+            profileToScrapeDTO.setProfileURL(searchResult.getUrl());
+            profileToScrapeDTO.setSearchResultId(searchResult.getId());
+            profileToScrapeDTO.setOptionalFieldsContainer(new OptionalFieldsContainer());
+            profilesToScrape.add(profileToScrapeDTO);
+        }
+        return profilesToScrape;
     }
 }

@@ -1,17 +1,20 @@
-package com.dataox.loadbalancer.domain.dto;
+package com.dataox.loadbalancer.dto;
 
 import com.dataox.linkedinscraper.dto.OptionalFieldsContainer;
-import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.experimental.FieldDefaults;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * @author Dmitriy Lysko
  * @since 25/03/2021
  */
 @Data
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@AllArgsConstructor
 public class LinkedinProfileToUpdateDTO {
+    @NotNull
     Long linkedinProfileId;
+    @NotNull
     OptionalFieldsContainer optionalFieldsContainer;
 }

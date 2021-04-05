@@ -5,6 +5,7 @@ import com.dataox.okhttputils.SimpleOkHttpTemplate;
 import okhttp3.OkHttpClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.concurrent.TimeUnit;
 
@@ -13,7 +14,7 @@ import java.util.concurrent.TimeUnit;
  * @since 28/01/2021
  */
 @Configuration
-public class OkHttpConfiguration {
+public class HttpRequestsConfiguration {
 
     @Bean
     public OkHttpTemplate okHttpTemplate(OkHttpClient okHttpClient) {
@@ -30,5 +31,10 @@ public class OkHttpConfiguration {
                 .followSslRedirects(true)
                 .followRedirects(true)
                 .build();
+    }
+
+    @Bean
+    RestTemplate restTemplate() {
+        return new RestTemplate();
     }
 }

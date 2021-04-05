@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -18,6 +19,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ScrapingResultsDTO {
+    @NotNull
     List<LinkedinProfile> successfulProfiles;
+    @NotNull
     List<NotScrapedLinkedinProfile> notScrapedLinkedinProfiles;
 }

@@ -29,6 +29,7 @@ app:
     enabled: false
     search:
       not.searched.data: "0 * * * * *"
-
+  service:
+    load-balancer-url: []
 server:
-  port: 0
+  port: 8085

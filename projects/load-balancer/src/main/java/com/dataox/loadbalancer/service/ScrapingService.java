@@ -4,7 +4,6 @@ import com.dataox.linkedinscraper.dto.LinkedinProfileToScrapeDTO;
 import com.dataox.linkedinscraper.dto.NotScrapedLinkedinProfile;
 import com.dataox.linkedinscraper.dto.ScrapingResultsDTO;
 import com.dataox.loadbalancer.configuration.property.ScrapingProperties;
-import com.dataox.loadbalancer.domain.dto.LinkedinProfileToUpdateDTO;
 import com.dataox.loadbalancer.domain.entities.InitialData;
 import com.dataox.loadbalancer.domain.entities.LinkedinNotReusableProfile;
 import com.dataox.loadbalancer.domain.entities.LinkedinProfile;
@@ -13,6 +12,7 @@ import com.dataox.loadbalancer.domain.repositories.InitialDataRepository;
 import com.dataox.loadbalancer.domain.repositories.LinkedinNotReusableProfileRepository;
 import com.dataox.loadbalancer.domain.repositories.LinkedinProfileRepository;
 import com.dataox.loadbalancer.domain.repositories.SearchResultRepository;
+import com.dataox.loadbalancer.dto.LinkedinProfileToUpdateDTO;
 import com.dataox.loadbalancer.exception.DataNotFoundException;
 import com.dataox.loadbalancer.exception.RecordNotFoundException;
 import lombok.AccessLevel;
@@ -26,6 +26,8 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static java.util.Objects.isNull;
 
 /**
  * @author Dmitriy Lysko
@@ -45,6 +47,7 @@ public class ScrapingService {
     RabbitTemplate rabbitTemplate;
     DataLoaderService dataLoaderService;
     ScrapingDataValidationService dataValidationService;
+    GoogleSearchService googleSearchService;
 
     public void startInitialScraping(List<Long> denovoIds) {
         List<InitialData> initialData = initialDataRepository.findAllByDenovoIdIn(denovoIds);
@@ -60,16 +63,23 @@ public class ScrapingService {
         if (!searchedAndFoundInitialData.isEmpty())
             startScraping(searchedAndFoundInitialData);
         if (!notSearchedInitialData.isEmpty())
-            triggerGoogleSearch(notSearchedInitialData);
+            googleSearchService.triggerGoogleSearch(notSearchedInitialData);
+    }
+
+    public void startMinimalScraping(List<Long> searchResultIds) {
+        List<SearchResult> searchResults = searchResultRepository.findAllByIdIn(searchResultIds);
+        List<LinkedinProfileToScrapeDTO> profileToScrapeDTOS = DTOConverter.toMinimalScrapeDTOS(searchResults);
+        List<List<LinkedinProfileToScrapeDTO>> splittedProfiles = ListUtils.partition(profileToScrapeDTOS, scrapingProperties.getBatchSize());
+        sendToQueue(splittedProfiles);
     }
 
     public void updateProfiles(List<LinkedinProfileToUpdateDTO> profileToUpdateDTOS) {
         List<Long> profileIds = profileToUpdateDTOS.stream()
                 .map(LinkedinProfileToUpdateDTO::getLinkedinProfileId)
                 .collect(Collectors.toList());
-        List<LinkedinProfile> toUpdateProfiles = linkedinProfileRepository.findAllById(profileIds);
-        dataValidationService.validateUpdateProfiles(toUpdateProfiles, profileIds);
-        List<LinkedinProfileToScrapeDTO> profileToScrapeDTOS = DTOConverter.convertToProfileToScrapeDTOS(profileToUpdateDTOS, toUpdateProfiles);
+        List<LinkedinProfile> profilesToUpdate = linkedinProfileRepository.findAllById(profileIds);
+        dataValidationService.validateUpdateProfiles(profilesToUpdate, profileIds);
+        List<LinkedinProfileToScrapeDTO> profileToScrapeDTOS = DTOConverter.convertToProfileToScrapeDTOS(profileToUpdateDTOS, profilesToUpdate);
         List<List<LinkedinProfileToScrapeDTO>> splittedProfiles = ListUtils.partition(profileToScrapeDTOS, scrapingProperties.getBatchSize());
         sendToQueue(splittedProfiles);
     }
@@ -88,9 +98,32 @@ public class ScrapingService {
 
     public void processScrapingResults(ScrapingResultsDTO scrapingResultsDTO) {
         List<LinkedinProfile> successfulProfiles = scrapingResultsDTO.getSuccessfulProfiles();
+        List<Long> searchResultsIds = resolveMinimalScrapedSearchResultsIds(successfulProfiles);
         dataLoaderService.saveLinkedinProfiles(successfulProfiles);
         processReusableNotScrapedProfiles(scrapingResultsDTO);
         processNotReusableProfiles(scrapingResultsDTO);
+        List<SearchResult> searchResults = searchResultRepository.findAllByIdIn(searchResultsIds);
+        List<Long> minimalScrapedLinkedinProfiles = searchResults.stream()
+                .map(SearchResult::getLinkedinProfile)
+                .map(LinkedinProfile::getId)
+                .collect(Collectors.toList());
+        triggerChooseCorrectResultEndpoint(minimalScrapedLinkedinProfiles);
+    }
+
+    private void triggerChooseCorrectResultEndpoint(List<Long> minimalScrapedLinkedinProfiles) {
+        log.info("Triggering choose correct result endpoint with linkedin profiles ids: {}", minimalScrapedLinkedinProfiles);
+    }
+
+    private List<Long> resolveMinimalScrapedSearchResultsIds(List<LinkedinProfile> successfulProfiles) {
+        List<Long> searchResultIds = successfulProfiles.stream()
+                .map(LinkedinProfile::getSearchResult)
+                .map(SearchResult::getId)
+                .collect(Collectors.toList());
+        List<SearchResult> searchResults = searchResultRepository.findAllByIdIn(searchResultIds);
+        return searchResults.stream()
+                .filter(searchResult -> isNull(searchResult.getLinkedinProfile()))
+                .map(SearchResult::getId)
+                .collect(Collectors.toList());
     }
 
     private void processNotReusableProfiles(ScrapingResultsDTO scrapingResultsDTO) {
@@ -133,7 +166,7 @@ public class ScrapingService {
         List<List<SearchResult>> resultBatches = ListUtils.partition(searchResults, scrapingProperties.getBatchSize());
         List<List<LinkedinProfileToScrapeDTO>> profileToScrapeBatchesLists = resultBatches.stream()
                 .map(searchResult -> searchResult.stream()
-                        .map(DTOConverter::profileToInitialScrapeDTO)
+                        .map(DTOConverter::searchResultToInitialScrapeDTO)
                         .collect(Collectors.toList()))
                 .collect(Collectors.toList());
         sendToQueue(profileToScrapeBatchesLists);
@@ -147,10 +180,4 @@ public class ScrapingService {
         log.info("Sent {} batches to queue with batch size: {}", profileToScrapeBatchesLists.size(), scrapingProperties.getBatchSize());
     }
 
-    private void triggerGoogleSearch(List<InitialData> notSearchedInitialData) {
-        List<Long> denovoIds = notSearchedInitialData.stream()
-                .map(InitialData::getDenovoId)
-                .collect(Collectors.toList());
-        log.info("Triggered google search for {} denovo ids", denovoIds);
-    }
 }
