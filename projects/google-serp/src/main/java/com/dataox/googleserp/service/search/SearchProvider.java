@@ -22,5 +22,5 @@ public interface SearchProvider<T> {
 
     String prepareQueryUrl(SearchQuery query);
 
-    Collection<SearchResult> search(SearchQuery query, InitialData initialData);
+    Collection<SearchResult> search(InitialData initialData, int searchStep);
 }

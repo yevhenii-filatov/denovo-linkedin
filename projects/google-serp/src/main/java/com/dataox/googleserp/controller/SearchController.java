@@ -1,20 +1,26 @@
 package com.dataox.googleserp.controller;
 
-import com.dataox.googleserp.exceptions.SearchException;
+import com.dataox.googleserp.model.dto.InitialDataDTO;
+import com.dataox.googleserp.model.entity.InitialData;
+import com.dataox.googleserp.service.InitialDataProcessor;
 import com.dataox.googleserp.service.run.SearchStarter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Dmitriy Lysko
  * @since 25/01/2021
  */
-
+@Validated
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -22,22 +28,14 @@ import java.util.List;
 public class SearchController {
 
     private final SearchStarter searchStarter;
+    private final InitialDataProcessor initialDataProcessor;
 
-    @PostMapping("/start")
-    public ResponseEntity<String> startSearch(@RequestBody List<Long> denovoIds) {
-        searchStarter.startSearchWithDenovoIds(denovoIds);
-        return ResponseEntity.ok("SUCCESSFULLY STARTED");
-    }
-
-    @GetMapping("/start")
-    public ResponseEntity<String> startSearch() {
-        searchStarter.startSearchForNotSearchedInitialData();
-        return ResponseEntity.ok("SUCCESSFULLY STARTED");
-    }
-
-    @ExceptionHandler(SearchException.class)
-    public ResponseEntity<String> handleStartSearchException(SearchException e) {
-        return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(e.getMessage());
+    @PostMapping
+    public ResponseEntity<List<InitialData>> startSearch(@RequestBody @Valid List<InitialDataDTO> initialDataDTOS) {
+        Map<InitialData, Integer> dataAndStep = initialDataProcessor.processInitialData(initialDataDTOS);
+        List<InitialData> initialData = new ArrayList<>(dataAndStep.keySet());
+        searchStarter.startSearch(dataAndStep);
+        return ResponseEntity.ok(initialData);
     }
 
     @ExceptionHandler(Exception.class)

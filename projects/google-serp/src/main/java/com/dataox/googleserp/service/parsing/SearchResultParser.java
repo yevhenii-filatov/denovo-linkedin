@@ -12,7 +12,7 @@ import java.util.Collection;
 
 @Service
 public interface SearchResultParser<T> {
-    Collection<SearchResult> parse(T container, String queryUrl);
+    Collection<SearchResult> parse(T container, String queryUrl, int searchStep);
 
     SearchResult parseOne(T element);
 

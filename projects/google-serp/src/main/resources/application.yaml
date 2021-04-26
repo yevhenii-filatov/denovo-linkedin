@@ -25,11 +25,7 @@ app:
   proxy:
     operia:
       key: [ OPERIA_KEY ]
-  scheduling:
-    enabled: false
-    search:
-      not.searched.data: "0 * * * * *"
   service:
-    load-balancer-url: []
+    choose-best-endpoint-url: http://localhost:8084/choose
 server:
   port: 8085

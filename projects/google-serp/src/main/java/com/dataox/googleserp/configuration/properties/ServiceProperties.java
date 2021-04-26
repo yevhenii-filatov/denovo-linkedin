@@ -6,11 +6,11 @@ import org.springframework.context.annotation.Configuration;
 
 /**
  * @author Dmitriy Lysko
- * @since 05/04/2021
+ * @since 20/04/2021
  */
 @Data
 @Configuration
 @ConfigurationProperties(prefix = "app.service")
 public class ServiceProperties {
-    private String loadBalancerUrl;
+    private String chooseBestEndpointUrl;
 }
