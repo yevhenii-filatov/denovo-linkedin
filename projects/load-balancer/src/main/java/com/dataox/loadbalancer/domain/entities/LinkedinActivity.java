@@ -2,6 +2,7 @@ package com.dataox.loadbalancer.domain.entities;
 
 import com.dataox.loadbalancer.domain.types.LinkedinActivityType;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -32,6 +33,7 @@ public class LinkedinActivity {
     @JoinColumn(name = "linkedin_profile_id",referencedColumnName = "id")
     private LinkedinProfile linkedinProfile;
 
+    @EqualsAndHashCode.Exclude
     @OneToOne(mappedBy = "linkedinActivity", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private LinkedinPost linkedinPost;
 }

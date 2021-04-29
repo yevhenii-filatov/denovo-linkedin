@@ -68,4 +68,15 @@ public class LinkedinProfile {
 
     @OneToMany(mappedBy = "linkedinProfile", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<LinkedinAccomplishment> linkedinAccomplishments = new ArrayList<>();
+
+    @PrePersist
+    private void setCreationDate() {
+        this.createdAt = Instant.now();
+        this.updatedAt = Instant.now();
+    }
+
+    @PreUpdate
+    private void setUpdatedDate() {
+        this.updatedAt = Instant.now();
+    }
 }

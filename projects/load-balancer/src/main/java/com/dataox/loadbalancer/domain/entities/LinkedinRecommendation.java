@@ -24,6 +24,10 @@ public class LinkedinRecommendation {
     @Column(name = "updated_at")
     private Instant updatedAt;
 
+    @NotBlank
+    @Column(name = "item_source")
+    private String itemSource;
+
     @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "type")

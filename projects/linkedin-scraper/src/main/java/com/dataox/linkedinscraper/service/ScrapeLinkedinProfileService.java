@@ -10,18 +10,19 @@ import com.dataox.linkedinscraper.exceptions.linkedin.LinkedinParsingException;
 import com.dataox.linkedinscraper.exceptions.linkedin.LinkedinScrapingException;
 import com.dataox.linkedinscraper.parser.LinkedinProfileParser;
 import com.dataox.linkedinscraper.parser.dto.LinkedinProfile;
+import com.dataox.linkedinscraper.parser.dto.SearchResult;
 import com.dataox.linkedinscraper.scraping.scrapers.LinkedinProfileScraper;
 import com.dataox.linkedinscraper.scraping.service.login.LoginService;
 import com.dataox.linkedinscraper.service.error.detector.LinkedinError;
 import com.dataox.linkedinscraper.service.error.detector.LinkedinErrorDetector;
 import com.dataox.linkedinscraper.utils.NotificationUtils;
 import com.dataox.notificationservice.service.TelegramNotificationsServiceProvider;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.springframework.amqp.rabbit.listener.RabbitListenerEndpointRegistry;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
@@ -49,7 +50,8 @@ public class ScrapeLinkedinProfileService {
     private final LinkedinErrorDetector errorDetector;
     private final TelegramNotificationsServiceProvider notificationsService;
     private final ApplicationContext applicationContext;
-    private final RabbitListenerEndpointRegistry rabbitListenerEndpointRegistry;
+    @Getter
+    private boolean isWorking = true;
 
     public ScrapingResultsDTO scrape(List<LinkedinProfileToScrapeDTO> linkedinProfilesToScrape) {
         List<LinkedinProfile> successfullyScraped = new ArrayList<>();
@@ -66,7 +68,7 @@ public class ScrapeLinkedinProfileService {
             }
         } catch (LinkedinException e) {
             addTheRestOfProfilesToNotScrapedList(currentProfileToScrape, linkedinProfilesToScrape, notScraped);
-            rabbitListenerEndpointRegistry.stop();
+            this.isWorking = false;
             notificationsService.send(NotificationUtils.createScraperStoppedMessage(e, applicationContext.getId()));
         }
         return new ScrapingResultsDTO(successfullyScraped, notScraped);
@@ -77,7 +79,6 @@ public class ScrapeLinkedinProfileService {
                                                       List<NotScrapedLinkedinProfile> notScraped) {
         if (isNull(currentProfileToScrape)) {
             linkedinProfilesToScrape.stream()
-                    .map(LinkedinProfileToScrapeDTO::getProfileURL)
                     .map(ScrapeLinkedinProfileService::createReusableNotScrapedProfile)
                     .forEach(notScraped::add);
         } else {
@@ -86,42 +87,49 @@ public class ScrapeLinkedinProfileService {
                 return;
             IntStream.range(failedProfileIndex + 1, linkedinProfilesToScrape.size())
                     .mapToObj(linkedinProfilesToScrape::get)
-                    .map(LinkedinProfileToScrapeDTO::getProfileURL)
                     .map(ScrapeLinkedinProfileService::createReusableNotScrapedProfile)
                     .forEach(notScraped::add);
         }
     }
 
-    private static NotScrapedLinkedinProfile createReusableNotScrapedProfile(String profileURL) {
-        return new NotScrapedLinkedinProfile(profileURL, StringUtils.EMPTY, true);
+    private static NotScrapedLinkedinProfile createReusableNotScrapedProfile(LinkedinProfileToScrapeDTO profile) {
+        return new NotScrapedLinkedinProfile(profile, StringUtils.EMPTY, true);
     }
 
-    private LinkedinProfile scrapeSingleProfile(LinkedinProfileToScrapeDTO profile, WebDriver webDriver, List<NotScrapedLinkedinProfile> notScraped) {
+    private LinkedinProfile scrapeSingleProfile(LinkedinProfileToScrapeDTO profileToScrape, WebDriver webDriver, List<NotScrapedLinkedinProfile> notScraped) {
         try {
-            CollectedProfileSourcesDTO sources = scraper.scrape(webDriver, profile);
-            return parser.parse(sources);
+            CollectedProfileSourcesDTO sources = scraper.scrape(webDriver, profileToScrape);
+            LinkedinProfile parsedProfile = parser.parse(sources);
+            seatSearchResults(profileToScrape, parsedProfile);
+            return parsedProfile;
         } catch (LinkedinScrapingException e) {
             LinkedinError linkedinError = errorDetector.detect(webDriver);
             boolean isProfileReusable = isProfileReusable(linkedinError);
             boolean isScraperShouldStop = isScraperShouldStop(linkedinError);
             e.setLinkedinError(linkedinError);
-            handleParsingAndScrapingException(profile.getProfileURL(), e, isProfileReusable, notScraped);
+            handleParsingAndScrapingException(profileToScrape, e, isProfileReusable, notScraped);
             if (isScraperShouldStop)
                 throw e;
             return null;
         } catch (LinkedinParsingException e) {
-            handleParsingAndScrapingException(profile.getProfileURL(), e, false, notScraped);
+            handleParsingAndScrapingException(profileToScrape, e, false, notScraped);
             throw e;
         }
     }
 
-    private void handleParsingAndScrapingException(String profileUrl,
+    private void seatSearchResults(LinkedinProfileToScrapeDTO profile, LinkedinProfile linkedinProfile) {
+        SearchResult searchResult = new SearchResult();
+        searchResult.setId(profile.getSearchResultId());
+        linkedinProfile.setSearchResult(searchResult);
+    }
+
+    private void handleParsingAndScrapingException(LinkedinProfileToScrapeDTO profileToScrapeDTO,
                                                    LinkedinException e,
                                                    boolean isProfileReusable,
                                                    List<NotScrapedLinkedinProfile> notScraped) {
-        NotScrapedLinkedinProfile notScrapedProfile = new NotScrapedLinkedinProfile(profileUrl, e.asString(), isProfileReusable);
+        NotScrapedLinkedinProfile notScrapedProfile = new NotScrapedLinkedinProfile(profileToScrapeDTO, e.asString(), isProfileReusable);
         notScraped.add(notScrapedProfile);
-        notificationsService.send(NotificationUtils.createExceptionMessage(e, profileUrl, applicationContext.getId()));
+        notificationsService.send(NotificationUtils.createExceptionMessage(e, profileToScrapeDTO.getProfileURL(), applicationContext.getId()));
     }
 
     private boolean isScraperShouldStop(LinkedinError linkedinError) {

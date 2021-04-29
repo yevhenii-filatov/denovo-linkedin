@@ -32,7 +32,6 @@ public class LinkedinAccomplishment {
     @Column(name = "title")
     private String title;
 
-    @NotBlank
     @Column(name = "description")
     private String description;
 

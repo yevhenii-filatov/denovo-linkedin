@@ -1,6 +1,7 @@
 package com.dataox.loadbalancer.domain.entities;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -50,6 +51,7 @@ public class LinkedinBasicProfileInfo {
     private String about;
 
     @NotNull
+    @EqualsAndHashCode.Exclude
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "linkedin_profile_id",referencedColumnName = "id")
     private LinkedinProfile linkedinProfile;

@@ -37,7 +37,7 @@ public class LinkedinInterest {
     @Column(name = "type")
     private LinkedinInterestType linkedinInterestType;
 
-    @NotBlank
+//    @NotBlank change in database to not null
     @Column(name = "profile_url")
     private String profileUrl;
 

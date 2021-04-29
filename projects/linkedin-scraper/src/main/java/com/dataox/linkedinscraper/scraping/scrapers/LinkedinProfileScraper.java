@@ -2,6 +2,7 @@ package com.dataox.linkedinscraper.scraping.scrapers;
 
 import com.dataox.linkedinscraper.dto.CollectedProfileSourcesDTO;
 import com.dataox.linkedinscraper.dto.LinkedinProfileToScrapeDTO;
+import com.dataox.linkedinscraper.dto.OptionalFieldsContainer;
 import com.dataox.linkedinscraper.exceptions.linkedin.LinkedinScrapingException;
 import com.dataox.linkedinscraper.scraping.scrapers.subscrapers.*;
 import lombok.AccessLevel;
@@ -41,6 +42,7 @@ public class LinkedinProfileScraper {
 
     public CollectedProfileSourcesDTO scrape(WebDriver webDriver, LinkedinProfileToScrapeDTO profile) {
         try {
+            OptionalFieldsContainer optionalFieldsContainer = profile.getOptionalFieldsContainer();
             log.info("Scraping profile: {}", profile.getProfileURL());
             webDriver.get(profile.getProfileURL());
             CollectedProfileSourcesDTO profileSourcesDTO = new CollectedProfileSourcesDTO();
@@ -50,14 +52,14 @@ public class LinkedinProfileScraper {
             profileSourcesDTO.setAboutSectionSource(aboutSectionScraper.scrape(webDriver));
             profileSourcesDTO.setExperiencesSource(experienceScraper.scrape(webDriver));
             profileSourcesDTO.setEducationsSource(educationScraper.scrape(webDriver));
-            profileSourcesDTO.setLicenseSource(scrapeSafe(webDriver, licenseScraper, EMPTY, profile.isScrapeLicenses()));
-            profileSourcesDTO.setVolunteersSource(scrapeSafe(webDriver, volunteersScraper, EMPTY, profile.isScrapeVolunteer()));
-            profileSourcesDTO.setSkillsWithEndorsementsSources(scrapeSafe(webDriver, skillsWithEndorsementsScraper, emptyList(), profile.isScrapeSkills()));
-            profileSourcesDTO.setAllSkillsSource(scrapeSafe(webDriver, allSkillsScraper, EMPTY, profile.isScrapeSkills()));
-            profileSourcesDTO.setRecommendationsSources(scrapeSafe(webDriver, recommendationsScraper, emptyList(), profile.isScrapeRecommendations()));
-            profileSourcesDTO.setAccomplishmentsSources(scrapeSafe(webDriver, accomplishmentsScraper, emptyList(), profile.isScrapeAccomplishments()));
-            profileSourcesDTO.setInterestsSources(scrapeSafe(webDriver, interestsScraper, emptyList(), profile.isScrapeInterests()));
-            profileSourcesDTO.setActivitiesSources(scrapeSafe(webDriver, activitiesScraper, emptyList(), profile.isScrapeActivities()));
+            profileSourcesDTO.setLicenseSource(scrapeSafe(webDriver, licenseScraper, EMPTY, optionalFieldsContainer.isScrapeLicenses()));
+            profileSourcesDTO.setVolunteersSource(scrapeSafe(webDriver, volunteersScraper, EMPTY, optionalFieldsContainer.isScrapeVolunteer()));
+            profileSourcesDTO.setSkillsWithEndorsementsSources(scrapeSafe(webDriver, skillsWithEndorsementsScraper, emptyList(), optionalFieldsContainer.isScrapeSkills()));
+            profileSourcesDTO.setAllSkillsSource(scrapeSafe(webDriver, allSkillsScraper, EMPTY, optionalFieldsContainer.isScrapeSkills()));
+            profileSourcesDTO.setRecommendationsSources(scrapeSafe(webDriver, recommendationsScraper, emptyList(), optionalFieldsContainer.isScrapeRecommendations()));
+            profileSourcesDTO.setAccomplishmentsSources(scrapeSafe(webDriver, accomplishmentsScraper, emptyList(), optionalFieldsContainer.isScrapeAccomplishments()));
+            profileSourcesDTO.setInterestsSources(scrapeSafe(webDriver, interestsScraper, emptyList(), optionalFieldsContainer.isScrapeInterests()));
+            profileSourcesDTO.setActivitiesSources(scrapeSafe(webDriver, activitiesScraper, emptyList(), optionalFieldsContainer.isScrapeActivities()));
             return profileSourcesDTO;
         } catch (Exception e) {
             log.error("Scraper failed to scrape profile: {}", profile.getProfileURL());
