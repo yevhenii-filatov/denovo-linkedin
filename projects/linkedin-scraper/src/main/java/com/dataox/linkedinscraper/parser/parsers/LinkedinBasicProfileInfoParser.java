@@ -33,7 +33,6 @@ public class LinkedinBasicProfileInfoParser implements LinkedinParser<LinkedinBa
         basicProfileInfo.setFullName(parseFullName(headerElement));
         basicProfileInfo.setNumberOfConnections(parseNumberOfConnections(headerElement));
         basicProfileInfo.setLocation(parseLocation(headerElement));
-
         setAboutIfExists(source, basicProfileInfo);
 
         return basicProfileInfo;

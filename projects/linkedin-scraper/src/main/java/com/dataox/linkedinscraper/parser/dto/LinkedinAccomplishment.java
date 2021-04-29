@@ -12,6 +12,7 @@ import java.time.Instant;
 @NoArgsConstructor
 public class LinkedinAccomplishment {
 
+    @NotNull
     private Instant updatedAt;
 
     @NotBlank

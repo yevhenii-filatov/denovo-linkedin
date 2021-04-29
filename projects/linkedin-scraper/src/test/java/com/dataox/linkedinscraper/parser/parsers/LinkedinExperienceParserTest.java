@@ -2,8 +2,8 @@ package com.dataox.linkedinscraper.parser.parsers;
 
 import com.dataox.linkedinscraper.parser.LinkedinParser;
 import com.dataox.linkedinscraper.parser.dto.LinkedinExperience;
-import com.dataox.linkedinscraper.parser.service.mappers.LinkedinJobMapper;
-import com.dataox.linkedinscraper.parser.utils.TimeConverter;
+import com.dataox.linkedinscraper.parser.service.mappers.LinkedinJobTypeMapper;
+import com.dataox.linkedinscraper.parser.service.TimeConverter;
 import org.junit.jupiter.api.Test;
 import org.springframework.util.DigestUtils;
 
@@ -23,7 +23,7 @@ class LinkedinExperienceParserTest {
     void shouldParse() throws IOException {
         String source = loadResource(EXPERIENCE_SOURCE);
         TimeConverter timeConverter = new TimeConverter();
-        LinkedinParser<List<LinkedinExperience>, String> parser = new LinkedinExperienceParser(timeConverter, new LinkedinJobMapper());
+        LinkedinParser<List<LinkedinExperience>, String> parser = new LinkedinExperienceParser(timeConverter, new LinkedinJobTypeMapper());
 
         List<LinkedinExperience> experiences = parser.parse(source);
 
