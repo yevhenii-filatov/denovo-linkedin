@@ -1,5 +1,6 @@
 package com.dataox.loadbalancer.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -15,6 +16,7 @@ import java.util.List;
 @Entity
 @Table(name = "initial_data")
 @ToString(exclude = "searchResults")
+@JsonIgnoreProperties(value = {"searchMetadata", "searchResults"})
 public class InitialData {
     @Id
     @Column(name = "id")
@@ -32,12 +34,19 @@ public class InitialData {
     private String firstName;
 
     @NotNull
+    @Column(name = "middle_name")
+    private String middleName;
+
+    @NotNull
     @Column(name = "last_name")
     private String lastName;
 
     @NotNull
     @Column(name = "firm_name")
     private String firmName;
+
+    @Column(name = "linkedin_url", length = 1000)
+    private String linkedinUrl;
 
     @NotNull
     @Column(name = "searched")
