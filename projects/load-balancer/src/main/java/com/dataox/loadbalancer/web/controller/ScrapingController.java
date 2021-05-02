@@ -1,6 +1,7 @@
 package com.dataox.loadbalancer.web.controller;
 
 import com.dataox.loadbalancer.domain.dto.LinkedinProfileToUpdateDTO;
+import com.dataox.loadbalancer.domain.dto.ScrapingDTO;
 import com.dataox.loadbalancer.exception.DataNotFoundException;
 import com.dataox.loadbalancer.service.ScrapingService;
 import lombok.AccessLevel;
@@ -24,8 +25,8 @@ public class ScrapingController {
     ScrapingService scrapingService;
 
     @PostMapping("/initial")
-    public ResponseEntity<String> startInitialScraping(@RequestBody List<Long> denovoIds) {
-        scrapingService.startInitialScraping(denovoIds);
+    public ResponseEntity<String> startInitialScraping(@RequestBody List<ScrapingDTO> scrapingDTOS) {
+        scrapingService.startInitialScraping(scrapingDTOS);
         return ResponseEntity.ok("NICE");
     }
 

@@ -4,7 +4,9 @@ import com.dataox.linkedinscraper.dto.LinkedinProfileToScrapeDTO;
 import com.dataox.linkedinscraper.dto.NotScrapedLinkedinProfile;
 import com.dataox.linkedinscraper.dto.ScrapingResultsDTO;
 import com.dataox.loadbalancer.configuration.property.ScrapingProperties;
+import com.dataox.loadbalancer.domain.dto.InitialDataSearchPosition;
 import com.dataox.loadbalancer.domain.dto.LinkedinProfileToUpdateDTO;
+import com.dataox.loadbalancer.domain.dto.ScrapingDTO;
 import com.dataox.loadbalancer.domain.entities.InitialData;
 import com.dataox.loadbalancer.domain.entities.LinkedinNotReusableProfile;
 import com.dataox.loadbalancer.domain.entities.LinkedinProfile;
@@ -46,21 +48,39 @@ public class ScrapingService {
     DataLoaderService dataLoaderService;
     ScrapingDataValidationService dataValidationService;
 
-    public void startInitialScraping(List<Long> denovoIds) {
+    public void startInitialScraping(List<ScrapingDTO> scrapingDTOS) {
+        List<Long> denovoIds = getDenovoIds(scrapingDTOS);
+        List<InitialDataSearchPosition> initialDataSearchPositions = getInitialDataSearchPositions(scrapingDTOS);
         List<InitialData> initialData = initialDataRepository.findAllByDenovoIdIn(denovoIds);
         dataValidationService.validateInitialData(denovoIds, initialData);
-        List<InitialData> searchedAndFoundInitialData = initialData.stream()
-                .filter(InitialData::getSearched)
-                .filter(data -> !data.getNoResults())
-                .filter(data -> data.getSearchResults().size() == 1)
+        List<InitialDataSearchPosition> searchedAndFoundInitialData = initialDataSearchPositions.stream()
+                .filter(data-> data.getInitialData().getSearched())
+                .filter(data -> !data.getInitialData().getNoResults())
+                .filter(data -> data.getInitialData().getSearchResults().size() == 1)
                 .collect(Collectors.toList());
-        List<InitialData> notSearchedInitialData = initialData.stream()
+        List<InitialData> notSearchedInitialData = initialDataSearchPositions.stream()
+                .map(InitialDataSearchPosition::getInitialData)
                 .filter(data -> !data.getSearched())
                 .collect(Collectors.toList());
         if (!searchedAndFoundInitialData.isEmpty())
             startScraping(searchedAndFoundInitialData);
         if (!notSearchedInitialData.isEmpty())
-            triggerGoogleSearch(notSearchedInitialData);
+            log.info("denovoIds: {} doesn't present in InitialData table",
+                    notSearchedInitialData.stream().map(InitialData::getDenovoId).collect(Collectors.toList()));
+    }
+
+    private List<InitialDataSearchPosition> getInitialDataSearchPositions(List<ScrapingDTO> scrapingDTOS) {
+        return scrapingDTOS.stream()
+                .map(dto -> {
+                    InitialData initialData = initialDataRepository.findById(dto.getDenovoId())
+                            .orElseThrow(() -> new IllegalArgumentException(dto.getDenovoId() + " doesn't exists"));
+                    return new InitialDataSearchPosition(initialData, dto.getSearchPosition());
+                })
+                .collect(Collectors.toList());
+    }
+
+    private List<Long> getDenovoIds(List<ScrapingDTO> scrapingDTOS) {
+        return scrapingDTOS.stream().map(ScrapingDTO::getDenovoId).collect(Collectors.toList());
     }
 
     public void updateProfiles(List<LinkedinProfileToUpdateDTO> profileToUpdateDTOS) {
@@ -126,9 +146,11 @@ public class ScrapingService {
             sendToQueue(splittedProfiles);
     }
 
-    private void startScraping(List<InitialData> initialData) {
-        List<SearchResult> searchResults = initialData.stream()
-                .flatMap(initData -> initData.getSearchResults().stream())
+    private void startScraping(List<InitialDataSearchPosition> initialDataSearchPositions) {
+        List<SearchResult> searchResults = initialDataSearchPositions.stream()
+                .flatMap(dataSearchPosition ->
+                        dataSearchPosition.getInitialData().getSearchResults().stream()
+                                .filter(searchResult -> searchResult.getSearchPosition() == dataSearchPosition.getSearchPosition()))
                 .collect(Collectors.toList());
         List<List<SearchResult>> resultBatches = ListUtils.partition(searchResults, scrapingProperties.getBatchSize());
         List<List<LinkedinProfileToScrapeDTO>> profileToScrapeBatchesLists = resultBatches.stream()
@@ -145,12 +167,5 @@ public class ScrapingService {
                 .collect(Collectors.toList());
         profileToScrapeBatchesLists.forEach(rabbitTemplate::convertAndSend);
         log.info("Sent {} batches to queue with batch size: {}", profileToScrapeBatchesLists.size(), scrapingProperties.getBatchSize());
-    }
-
-    private void triggerGoogleSearch(List<InitialData> notSearchedInitialData) {
-        List<Long> denovoIds = notSearchedInitialData.stream()
-                .map(InitialData::getDenovoId)
-                .collect(Collectors.toList());
-        log.info("Triggered google search for {} denovo ids", denovoIds);
     }
 }
