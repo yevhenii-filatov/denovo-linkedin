@@ -31,20 +31,14 @@
       "description": "Token for the Operia proxy service."
     },
     {
-      "name": "app.scheduling.search.not.searched.data",
-      "type": "java.lang.String",
-      "description": "Cron for starting search for not searched initial data."
-    },
-    {
-      "name": "app.scheduling.enabled",
-      "type": "java.lang.Boolean",
-      "description": "Enable scheduling search for not searched initial data.",
-      "defaultValue": false
-    },
-    {
       "name": "app.search.tasks-timeout",
       "type": "java.lang.Long",
       "description": "Time in minutes allotted for amount of tasks defined in 'concurrency-restriction' property to complete."
+    },
+    {
+      "name": "app.service.choose-best-endpoint-url",
+      "type": "java.lang.String",
+      "description": "Url of choose best endpoint."
     }
   ]
 }

@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
  * @author Dmitriy Lysko
  * @since 16/03/2021
  */
-@SpringBootApplication(scanBasePackages = "com.dataox")
+@SpringBootApplication(scanBasePackages = "com.dataox.loadbalancer")
 @EnableJpaRepositories(basePackages = "com.dataox.loadbalancer")
 public class LoadBalancerApplication {
     public static void main(String[] args) {

@@ -1,4 +1,4 @@
-package com.dataox.linkedinscraper.parser.utils;
+package com.dataox.linkedinscraper.parser.service;
 
 import com.dataox.linkedinscraper.parser.exceptions.TimeConvertingException;
 import org.springframework.stereotype.Service;
@@ -44,7 +44,7 @@ public class TimeConverter {
 
     }
 
-    private static LocalDate parseExactDate(String date) {
+    private  LocalDate parseExactDate(String date) {
         LocalDate localDate = null;
         if (isNotBlank(date)) {
             try {

@@ -4,7 +4,7 @@ import com.dataox.linkedinscraper.parser.LinkedinParser;
 import com.dataox.linkedinscraper.parser.dto.LinkedinActivity;
 import com.dataox.linkedinscraper.parser.dto.LinkedinComment;
 import com.dataox.linkedinscraper.parser.dto.LinkedinPost;
-import com.dataox.linkedinscraper.parser.service.mappers.LinkedinActivityMapper;
+import com.dataox.linkedinscraper.parser.service.mappers.LinkedinActivityTypeMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.nodes.Element;
@@ -26,7 +26,7 @@ import static java.util.Objects.nonNull;
 public class LinkedinActivityParser implements LinkedinParser<List<LinkedinActivity>, List<String>> {
 
     private final LinkedinPostParser postParser;
-    private final LinkedinActivityMapper mapper;
+    private final LinkedinActivityTypeMapper mapper;
 
     @Override
     public List<LinkedinActivity> parse(List<String> source) {
@@ -59,6 +59,14 @@ public class LinkedinActivityParser implements LinkedinParser<List<LinkedinActiv
         return activity;
     }
 
+    private String parseType(Element activityElement) {
+        String activityType = text(activityElement.selectFirst("span.feed-shared-header__text-view button + span"));
+        return nonNull(activityType)
+                ? activityType
+                : "shared this";
+    }
+
+    // Delete duplicated posts and combine their comments. Currently not required
     private void makePostsUniqAndCombineComments(List<LinkedinActivity> activities) {
         for (int i = 0; i < activities.size(); i++) {
             LinkedinPost post = activities.get(i).getLinkedinPost();
@@ -71,12 +79,5 @@ public class LinkedinActivityParser implements LinkedinParser<List<LinkedinActiv
                 }
             }
         }
-    }
-
-    private String parseType(Element activityElement) {
-        String activityType = text(activityElement.selectFirst("span.feed-shared-header__text-view button + span"));
-        return nonNull(activityType)
-                ? activityType
-                : "shared this";
     }
 }

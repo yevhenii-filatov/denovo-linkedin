@@ -24,7 +24,11 @@ app:
 logging:
   level:
     sql: info
+    web: info
   notifications:
     slack:
       slack-token: [ TOKEN ]
       notifications-channel: [ CHANNEL ]
+  search:
+    service-url: [ URL ]
+

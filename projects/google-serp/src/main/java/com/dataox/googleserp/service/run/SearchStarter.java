@@ -1,22 +1,16 @@
 package com.dataox.googleserp.service.run;
 
 import com.dataox.googleserp.configuration.properties.SearchProperties;
-import com.dataox.googleserp.exceptions.SearchException;
 import com.dataox.googleserp.model.entity.InitialData;
-import com.dataox.googleserp.model.entity.SearchResult;
 import com.dataox.googleserp.repository.InitialDataRepository;
-import com.dataox.googleserp.repository.SearchResultRepository;
-import com.dataox.googleserp.service.sending.SearchResultSender;
+import com.dataox.googleserp.service.ChooseBestApiTrigger;
 import com.dataox.notificationservice.service.NotificationsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.awaitility.Awaitility;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.*;
 import java.util.stream.Collectors;
 
@@ -28,61 +22,31 @@ import static com.dataox.googleserp.util.NotificationUtils.createSearchFailedMes
 @RequiredArgsConstructor
 public class SearchStarter {
 
-    private final SearchResultSender searchResultSender;
     private final ExecutorService searchExecutorService;
     private final InitialDataRepository initialDataRepository;
-    private final SearchResultRepository searchResultRepository;
+    private final ChooseBestApiTrigger chooseBestApiTrigger;
     private final SearchProperties searchProperties;
     private final NotificationsService notificationsService;
-    private static final String ALREADY_SEARCHED_ERROR_MESSAGE = "Can't start search with DenovoIds. Already searched";
-    private static final String NO_DATA_TO_SEARCH_ERROR_MESSAGE = "Not searched data is not present in database!";
 
-    public void startSearchWithDenovoIds(List<Long> denovoIds) {
+    public void startSearch(Map<InitialData, Integer> dataAndStep) {
+        List<Long> denovoIds = extractDenovoIds(dataAndStep);
         try {
-            List<InitialData> initialData = initialDataRepository.findAllByDenovoIdInAndSearchedFalse(denovoIds);
-            if (initialData.isEmpty()) {
-                log.error(ALREADY_SEARCHED_ERROR_MESSAGE + " {}", denovoIds);
-                throw new SearchException(ALREADY_SEARCHED_ERROR_MESSAGE);
-            }
             CompletableFuture.runAsync(() -> {
-                startSearchWithInitialData(initialData);
-                List<Long> searchResultsIds = getResultsIdsByInitialData(initialData);
-                searchResultSender.sendSearchResultIdsToLoadBalancer(searchResultsIds);
+                searchWithInitialData(dataAndStep);
+                chooseBestApiTrigger.triggerAPI(denovoIds);
             }).exceptionally(throwable -> {
                 notificationsService.sendInternal(createErrorMessage(throwable));
                 return null;
             });
-        } catch (SearchException e) {
-            throw e;
         } catch (Exception e) {
             notificationsService.sendInternal(createErrorMessage(e));
             throw e;
         }
     }
 
-    public void startSearchForNotSearchedInitialData() {
-        try {
-            List<InitialData> notSearchedInitialData = initialDataRepository.findAllBySearchedFalse();
-            if (notSearchedInitialData.isEmpty()) {
-                log.error(NO_DATA_TO_SEARCH_ERROR_MESSAGE);
-                throw new SearchException(NO_DATA_TO_SEARCH_ERROR_MESSAGE);
-            }
-            CompletableFuture.runAsync(() -> startSearchWithInitialData(notSearchedInitialData))
-                    .exceptionally(throwable -> {
-                        notificationsService.sendInternal(createErrorMessage(throwable));
-                        return null;
-                    });
-        } catch (SearchException e) {
-            throw e;
-        } catch (Exception e) {
-            notificationsService.sendInternal(createErrorMessage(e));
-            throw e;
-        }
-    }
-
-    private synchronized void startSearchWithInitialData(List<InitialData> initialData) {
-        List<Long> denovoIdsToSearch = extractDenovoIds(initialData);
-        List<SearchProfileWithGoogleTask> searchProfileWithGoogleTasks = createSearchProfileWithGoogleTasks(initialData);
+    private synchronized void searchWithInitialData(Map<InitialData, Integer> dataAndStep) {
+        List<Long> denovoIdsToSearch = extractDenovoIds(dataAndStep);
+        List<SearchProfileWithGoogleTask> searchProfileWithGoogleTasks = createSearchProfileWithGoogleTasks(dataAndStep);
 
         log.info("Starting search for denovoIds: {}", denovoIdsToSearch);
         List<? extends Future<?>> futureList = submitTasks(searchProfileWithGoogleTasks);
@@ -134,25 +98,15 @@ public class SearchStarter {
         return exceptions;
     }
 
-    private List<SearchProfileWithGoogleTask> createSearchProfileWithGoogleTasks(List<InitialData> initialData) {
-        return initialData.stream()
-                .map(SearchProfileWithGoogleTask::new)
+    private List<SearchProfileWithGoogleTask> createSearchProfileWithGoogleTasks(Map<InitialData, Integer> initialDataSearchStepMap) {
+        return initialDataSearchStepMap.entrySet().stream()
+                .map(dataAndStep -> new SearchProfileWithGoogleTask(dataAndStep.getKey(), dataAndStep.getValue()))
                 .collect(Collectors.toList());
     }
 
-    private List<Long> extractDenovoIds(List<InitialData> initialData) {
-        return initialData.stream()
+    private List<Long> extractDenovoIds(Map<InitialData, Integer> dataAndStep) {
+        return dataAndStep.keySet().stream()
                 .map(InitialData::getDenovoId)
-                .collect(Collectors.toList());
-    }
-
-    private List<Long> getResultsIdsByInitialData(List<InitialData> initialData) {
-        List<Long> initialDataIds = initialData.stream()
-                .map(InitialData::getId)
-                .collect(Collectors.toList());
-        List<SearchResult> searchResults = searchResultRepository.findAllByInitialDataRecordIdIn(initialDataIds);
-        return searchResults.stream()
-                .map(SearchResult::getId)
                 .collect(Collectors.toList());
     }
 }

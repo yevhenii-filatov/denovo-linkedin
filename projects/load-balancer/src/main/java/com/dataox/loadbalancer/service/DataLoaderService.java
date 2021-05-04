@@ -1,11 +1,14 @@
 package com.dataox.loadbalancer.service;
 
+import com.dataox.loadbalancer.domain.entities.InitialData;
 import com.dataox.loadbalancer.domain.entities.LinkedinNotReusableProfile;
 import com.dataox.loadbalancer.domain.entities.LinkedinProfile;
 import com.dataox.loadbalancer.domain.entities.SearchResult;
+import com.dataox.loadbalancer.domain.repositories.InitialDataRepository;
 import com.dataox.loadbalancer.domain.repositories.LinkedinNotReusableProfileRepository;
 import com.dataox.loadbalancer.domain.repositories.LinkedinProfileRepository;
 import com.dataox.loadbalancer.domain.repositories.SearchResultRepository;
+import com.dataox.loadbalancer.dto.InitialDataDTO;
 import com.dataox.loadbalancer.exception.RecordNotFoundException;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +31,7 @@ public class DataLoaderService {
     LinkedinProfileRepository linkedinProfileRepository;
     SearchResultRepository searchResultRepository;
     LinkedinNotReusableProfileRepository notReusableProfileRepository;
+    InitialDataRepository initialDataRepository;
 
     public void saveLinkedinProfiles(List<LinkedinProfile> linkedinProfiles) {
         for (LinkedinProfile scrapedProfile : linkedinProfiles) {
@@ -48,16 +52,23 @@ public class DataLoaderService {
         MapperService.reSetRequiredFields(profileToUpdate, scrapedProfile);
         MapperService.reSetLinkedinProfile(profileToUpdate);
         profileToUpdate.setUpdatedAt(Instant.now());
+        searchResult.setLinkedinProfile(profileToUpdate);
         linkedinProfileRepository.save(profileToUpdate);
     }
 
     private void initialSave(LinkedinProfile scrapedProfile, SearchResult searchResult) {
         scrapedProfile.setSearchResult(searchResult);
         MapperService.reSetLinkedinProfile(scrapedProfile);
+        searchResult.setLinkedinProfile(scrapedProfile);
         linkedinProfileRepository.save(scrapedProfile);
     }
 
     public void saveNotReusableProfiles(List<LinkedinNotReusableProfile> notReusableProfiles) {
         notReusableProfileRepository.saveAll(notReusableProfiles);
+    }
+
+    public List<InitialData> saveInitialData(List<InitialDataDTO> initialDataDTOS) {
+        List<InitialData> initialData = DTOConverter.toInitialData(initialDataDTOS);
+        return initialDataRepository.saveAll(initialData);
     }
 }

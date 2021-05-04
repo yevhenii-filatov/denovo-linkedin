@@ -61,4 +61,9 @@ public class InitialData {
 
     @OneToMany(mappedBy = "initialDataRecord", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<SearchResult> searchResults = new ArrayList<>();
+
+    @PreUpdate
+    void setUpdatedAd() {
+        this.updatedAt = Instant.now();
+    }
 }
