@@ -1,6 +1,7 @@
 package com.dataox.loadbalancer.web.controller;
 
-import com.dataox.loadbalancer.dto.LinkedinProfileToUpdateDTO;
+import com.dataox.loadbalancer.domain.dto.LinkedinProfileToUpdateDTO;
+import com.dataox.loadbalancer.domain.dto.ScrapingDTO;
 import com.dataox.loadbalancer.exception.DataNotFoundException;
 import com.dataox.loadbalancer.service.ScrapingService;
 import lombok.AccessLevel;
@@ -8,10 +9,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -26,6 +25,12 @@ import java.util.List;
 public class ScrapingController {
     ScrapingService scrapingService;
 
+    @PostMapping("/initial")
+    public ResponseEntity<String> startInitialScraping(@RequestBody List<ScrapingDTO> scrapingDTOS) {
+        scrapingService.startInitialScraping(scrapingDTOS);
+        return ResponseEntity.ok("NICE");
+    }
+  
     @PostMapping("/rescrape")
     public ResponseEntity<String> rescrapeFixedProfiles(@RequestBody List<Long> notReusableProfileIds) {
         scrapingService.rescrapeFixedProfiles(notReusableProfileIds);
