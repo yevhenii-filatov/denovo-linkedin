@@ -32,12 +32,6 @@ public class ServicesController {
         return ResponseEntity.ok("Fine");
     }
 
-    @PostMapping("/searched")
-    public ResponseEntity<String> receiveSearchedProfiles(@RequestBody List<Long> searchResultIds) {
-        scrapingService.startMinimalScraping(searchResultIds);
-        return ResponseEntity.ok("FINE");
-    }
-
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<String> handleException(Exception e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());

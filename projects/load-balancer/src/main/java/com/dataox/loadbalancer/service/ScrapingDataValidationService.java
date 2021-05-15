@@ -5,6 +5,7 @@ import com.dataox.loadbalancer.domain.entities.LinkedinProfile;
 import com.dataox.loadbalancer.exception.DataNotFoundException;
 import com.dataox.notificationservice.service.SlackNotificationsServiceProvider;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,6 +16,7 @@ import java.util.stream.Collectors;
  * @since 25/03/2021
  */
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class ScrapingDataValidationService {
     SlackNotificationsServiceProvider slackNotifications;
@@ -25,9 +27,14 @@ public class ScrapingDataValidationService {
         List<Long> notFoundDenovoIds = checkForNotFoundDenovoIds(denovoIds, initialData);
         List<Long> moreThanOneSearchResultDenovoIds = checkSearchResults(initialData);
         if (!notFoundDenovoIds.isEmpty())
-            slackNotifications.send(String.format("Denovo ids %s was not found in database", notFoundDenovoIds));
+        /**
+         * TODO: UNCOMMENT "slackNotifications.send" AND DELETE "log.error" WHEN SLACK NOTIFICATIONS ARE CONFIGURED
+         */
+//            slackNotifications.send(String.format("Denovo ids %s was not found in database", notFoundDenovoIds));
+            log.error("Denovo ids {} was not found in database", notFoundDenovoIds);
         if (!moreThanOneSearchResultDenovoIds.isEmpty())
-            slackNotifications.send(String.format("Initial data with given denovo ids %s has more than one search result", moreThanOneSearchResultDenovoIds));
+//            slackNotifications.send(String.format("Initial data with given denovo ids %s has more than one search result", moreThanOneSearchResultDenovoIds));
+            log.error("Initial data with given denovo ids {} has more than one search result", moreThanOneSearchResultDenovoIds);
     }
 
     private List<Long> checkSearchResults(List<InitialData> initialData) {

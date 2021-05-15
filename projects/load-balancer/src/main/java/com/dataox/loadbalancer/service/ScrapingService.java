@@ -5,7 +5,6 @@ import com.dataox.linkedinscraper.dto.NotScrapedLinkedinProfile;
 import com.dataox.linkedinscraper.dto.ScrapingResultsDTO;
 import com.dataox.loadbalancer.configuration.property.ScrapingProperties;
 import com.dataox.loadbalancer.domain.dto.InitialDataSearchPosition;
-import com.dataox.loadbalancer.domain.dto.LinkedinProfileToUpdateDTO;
 import com.dataox.loadbalancer.domain.dto.ScrapingDTO;
 import com.dataox.loadbalancer.domain.entities.InitialData;
 import com.dataox.loadbalancer.domain.entities.LinkedinNotReusableProfile;
@@ -76,7 +75,7 @@ public class ScrapingService {
     private List<InitialDataSearchPosition> getInitialDataSearchPositions(List<ScrapingDTO> scrapingDTOS) {
         return scrapingDTOS.stream()
                 .map(dto -> {
-                    InitialData initialData = initialDataRepository.findById(dto.getDenovoId())
+                    InitialData initialData = initialDataRepository.findByDenovoId(dto.getDenovoId())
                             .orElseThrow(() -> new IllegalArgumentException(dto.getDenovoId() + " doesn't exists"));
                     return new InitialDataSearchPosition(initialData, dto.getSearchPosition());
                 })

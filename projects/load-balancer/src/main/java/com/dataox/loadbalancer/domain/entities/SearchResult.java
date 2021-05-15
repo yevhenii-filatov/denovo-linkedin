@@ -53,6 +53,9 @@ public class SearchResult {
     @JoinColumn(name = "initial_data_record_id", nullable = false)
     private InitialData initialDataRecord;
 
+    @OneToOne(mappedBy = "searchResult")
+    private LinkedinProfile linkedinProfile;
+
     @PrePersist
     private void setCollectedAt() {
         this.collectedAt = Instant.now();
