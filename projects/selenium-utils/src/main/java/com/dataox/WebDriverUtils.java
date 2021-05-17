@@ -1,5 +1,6 @@
 package com.dataox;
 
+import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -15,8 +16,11 @@ import static com.dataox.WebDriverUtils.ScrollingDirection.*;
  * @author Yevhenii Filatov
  * @since 11/26/20
  */
-
+@Slf4j
 public final class WebDriverUtils {
+
+    private static Long lastScrollYInElementPosition;
+
     private WebDriverUtils() {
         throw new UnsupportedOperationException("utility class");
     }
@@ -145,7 +149,14 @@ public final class WebDriverUtils {
 
     public static Long getCurrentScrollYInElement(WebDriver webDriver, WebElement scrollingElement) {
         JavascriptExecutor js = (JavascriptExecutor) webDriver;
-        return (Long) js.executeScript("return arguments[0].scrollTop", scrollingElement);
+        Long lng = 0L;
+        try {
+            lng = (Long) js.executeScript("return arguments[0].scrollTop", scrollingElement);
+            lastScrollYInElementPosition = lng;
+        } catch (ClassCastException e) {
+            return lastScrollYInElementPosition;
+        }
+        return lng;
     }
 
     public static String getElementHtml(WebElement webElement) {

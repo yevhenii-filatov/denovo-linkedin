@@ -1,9 +1,9 @@
 package com.dataox.linkedinscraper.scraping.service.login;
 
 import com.dataox.captchasolver.CaptchaSolver;
+import com.dataox.linkedinscraper.exceptions.linkedin.LinkedinLoginException;
 import com.dataox.linkedinscraper.scraping.configuration.property.LinkedinProperties;
 import com.dataox.linkedinscraper.scraping.exceptions.ElementNotFoundException;
-import com.dataox.linkedinscraper.exceptions.linkedin.LinkedinLoginException;
 import com.dataox.linkedinscraper.service.error.detector.LinkedinError;
 import com.dataox.linkedinscraper.service.error.detector.LinkedinErrorDetector;
 import lombok.AccessLevel;
@@ -46,7 +46,7 @@ public class LoginService {
     public void performLogin(WebDriver webDriver) {
         try {
             webDriver.get(LINKEDIN_LOGIN_PAGE_URL);
-            log.info("Performing login to linkedin with user credentials: {} {}",
+            log.info("Performing login to linkedin with user credentials: Login:{} Password:{}",
                     linkedinProperties.getProfileLogin(),
                     linkedinProperties.getProfilePassword());
             WebDriverWait wait = new WebDriverWait(webDriver, 60);
