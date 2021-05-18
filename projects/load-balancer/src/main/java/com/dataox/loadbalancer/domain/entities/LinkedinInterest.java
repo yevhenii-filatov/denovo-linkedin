@@ -25,11 +25,11 @@ public class LinkedinInterest {
     private Instant updatedAt;
 
     @NotBlank
-    @Column(name = "item_source")
+    @Column(name = "item_source", columnDefinition = "TEXT")
     private String itemSource;
 
     @NotBlank
-    @Column(name = "name")
+    @Column(name = "name", columnDefinition = "TEXT")
     private String name;
 
     @NotNull
@@ -38,14 +38,14 @@ public class LinkedinInterest {
     private LinkedinInterestType linkedinInterestType;
 
 //    @NotBlank change in database to not null
-    @Column(name = "profile_url")
+@Column(name = "profile_url", columnDefinition = "TEXT")
     private String profileUrl;
 
-    @Column(name = "headline")
+    @Column(name = "headline", columnDefinition = "TEXT")
     private String headline;
 
     @NotBlank
-    @Column(name = "number_of_followers")
+    @Column(name = "number_of_followers", columnDefinition = "TEXT")
     private String numberOfFollowers;
 
     @NotNull

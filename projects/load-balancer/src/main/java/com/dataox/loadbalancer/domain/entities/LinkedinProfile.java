@@ -36,7 +36,7 @@ public class LinkedinProfile {
     private Instant updatedAt;
 
     @NotBlank
-    @Column(name = "profile_url")
+    @Column(name = "profile_url", columnDefinition = "TEXT")
     private String profileUrl;
 
     @OneToOne(mappedBy = "linkedinProfile", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)

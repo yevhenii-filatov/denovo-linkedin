@@ -17,11 +17,11 @@ public class SearchMetadata {
     private Long id;
 
     @NotNull
-    @Column(name = "search_page_source")
+    @Column(name = "search_page_source", columnDefinition = "TEXT")
     private String searchPageSource;
 
     @NotNull
-    @Column(name = "query_url")
+    @Column(name = "query_url", columnDefinition = "TEXT")
     private String queryUrl;
 
     @OneToOne(mappedBy = "searchMetadata")

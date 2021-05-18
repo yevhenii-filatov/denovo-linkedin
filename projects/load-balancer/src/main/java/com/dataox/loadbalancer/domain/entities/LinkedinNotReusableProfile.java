@@ -27,7 +27,7 @@ public class LinkedinNotReusableProfile {
     Long id;
 
     @NotNull
-    @Column(name = "error_description")
+    @Column(name = "error_description", columnDefinition = "TEXT")
     String errorDescription;
 
     @NotNull

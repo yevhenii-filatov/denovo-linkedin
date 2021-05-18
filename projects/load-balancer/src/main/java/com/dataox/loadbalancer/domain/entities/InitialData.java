@@ -30,19 +30,19 @@ public class InitialData {
     private Instant updatedAt;
 
     @NotNull
-    @Column(name = "first_name")
+    @Column(name = "first_name", columnDefinition = "TEXT")
     private String firstName;
 
     @NotNull
-    @Column(name = "middle_name")
+    @Column(name = "middle_name", columnDefinition = "TEXT")
     private String middleName;
 
     @NotNull
-    @Column(name = "last_name")
+    @Column(name = "last_name", columnDefinition = "TEXT")
     private String lastName;
 
     @NotNull
-    @Column(name = "firm_name")
+    @Column(name = "firm_name", columnDefinition = "TEXT")
     private String firmName;
 
     @Column(name = "linkedin_url", length = 1000)

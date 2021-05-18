@@ -25,14 +25,14 @@ public class LinkedinAccomplishment {
     private Instant updatedAt;
 
     @NotBlank
-    @Column(name = "item_source")
+    @Column(name = "item_source", columnDefinition = "TEXT")
     private String itemSource;
 
     @NotBlank
-    @Column(name = "title")
+    @Column(name = "title", columnDefinition = "TEXT")
     private String title;
 
-    @Column(name = "description")
+    @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
     @NotNull

@@ -24,22 +24,22 @@ public class LinkedinEndorsement {
     private Instant updatedAt;
 
     @NotBlank
-    @Column(name = "item_source")
+    @Column(name = "item_source", columnDefinition = "TEXT")
     private String itemSource;
 
     @NotBlank
-    @Column(name = "endorser_full_name")
+    @Column(name = "endorser_full_name", columnDefinition = "TEXT")
     private String endorserFullName;
 
-    @Column(name = "endorser_headline")
+    @Column(name = "endorser_headline", columnDefinition = "TEXT")
     private String endorserHeadline;
 
     @NotBlank
-    @Column(name = "endorser_connection_degree")
+    @Column(name = "endorser_connection_degree", columnDefinition = "TEXT")
     private String endorserConnectionDegree;
 
     @NotBlank
-    @Column(name = "endorser_profile_url")
+    @Column(name = "endorser_profile_url", columnDefinition = "TEXT")
     private String endorserProfileUrl;
 
     @NotNull

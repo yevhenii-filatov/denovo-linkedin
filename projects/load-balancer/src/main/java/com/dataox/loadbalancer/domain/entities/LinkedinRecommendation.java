@@ -25,7 +25,7 @@ public class LinkedinRecommendation {
     private Instant updatedAt;
 
     @NotBlank
-    @Column(name = "item_source")
+    @Column(name = "item_source", columnDefinition = "TEXT")
     private String itemSource;
 
     @NotNull
@@ -34,23 +34,23 @@ public class LinkedinRecommendation {
     private LinkedinRecommendationType linkedinRecommendationType;
 
     @NotBlank
-    @Column(name = "person_full_name")
+    @Column(name = "person_full_name", columnDefinition = "TEXT")
     private String personFullName;
 
     @NotBlank
-    @Column(name = "person_profile_url")
+    @Column(name = "person_profile_url", columnDefinition = "TEXT")
     private String personProfileUrl;
 
     @NotBlank
-    @Column(name = "person_headline")
+    @Column(name = "person_headline", columnDefinition = "TEXT")
     private String personHeadline;
 
     @NotBlank
-    @Column(name = "person_extra_info")
+    @Column(name = "person_extra_info", columnDefinition = "TEXT")
     private String personExtraInfo;
 
     @NotBlank
-    @Column(name = "description")
+    @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
     @NotNull

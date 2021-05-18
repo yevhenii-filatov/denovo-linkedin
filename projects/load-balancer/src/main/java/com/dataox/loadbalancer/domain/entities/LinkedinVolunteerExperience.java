@@ -24,36 +24,36 @@ public class LinkedinVolunteerExperience {
     private Instant updatedAt;
 
     @NotBlank
-    @Column(name = "item_source")
+    @Column(name = "item_source", columnDefinition = "TEXT")
     private String itemSource;
 
     @NotBlank
-    @Column(name = "company_name")
+    @Column(name = "company_name", columnDefinition = "TEXT")
     private String companyName;
 
-    @Column(name = "company_profile_url")
+    @Column(name = "company_profile_url", columnDefinition = "TEXT")
     private String companyProfileUrl;
 
     @NotBlank
-    @Column(name = "position")
+    @Column(name = "position", columnDefinition = "TEXT")
     private String position;
 
     @NotBlank
-    @Column(name = "date_started")
+    @Column(name = "date_started", columnDefinition = "TEXT")
     private String dateStarted;
 
     @NotBlank
-    @Column(name = "date_finished")
+    @Column(name = "date_finished", columnDefinition = "TEXT")
     private String dateFinished;
 
     @NotBlank
-    @Column(name = "total_duration")
+    @Column(name = "total_duration", columnDefinition = "TEXT")
     private String totalDuration;
 
-    @Column(name = "field_of_activity")
+    @Column(name = "field_of_activity", columnDefinition = "TEXT")
     private String fieldOfActivity;
 
-    @Column(name = "description")
+    @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
     @NotNull

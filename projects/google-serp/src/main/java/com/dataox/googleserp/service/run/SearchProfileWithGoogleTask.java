@@ -35,7 +35,7 @@ public class SearchProfileWithGoogleTask implements Runnable {
         results.forEach(searchResult -> searchResult.setInitialDataRecord(initialData));
         initialData.setNoResults(results.isEmpty());
         initialData.setSearched(true);
-//        initialData.getSearchResults().clear(); //uncomment when pinchun finish playing with results
+        initialData.getSearchResults().clear(); //uncomment when pinchun finish playing with results
         initialData.getSearchResults().addAll(results);
         initialData.setUpdatedAt(Instant.now());
         initialDataRepository.save(initialData);

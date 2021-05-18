@@ -26,18 +26,18 @@ public class LinkedinSkill {
     private Instant updatedAt;
 
     @NotBlank
-    @Column(name = "item_source")
+    @Column(name = "item_source", columnDefinition = "TEXT")
     private String itemSource;
 
     @NotBlank
-    @Column(name = "name")
+    @Column(name = "name", columnDefinition = "TEXT")
     private String name;
 
     @NotBlank
-    @Column(name = "category")
+    @Column(name = "category", columnDefinition = "TEXT")
     private String category;
 
-    @Column(name = "url")
+    @Column(name = "url", columnDefinition = "TEXT")
     private String url;
 
     @Column(name = "number_of_endorsements")

@@ -21,14 +21,14 @@ public class LinkedinPost {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "url")
+    @Column(name = "url", columnDefinition = "TEXT")
     private String url;
 
     @NotBlank
-    @Column(name = "item_source")
+    @Column(name = "item_source", columnDefinition = "TEXT")
     private String itemSource;
 
-    @Column(name = "relative_publication_date")
+    @Column(name = "relative_publication_date", columnDefinition = "TEXT")
     private String relativePublicationDate;
 
     @NotNull
@@ -39,21 +39,21 @@ public class LinkedinPost {
     private Instant absolutePublicationDate;
 
     @NotBlank
-    @Column(name = "author_name")
+    @Column(name = "author_name", columnDefinition = "TEXT")
     private String authorProfileName;
 
     @NotBlank
-    @Column(name = "author_profile_url")
+    @Column(name = "author_profile_url", columnDefinition = "TEXT")
     private String authorProfileUrl;
 
-    @Column(name = "author_connection_degree")
+    @Column(name = "author_connection_degree", columnDefinition = "TEXT")
     private String authorConnectionDegree;
 
     @NotBlank
-    @Column(name = "author_headline")
+    @Column(name = "author_headline", columnDefinition = "TEXT")
     private String authorHeadline;
 
-    @Column(name = "content")
+    @Column(name = "content", columnDefinition = "TEXT")
     private String content;
 
     @Column(name = "number_of_comments")

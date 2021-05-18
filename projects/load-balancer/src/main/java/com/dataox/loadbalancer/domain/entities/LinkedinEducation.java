@@ -24,35 +24,35 @@ public class LinkedinEducation {
     private Instant updatedAt;
 
     @NotBlank
-    @Column(name = "item_source")
+    @Column(name = "item_source", columnDefinition = "TEXT")
     private String itemSource;
 
     @NotBlank
-    @Column(name = "institution_name")
+    @Column(name = "institution_name", columnDefinition = "TEXT")
     private String institutionName;
 
-    @Column(name = "institution_profile_url")
+    @Column(name = "institution_profile_url", columnDefinition = "TEXT")
     private String institutionProfileUrl;
 
-    @Column(name = "degree")
+    @Column(name = "degree", columnDefinition = "TEXT")
     private String degree;
 
-    @Column(name = "field_of_study")
+    @Column(name = "field_of_study", columnDefinition = "TEXT")
     private String fieldOfStudy;
 
-    @Column(name = "grade")
+    @Column(name = "grade", columnDefinition = "TEXT")
     private String grade;
 
-    @Column(name = "started_year")
+    @Column(name = "started_year", columnDefinition = "TEXT")
     private String startedYear;
 
-    @Column(name = "finished_year")
+    @Column(name = "finished_year", columnDefinition = "TEXT")
     private String finishedYear;
 
-    @Column(name = "activities_and_societies")
+    @Column(name = "activities_and_societies", columnDefinition = "TEXT")
     private String activitiesAndSocieties;
 
-    @Column(name = "description")
+    @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
     @NotNull

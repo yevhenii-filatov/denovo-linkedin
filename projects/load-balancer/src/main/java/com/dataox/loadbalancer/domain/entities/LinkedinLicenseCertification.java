@@ -24,27 +24,27 @@ public class LinkedinLicenseCertification {
     private Instant updatedAt;
 
     @NotBlank
-    @Column(name = "item_source")
+    @Column(name = "item_source", columnDefinition = "TEXT")
     private String itemSource;
 
     @NotBlank
-    @Column(name = "name")
+    @Column(name = "name", columnDefinition = "TEXT")
     private String name;
 
     @NotBlank
-    @Column(name = "issuer")
+    @Column(name = "issuer", columnDefinition = "TEXT")
     private String issuer;
 
-    @Column(name = "issuer_profile_url")
+    @Column(name = "issuer_profile_url", columnDefinition = "TEXT")
     private String issuerProfileUrl;
 
-    @Column(name = "issued_date")
+    @Column(name = "issued_date", columnDefinition = "TEXT")
     private String issuedDate;
 
-    @Column(name = "expiration_date")
+    @Column(name = "expiration_date", columnDefinition = "TEXT")
     private String expirationDate;
 
-    @Column(name = "credential_id")
+    @Column(name = "credential_id", columnDefinition = "TEXT")
     private String credentialId;
 
     @NotNull

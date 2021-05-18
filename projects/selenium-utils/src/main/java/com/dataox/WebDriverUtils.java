@@ -132,7 +132,14 @@ public final class WebDriverUtils {
 
     public static Long getScrollY(WebDriver webDriver) {
         JavascriptExecutor js = (JavascriptExecutor) webDriver;
-        return (Long) js.executeScript("return scrollY");
+        Long lng = 0L;
+        try {
+            lng = (Long) js.executeScript("return scrollY");
+            lastScrollYInElementPosition = lng;
+        } catch (ClassCastException e) {
+            return lastScrollYInElementPosition;
+        }
+        return lng;
     }
 
     public static void scrollToTheBottomOfElement(WebDriver webDriver, WebElement scrollingElement, int scrollStop) {

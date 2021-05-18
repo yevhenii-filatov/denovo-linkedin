@@ -36,13 +36,13 @@ public class LinkedinExperience {
     @Max(20)
     private String dateStarted;
 
-    @Max(20)
+    @NotNull
     private LocalDate dateStartedTimestamp;
 
     @Max(20)
     private String dateFinished;
 
-    @Max(20)
+    @NotNull
     private LocalDate dateFinishedTimestamp;
 
     @Max(20)

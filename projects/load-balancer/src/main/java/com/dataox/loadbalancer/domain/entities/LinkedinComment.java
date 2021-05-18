@@ -19,19 +19,19 @@ public class LinkedinComment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "url")
+    @Column(name = "url", columnDefinition = "TEXT")
     private String url;
 
     @NotBlank
-    @Column(name = "item_source")
+    @Column(name = "item_source", columnDefinition = "TEXT")
     private String itemSource;
 
     @NotBlank
-    @Column(name = "content")
+    @Column(name = "content", columnDefinition = "TEXT")
     private String content;
 
     @NotBlank
-    @Column(name = "relative_publication_date")
+    @Column(name = "relative_publication_date", columnDefinition = "TEXT")
     private String relativePublicationDate;
 
     @NotNull

@@ -26,28 +26,28 @@ public class LinkedinBasicProfileInfo {
     private Instant updatedAt;
 
     @NotBlank
-    @Column(name = "header_section_source")
+    @Column(name = "header_section_source", columnDefinition = "TEXT")
     private String headerSectionSource;
 
-    @Column(name = "about_section_source")
+    @Column(name = "about_section_source", columnDefinition = "TEXT")
     private String aboutSectionSource;
 
     @NotBlank
-    @Column(name = "full_name")
+    @Column(name = "full_name", columnDefinition = "TEXT")
     private String fullName;
 
     @NotBlank
-    @Column(name = "number_of_connections")
+    @Column(name = "number_of_connections", columnDefinition = "TEXT")
     private String numberOfConnections;
 
     @NotEmpty
-    @Column(name = "location")
+    @Column(name = "location", columnDefinition = "TEXT")
     private String location;
 
-    @Column(name = "cached_image_url")
+    @Column(name = "cached_image_url", columnDefinition = "TEXT")
     private String cachedImageUrl;
 
-    @Column(name = "about")
+    @Column(name = "about", columnDefinition = "TEXT")
     private String about;
 
     @NotNull
