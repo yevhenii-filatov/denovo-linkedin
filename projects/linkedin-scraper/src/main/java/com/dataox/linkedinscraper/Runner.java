@@ -4,6 +4,7 @@ import com.dataox.linkedinscraper.dto.LinkedinProfileToScrapeDTO;
 import com.dataox.linkedinscraper.dto.ScrapingResultsDTO;
 import com.dataox.linkedinscraper.parser.dto.LinkedinProfile;
 import com.dataox.linkedinscraper.service.ScrapeLinkedinProfileService;
+import com.dataox.notificationservice.service.NotificationsService;
 import com.dataox.okhttputils.OkHttpTemplate;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -31,6 +32,7 @@ import static java.util.Objects.isNull;
 @RequiredArgsConstructor
 public class Runner implements ApplicationRunner {
     private final ScrapeLinkedinProfileService scrapeLinkedinProfileService;
+    private final NotificationsService notificationsService;
     private final RabbitTemplate rabbitTemplate;
     private final ObjectMapper objectMapper;
     private final OkHttpTemplate okHttpTemplate;
@@ -38,6 +40,7 @@ public class Runner implements ApplicationRunner {
     @SuppressWarnings("unchecked")
     @Override
     public void run(ApplicationArguments args) throws Exception {
+        notificationsService.sendAll("LinkedIn Scraper Applicaton has been started.");
         while (scrapeLinkedinProfileService.isWorking()) {
             List<LinkedinProfileToScrapeDTO> profileToScrapeDTOS = (List<LinkedinProfileToScrapeDTO>) rabbitTemplate.receiveAndConvert();
             while (isNull(profileToScrapeDTOS)) {
@@ -55,7 +58,8 @@ public class Runner implements ApplicationRunner {
             try {
                 okHttpTemplate.request(request);
             } catch (IOException e) {
-                e.printStackTrace();
+                notificationsService.sendAll("LinkedIn Scraper Applicaton has unexpectedly finished it's work. Check logs for detailed information.");
+                notificationsService.sendInternal(e.getMessage());
             }
         }
     }

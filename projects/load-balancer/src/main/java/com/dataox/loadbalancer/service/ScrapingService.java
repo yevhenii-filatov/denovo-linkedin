@@ -17,6 +17,7 @@ import com.dataox.loadbalancer.domain.repositories.SearchResultRepository;
 import com.dataox.loadbalancer.dto.LinkedinProfileToUpdateDTO;
 import com.dataox.loadbalancer.exception.DataNotFoundException;
 import com.dataox.loadbalancer.exception.RecordNotFoundException;
+import com.dataox.notificationservice.service.NotificationsService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -41,6 +42,7 @@ import static java.util.Objects.isNull;
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class ScrapingService {
 
+    NotificationsService notificationsService;
     ScrapingProperties scrapingProperties;
     InitialDataRepository initialDataRepository;
     SearchResultRepository searchResultRepository;
@@ -57,9 +59,10 @@ public class ScrapingService {
         List<InitialData> initialData = initialDataRepository.findAllByDenovoIdIn(denovoIds);
         dataValidationService.validateInitialData(denovoIds, initialData);
         List<InitialDataSearchPosition> searchedAndFoundInitialData = initialDataSearchPositions.stream()
-                .filter(data-> data.getInitialData().getSearched())
+                .filter(data -> data.getInitialData().getSearched())
                 .filter(data -> !data.getInitialData().getNoResults())
-                .filter(data -> data.getInitialData().getSearchResults().size() == 1)
+//                .filter(data -> data.getInitialData().getSearchResults().size() == 1)
+//                .filter(data -> data.getSearchPosition() == data.getInitialData().getSearchResults())
                 .collect(Collectors.toList());
         List<InitialData> notSearchedInitialData = initialDataSearchPositions.stream()
                 .map(InitialDataSearchPosition::getInitialData)
@@ -77,6 +80,9 @@ public class ScrapingService {
                 .map(dto -> {
                     InitialData initialData = initialDataRepository.findByDenovoId(dto.getDenovoId())
                             .orElseThrow(() -> new IllegalArgumentException(dto.getDenovoId() + " doesn't exists"));
+//                    notificationsService.sendAll("LoadBalancer: DenovoId {"
+//                                        .concat(Long.toString(dto.getDenovoId()))
+//                                        .concat("} doesn't exists"));
                     return new InitialDataSearchPosition(initialData, dto.getSearchPosition());
                 })
                 .collect(Collectors.toList());
@@ -193,5 +199,9 @@ public class ScrapingService {
                 .collect(Collectors.toList());
         profileToScrapeBatchesLists.forEach(rabbitTemplate::convertAndSend);
         log.info("Sent {} batches to queue with batch size: {}", profileToScrapeBatchesLists.size(), scrapingProperties.getBatchSize());
+        notificationsService.sendAll("LoadBalancer: Sent "
+                .concat(String.valueOf(profileToScrapeBatchesLists.size()))
+                .concat(" batches to queue with batch size:")
+                .concat(String.valueOf(scrapingProperties.getBatchSize())));
     }
 }

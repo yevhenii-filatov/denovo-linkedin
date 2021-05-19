@@ -4,6 +4,7 @@ import com.dataox.notificationservice.configuration.NotificationsProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 @Slf4j
@@ -17,19 +18,16 @@ public class TelegramNotificationsServiceProvider implements NotificationsServic
     @Override
     public void send(String message) {
         NotificationsProperties.Telegram telegram = notificationsProperties.getTelegram();
-        /**
-         * TODO: UNCOMMENT WHEN TELEGRAM NOTIFICATIONS ARE CONFIGURED
-         */
-//        try {
-//            restTemplate.getForObject(REQUEST_URL, String.class,
-//                    telegram.getBotToken(),
-//                    telegram.getChatId(),
-//                    message);
-//            log.info("Sent message into telegram");
-//        } catch (RestClientException e) {
-//            log.error("Failed to send telegram message: {}", message);
-//            log.error("Exception message: {}", e.getMessage());
-//        }
+        try {
+            restTemplate.getForObject(REQUEST_URL, String.class,
+                    telegram.getBotToken(),
+                    telegram.getChatId(),
+                    message);
+            log.info("Sent message into telegram");
+        } catch (RestClientException e) {
+            log.error("Failed to send telegram message: {}", message);
+            log.error("Exception message: {}", e.getMessage());
+        }
     }
 
 }

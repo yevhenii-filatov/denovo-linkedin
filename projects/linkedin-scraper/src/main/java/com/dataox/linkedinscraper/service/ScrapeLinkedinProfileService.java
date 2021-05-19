@@ -16,7 +16,7 @@ import com.dataox.linkedinscraper.scraping.service.login.LoginService;
 import com.dataox.linkedinscraper.service.error.detector.LinkedinError;
 import com.dataox.linkedinscraper.service.error.detector.LinkedinErrorDetector;
 import com.dataox.linkedinscraper.utils.NotificationUtils;
-import com.dataox.notificationservice.service.TelegramNotificationsServiceProvider;
+import com.dataox.notificationservice.service.NotificationsService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -48,7 +48,7 @@ public class ScrapeLinkedinProfileService {
     private final LinkedinProfileParser parser;
     private final ChromeOptions chromeOptions;
     private final LinkedinErrorDetector errorDetector;
-    private final TelegramNotificationsServiceProvider notificationsService;
+    private final NotificationsService notificationsService;
     private final ApplicationContext applicationContext;
     @Getter
     private boolean isWorking = true;
@@ -69,7 +69,12 @@ public class ScrapeLinkedinProfileService {
         } catch (LinkedinException e) {
             addTheRestOfProfilesToNotScrapedList(currentProfileToScrape, linkedinProfilesToScrape, notScraped);
             this.isWorking = false;
-            notificationsService.send(NotificationUtils.createScraperStoppedMessage(e, applicationContext.getId()));
+
+            notificationsService.sendAll("LinkedinScraper: LinkedinException at ScrapeLinkedinProfileService: scrapeService has stopped working.");
+            notificationsService.sendInternal(NotificationUtils.createScraperStoppedMessage(e, applicationContext.getId()));
+
+            log.error("LinkedinException at ScrapeLinkedinProfileService: scrapeService has stopped working.");
+            e.printStackTrace();
         }
         return new ScrapingResultsDTO(successfullyScraped, notScraped);
     }
@@ -129,7 +134,7 @@ public class ScrapeLinkedinProfileService {
                                                    List<NotScrapedLinkedinProfile> notScraped) {
         NotScrapedLinkedinProfile notScrapedProfile = new NotScrapedLinkedinProfile(profileToScrapeDTO, e.asString(), isProfileReusable);
         notScraped.add(notScrapedProfile);
-        notificationsService.send(NotificationUtils.createExceptionMessage(e, profileToScrapeDTO.getProfileURL(), applicationContext.getId()));
+        notificationsService.sendInternal(NotificationUtils.createExceptionMessage(e, profileToScrapeDTO.getProfileURL(), applicationContext.getId()));
     }
 
     private boolean isScraperShouldStop(LinkedinError linkedinError) {

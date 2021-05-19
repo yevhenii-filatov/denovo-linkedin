@@ -4,6 +4,7 @@ import com.dataox.googleserp.model.dto.InitialDataDTO;
 import com.dataox.googleserp.model.entity.InitialData;
 import com.dataox.googleserp.service.InitialDataProcessor;
 import com.dataox.googleserp.service.run.SearchStarter;
+import com.dataox.notificationservice.service.NotificationsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -29,6 +30,7 @@ public class SearchController {
 
     private final SearchStarter searchStarter;
     private final InitialDataProcessor initialDataProcessor;
+    private final NotificationsService notificationsService;
 
     @PostMapping
     public ResponseEntity<List<InitialData>> startSearch(@RequestBody @Valid List<InitialDataDTO> initialDataDTOS) {
@@ -40,6 +42,7 @@ public class SearchController {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> handleException(Exception e) {
+        notificationsService.sendAll("GoogleSearch: Failed to start search: ".concat(e.getMessage()));
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to start search: ".concat(e.getMessage()));
     }
 }

@@ -48,13 +48,18 @@ public class SearchStarter {
         List<Long> denovoIdsToSearch = extractDenovoIds(dataAndStep);
         List<SearchProfileWithGoogleTask> searchProfileWithGoogleTasks = createSearchProfileWithGoogleTasks(dataAndStep);
 
+        notificationsService.sendAll("GoogleSearch: Starting search for denovoIds: ".concat(denovoIdsToSearch.toString()));
         log.info("Starting search for denovoIds: {}", denovoIdsToSearch);
+
         List<? extends Future<?>> futureList = submitTasks(searchProfileWithGoogleTasks);
         try {
             waitUntilTasksIsDone(searchProfileWithGoogleTasks, futureList);
             sendExceptionsInternalIfPresent(futureList);
+            notificationsService.sendAll("GoogleSearch: Finished searching for denovoIds: ".concat(denovoIdsToSearch.toString()));
         } catch (Exception e) {
             log.error("Failed to search for denovoIds: {}", denovoIdsToSearch);
+
+            notificationsService.sendAll("Failed to search for denovoIds:".concat(String.valueOf(denovoIdsToSearch)));
             notificationsService.sendInternal(createSearchFailedMessage(e, denovoIdsToSearch));
         }
     }

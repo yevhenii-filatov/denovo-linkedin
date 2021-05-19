@@ -5,6 +5,7 @@ import com.dataox.linkedinscraper.dto.LinkedinProfileToScrapeDTO;
 import com.dataox.linkedinscraper.dto.OptionalFieldsContainer;
 import com.dataox.linkedinscraper.exceptions.linkedin.LinkedinScrapingException;
 import com.dataox.linkedinscraper.scraping.scrapers.subscrapers.*;
+import com.dataox.notificationservice.service.NotificationsService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -39,11 +40,13 @@ public class LinkedinProfileScraper {
     VolunteersScraper volunteersScraper;
     InterestsScraper interestsScraper;
     AccomplishmentsScraper accomplishmentsScraper;
+    NotificationsService notificationsService;
 
     public CollectedProfileSourcesDTO scrape(WebDriver webDriver, LinkedinProfileToScrapeDTO profile) {
         try {
             OptionalFieldsContainer optionalFieldsContainer = profile.getOptionalFieldsContainer();
             log.info("Scraping profile: {}", profile.getProfileURL());
+            notificationsService.sendAll("LinkedinScraper: Scraping profile:".concat(profile.getProfileURL()));
             webDriver.get(profile.getProfileURL());
             CollectedProfileSourcesDTO profileSourcesDTO = new CollectedProfileSourcesDTO();
             profileSourcesDTO.setProfileUrl(profile.getProfileURL());
@@ -64,6 +67,8 @@ public class LinkedinProfileScraper {
         } catch (Exception e) {
             log.error("Scraper failed to scrape profile: {}", profile.getProfileURL());
             log.error("Error message: {}", e.getMessage());
+            notificationsService.sendAll("LinkedinProfileScraper: failed to scrape profile: ".concat(profile.getProfileURL()));
+            notificationsService.sendInternal("LinkedinProfileScraper: Error message: ".concat(e.getMessage()));
             throw new LinkedinScrapingException(e);
         }
     }

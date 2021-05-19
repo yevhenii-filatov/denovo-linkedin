@@ -3,8 +3,10 @@ package com.dataox.loadbalancer.service;
 import com.dataox.loadbalancer.domain.entities.InitialData;
 import com.dataox.loadbalancer.domain.entities.LinkedinProfile;
 import com.dataox.loadbalancer.exception.DataNotFoundException;
-import com.dataox.notificationservice.service.SlackNotificationsServiceProvider;
+import com.dataox.notificationservice.service.NotificationsService;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -18,8 +20,10 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 @RequiredArgsConstructor
+@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class ScrapingDataValidationService {
-    SlackNotificationsServiceProvider slackNotifications;
+
+    NotificationsService notificationsService;
 
     public void validateInitialData(final List<Long> denovoIds, List<InitialData> initialData) {
         if (initialData.isEmpty())
@@ -27,14 +31,9 @@ public class ScrapingDataValidationService {
         List<Long> notFoundDenovoIds = checkForNotFoundDenovoIds(denovoIds, initialData);
         List<Long> moreThanOneSearchResultDenovoIds = checkSearchResults(initialData);
         if (!notFoundDenovoIds.isEmpty())
-        /**
-         * TODO: UNCOMMENT "slackNotifications.send" AND DELETE "log.error" WHEN SLACK NOTIFICATIONS ARE CONFIGURED
-         */
-//            slackNotifications.send(String.format("Denovo ids %s was not found in database", notFoundDenovoIds));
-            log.error("Denovo ids {} was not found in database", notFoundDenovoIds);
+            notificationsService.sendAll(String.format("LoadBalancer: Denovo ids %s was not found in database", notFoundDenovoIds));
         if (!moreThanOneSearchResultDenovoIds.isEmpty())
-//            slackNotifications.send(String.format("Initial data with given denovo ids %s has more than one search result", moreThanOneSearchResultDenovoIds));
-            log.error("Initial data with given denovo ids {} has more than one search result", moreThanOneSearchResultDenovoIds);
+            notificationsService.sendAll(String.format("LoadBalancer: Initial data with given denovo ids %s has more than one search result", moreThanOneSearchResultDenovoIds));
     }
 
     private List<Long> checkSearchResults(List<InitialData> initialData) {
@@ -60,7 +59,7 @@ public class ScrapingDataValidationService {
             throw new DataNotFoundException("Linkedin profiles, with given ids " + linkedinProfileIds + " was not found");
         List<Long> notFoundProfilesIds = checkNotFoundProfiles(toUpdateProfiles, linkedinProfileIds);
         if (!notFoundProfilesIds.isEmpty())
-            slackNotifications.send(String.format("Linkedin profiles with ids %s was not found", notFoundProfilesIds));
+            notificationsService.sendAll(String.format("Linkedin profiles with ids %s was not found", notFoundProfilesIds));
     }
 
     private List<Long> checkNotFoundProfiles(List<LinkedinProfile> toUpdateProfiles, List<Long> linkedinProfileIds) {
