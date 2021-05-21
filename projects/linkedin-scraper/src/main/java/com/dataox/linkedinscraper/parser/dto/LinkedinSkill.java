@@ -3,6 +3,7 @@ package com.dataox.linkedinscraper.parser.dto;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.Max;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.Instant;
@@ -20,11 +21,11 @@ public class LinkedinSkill {
     private String itemSource;
 
     @NotBlank
-//    @Max(100)
+    @Max(100)
     private String name;
 
     @NotBlank
-//    @Max(100)
+    @Max(100)
     private String category;
 
     private String url;

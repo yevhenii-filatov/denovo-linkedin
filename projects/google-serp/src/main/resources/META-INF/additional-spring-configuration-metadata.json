@@ -39,26 +39,6 @@
       "name": "app.service.choose-best-endpoint-url",
       "type": "java.lang.String",
       "description": "Url of choose best endpoint."
-    },
-    {
-      "name": "app.notifications.telegram.bot-token",
-      "type": "java.lang.String",
-      "description": "Token for the Telegram notification bot service."
-    },
-    {
-      "name": "app.notifications.telegram.chat-id",
-      "type": "java.lang.String",
-      "description": "Receiver id of the Telegram bot chat"
-    },
-    {
-      "name": "app.notifications.slack.slack-token",
-      "type": "java.lang.String",
-      "description": "Slack token for notifications"
-    },
-    {
-      "name": "app.notifications.slack.notifications-channel",
-      "type": "java.lang.String",
-      "description": "Slack channel for notifications"
     }
   ]
 }

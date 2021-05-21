@@ -4,6 +4,9 @@ import com.dataox.linkedinscraper.parser.dto.types.LinkedinJobType;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.Instant;
 import java.time.LocalDate;
 
@@ -11,41 +14,41 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class LinkedinExperience {
 
-//    @NotNull
+    @NotNull
     private Instant updatedAt;
 
-//    @NotBlank
+    @NotBlank
     private String itemSource;
 
     private LinkedinJobType linkedinJobType;
 
-//    @NotBlank
-//    @Max(100)
+    @NotBlank
+    @Max(100)
     private String companyName;
 
-//    @NotBlank
+    @NotBlank
     private String companyProfileUrl;
 
-//    @NotBlank
-//    @Max(100)
+    @NotBlank
+    @Max(100)
     private String position;
 
-//    @Max(20)
+    @Max(20)
     private String dateStarted;
 
-//    @NotNull
+    @NotNull
     private LocalDate dateStartedTimestamp;
 
-//    @Max(20)
+    @Max(20)
     private String dateFinished;
 
-//    @NotNull
+    @NotNull
     private LocalDate dateFinishedTimestamp;
 
-//    @Max(20)
+    @Max(20)
     private String totalDuration;
 
-//    @Max(100)
+    @Max(100)
     private String location;
 
     private String description;

@@ -33,8 +33,8 @@ public class ActivitiesScraper implements Scraper<List<String>> {
 
     private final ScraperProperties scraperProperties;
     private static final By EMPTY_ACTIVITIES = By.xpath("//h1[text()='Nothing to see for now']");
-    private static final By ACTIVITY_POSTS = By.xpath("//div[contains(@class,'pv-recent-activity-detail__outlet-container')]" +
-            "/div/div[contains(@class,'occludable-update ember-view')]");
+    private static final By ACTIVITY_POSTS = By.xpath("//div[contains(@class,'pv-recent-activity-detail__feed-container')]" +
+            "/div[contains(@class,'occludable-update')]");
     private static final By LOADING_ANIMATION = By.xpath("//div[contains(@class,'pv-recent-activity-detail__feed-container')]" +
             "/div[contains(@class,'detail-page-loader-container')]");
     private static final By COPY_LINK_BUTTON = By.xpath("//h5[text()='Copy link to post']");

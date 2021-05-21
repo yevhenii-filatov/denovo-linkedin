@@ -1,34 +1,25 @@
 app:
   chromedriver:
-    path: C:\Users\slava\chromedriver.exe
+    path: [PATH]
     headless: false
   captcha:
     anti-captcha:
-      token: 3e2572a1eec414da0316a68f39af95b4
+      token: [TOKEN]
   scraper:
     activities-amount: 50
   linkedin:
-    profile-login: johnsmith624621684@gmail.com
-    profile-password: denovotest
-  rabbitmq:
-    default-receive-queue: test_queue
-  notifications:
-    telegram:
-      bot-token: 1708054968:AAEsZvyJUth4UI4EzjlkaKtw7uRQCIYFJ50
-      chat-id: -1001493548628
-    slack:
-      slack-token: xoxb-1073218083651-1071671941189-NHmVi0hNMcQckY8RC2EQ0sCm
-      notifications-channel: li_results_notifications
+    profile-login: [LOGIN]
+    profile-password: [PASSWORD]
 
 spring:
   application:
-    name: LinkedinScraper
+    name: [NAME]
   rabbitmq:
-    username: slava
-    password: rvnjtp
+    username: [USERNAME]
+    password: [PASSWORD]
     listener:
       simple:
         prefetch: 0
         acknowledge-mode: auto
     template:
-      default-receive-queue: test_queue
+      default-receive-queue: [QUEUE_NAME]

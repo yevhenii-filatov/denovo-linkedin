@@ -57,7 +57,6 @@ public class Runner implements ApplicationRunner {
                     .build();
             try {
                 okHttpTemplate.request(request);
-//                notificationsService.sendAll("LinkedinScraper: Profile has ben successfully scraped: ".concat(profileToScrapeDTOS.toString()));
             } catch (IOException e) {
                 notificationsService.sendAll("LinkedIn Scraper Applicaton has unexpectedly finished it's work. Check logs for detailed information.");
                 notificationsService.sendInternal(e.getMessage());

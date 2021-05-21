@@ -1,18 +1,18 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/linkedin_denovo_localhost
-    username: root
-    password: postgres
+    url: jdbc:postgresql://[HOST]:[PORT]/denovo_linkedin
+    username: [ USER ]
+    password: [ PASSWORD ]
     driver-class-name: org.postgresql.Driver
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
   rabbitmq:
-    username: slava
-    password: rvnjtp
+    username: eternal
+    password: 1402
     template:
-      routing-key: test_queue
+      routing-key: linked-profiles
 
 server:
   servlet:
@@ -21,21 +21,14 @@ server:
 app:
   scraping:
     batch-size: 5
-  notifications:
-    telegram:
-      bot-token: 1708054968:AAEsZvyJUth4UI4EzjlkaKtw7uRQCIYFJ50
-      chat-id: -1001493548628
-    slack:
-      slack-token: xoxb-1073218083651-1071671941189-NHmVi0hNMcQckY8RC2EQ0sCm
-      notifications-channel: li_results_notifications
 logging:
   level:
     sql: info
     web: info
-#  notifications:
-#    slack:
-#      slack-token: xoxb-1073218083651-1071671941189-NHmVi0hNMcQckY8RC2EQ0sCm
-#      notifications-channel: li_results_notifications
+  notifications:
+    slack:
+      slack-token: [ TOKEN ]
+      notifications-channel: [ CHANNEL ]
   search:
     service-url: [ URL ]
 

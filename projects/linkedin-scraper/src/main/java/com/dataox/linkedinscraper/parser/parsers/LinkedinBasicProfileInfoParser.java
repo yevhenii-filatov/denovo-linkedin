@@ -48,7 +48,7 @@ public class LinkedinBasicProfileInfoParser implements LinkedinParser<LinkedinBa
     }
 
     private String parseFullName(Element headerElement) {
-        return text(headerElement.selectFirst("div > div:nth-child(1) > h1"));
+        return text(headerElement.selectFirst(".flex-1.mr5 > ul > li"));
     }
 
     private String parseNumberOfConnections(Element headerElement) {
@@ -56,7 +56,7 @@ public class LinkedinBasicProfileInfoParser implements LinkedinParser<LinkedinBa
     }
 
     private String parseLocation(Element headerElement) {
-        return text(headerElement.selectFirst("span.text-body-small.inline.t-black--light.break-words"));
+        return text(headerElement.selectFirst("ul.mt1 > li.inline-block:lt(1)"));
     }
 
     private String parseAbout(Element aboutElement) {

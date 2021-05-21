@@ -12,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
 import java.util.List;
 
 import static org.apache.commons.collections4.ListUtils.union;
@@ -39,11 +38,6 @@ public class LinkedinProfileParser implements LinkedinParser<LinkedinProfile, Co
     public LinkedinProfile parse(CollectedProfileSourcesDTO source) {
         try {
             LinkedinProfile linkedinProfile = new LinkedinProfile();
-
-            if (linkedinProfile.getCreatedAt() == null) {
-                linkedinProfile.setCreatedAt(Instant.now());
-            }
-            linkedinProfile.setUpdatedAt(Instant.now());
             linkedinProfile.setProfileUrl(source.getProfileUrl());
             linkedinProfile.setLinkedinActivities(activityParser.parse(source.getActivitiesSources()));
             linkedinProfile.setLinkedinBasicProfileInfo(basicProfileInfoParser.parse(getBasicProfileSource(source)));
@@ -56,7 +50,7 @@ public class LinkedinProfileParser implements LinkedinParser<LinkedinProfile, Co
             linkedinProfile.setLinkedinVolunteerExperiences(volunteerExperienceParser.parse(source.getVolunteersSource()));
             linkedinProfile.setLinkedinAccomplishments(accomplishmentParser.parse(source.getAccomplishmentsSources()));
 
-//            parsingValidator.validate(linkedinProfile);
+            parsingValidator.validate(linkedinProfile);
 
             return linkedinProfile;
         } catch (Exception e) {
