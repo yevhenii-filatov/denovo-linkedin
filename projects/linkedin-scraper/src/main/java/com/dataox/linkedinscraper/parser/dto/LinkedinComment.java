@@ -4,7 +4,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.Max;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.Instant;
@@ -24,7 +23,7 @@ public class LinkedinComment {
     private String content;
 
     @NotBlank
-    @Max(20)
+//    @Max(20)
     private String relativePublicationDate;
 
     @NotNull

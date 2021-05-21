@@ -2,6 +2,6 @@ images:
   directory:
     path: images/
 server:
-  port: 8084
+  port: 8083
   error:
     include-message: always

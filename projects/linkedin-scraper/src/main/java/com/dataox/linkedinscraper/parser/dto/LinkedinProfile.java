@@ -15,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 public class LinkedinProfile {
 
-    @NotNull
+
     private SearchResult searchResult;
 
     @NotNull

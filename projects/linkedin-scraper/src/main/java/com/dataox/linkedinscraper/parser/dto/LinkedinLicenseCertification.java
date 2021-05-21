@@ -3,7 +3,6 @@ package com.dataox.linkedinscraper.parser.dto;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.Max;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.Instant;
@@ -26,12 +25,12 @@ public class LinkedinLicenseCertification {
 
     private String issuerProfileUrl;
 
-    @Max(20)
+//    @Max(20)
     private String issuedDate;
 
-    @Max(30)
+//    @Max(30)
     private String expirationDate;
 
-    @Max(50)
+//    @Max(50)
     private String credentialId;
 }

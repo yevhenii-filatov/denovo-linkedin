@@ -14,5 +14,15 @@
       "name": "app.linkedin.profile-password",
       "type": "java.lang.String",
       "description": "Linkedin profile password."
+    },
+    {
+      "name": "app.captcha.anti-captcha.token",
+      "type": "java.lang.String",
+      "description": "Token for the anti-capcha"
+    },
+    {
+      "name": "app.rabbitmq.default-receive-queue",
+      "type": "java.lang.String",
+      "description": "Name of the Rabbitmq queue"
     }
   ] }

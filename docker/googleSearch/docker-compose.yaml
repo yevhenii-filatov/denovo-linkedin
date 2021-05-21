@@ -1,0 +1,17 @@
+version: '3.7'
+services:
+
+  picanalyzer:
+    image: openjdk:11.0.7-jdk
+    container_name: picanalyzer-back
+    working_dir: /app
+    restart: always
+    ports:
+      - 8585:8585
+    environment:
+      LOGGING_FILE_NAME: logs/app.log
+    volumes:
+      - /opt/introlab/picanalyzer-prod/picanalyzer-api:/app:rw
+      - /data/picanalyzer-images:/data
+    command: java -Xmx10g -XX:+HeapDumpOnOutOfMemoryError -jar pictanalyzer.jar &>/dev/null
+    tty: true
