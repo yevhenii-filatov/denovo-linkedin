@@ -16,7 +16,7 @@ public class SearchResult {
 
     private String title;
 
-    @NotNull
+//    @NotNull
     private String url;
 
     private String description;

@@ -119,19 +119,20 @@ public class ScrapingService {
         List<LinkedinProfile> successfulProfiles = scrapingResultsDTO.getSuccessfulProfiles();
         List<Long> searchResultsIds = resolveMinimalScrapedSearchResultsIds(successfulProfiles);
         dataLoaderService.saveLinkedinProfiles(successfulProfiles);
-        processReusableNotScrapedProfiles(scrapingResultsDTO);
-        processNotReusableProfiles(scrapingResultsDTO);
-        List<SearchResult> searchResults = searchResultRepository.findAllByIdIn(searchResultsIds);
-        List<Long> minimalScrapedLinkedinProfiles = searchResults.stream()
-                .map(SearchResult::getLinkedinProfile)
-                .map(LinkedinProfile::getId)
-                .collect(Collectors.toList());
-        triggerChooseCorrectResultEndpoint(minimalScrapedLinkedinProfiles);
+        notificationsService.sendAll("LoadBalancer: Profiles has been successfully scraped: ".concat(successfulProfiles.toString()));
+//        processReusableNotScrapedProfiles(scrapingResultsDTO);
+//        processNotReusableProfiles(scrapingResultsDTO);
+//        List<SearchResult> searchResults = searchResultRepository.findAllByIdIn(searchResultsIds);
+//        List<Long> minimalScrapedLinkedinProfiles = searchResults.stream()
+//                .map(SearchResult::getLinkedinProfile)
+//                .map(LinkedinProfile::getId)
+//                .collect(Collectors.toList());
+//        triggerChooseCorrectResultEndpoint(minimalScrapedLinkedinProfiles);
     }
 
-    private void triggerChooseCorrectResultEndpoint(List<Long> minimalScrapedLinkedinProfiles) {
-        log.info("Triggering choose correct result endpoint with linkedin profiles ids: {}", minimalScrapedLinkedinProfiles);
-    }
+//    private void triggerChooseCorrectResultEndpoint(List<Long> minimalScrapedLinkedinProfiles) {
+//        log.info("Triggering choose correct result endpoint with linkedin profiles ids: {}", minimalScrapedLinkedinProfiles);
+//    }
 
     private List<Long> resolveMinimalScrapedSearchResultsIds(List<LinkedinProfile> successfulProfiles) {
         List<Long> searchResultIds = successfulProfiles.stream()

@@ -16,26 +16,26 @@ public class LinkedinComment {
 
     private String url;
 
-    @NotBlank
+//    @NotBlank
     private String itemSource;
 
-    @NotBlank
-    @EqualsAndHashCode.Include
+//    @NotBlank
+//    @EqualsAndHashCode.Include
     private String content;
 
-    @NotBlank
-    @Max(20)
+//    @NotBlank
+//    @Max(20)
     private String relativePublicationDate;
 
-    @NotNull
+//    @NotNull
     private Instant collectedDate;
 
-    @NotNull
+//    @NotNull
     private Instant absolutePublicationDate;
 
-    @EqualsAndHashCode.Include
+//    @EqualsAndHashCode.Include
     private int numberOfReactions;
 
-    @EqualsAndHashCode.Include
+//    @EqualsAndHashCode.Include
     private int numberOfReplies;
 }

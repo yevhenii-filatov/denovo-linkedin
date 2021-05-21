@@ -32,7 +32,7 @@ public class ParsingValidatorImpl implements ParsingValidator {
             notificationsService.sendInternal(COMMON_MESSAGE + profile.getProfileUrl() + " due to: " + violations);
             throw new ParsingValidationException(violations.toString());
         }
-        log.info("Parsing validation for -> {} was successful", profile);
+        log.info("Parsing validation for -> {} was successful", profile.getProfileUrl());
     }
 
     private List<String> getFormattedViolations(Set<ConstraintViolation<LinkedinProfile>> violationSet) {

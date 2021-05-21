@@ -12,17 +12,17 @@ import java.time.Instant;
 @NoArgsConstructor
 public class LinkedinAccomplishment {
 
-    @NotNull
+//    @NotNull
     private Instant updatedAt;
 
-    @NotBlank
+//    @NotBlank
     private String itemSource;
 
-    @NotBlank
+//    @NotBlank
     private String title;
 
     private String description;
 
-    @NotNull
+//    @NotNull
     private LinkedinAccomplishmentType linkedinAccomplishmentType;
 }

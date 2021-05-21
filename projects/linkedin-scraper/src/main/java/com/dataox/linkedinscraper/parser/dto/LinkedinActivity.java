@@ -11,12 +11,12 @@ import java.time.Instant;
 @NoArgsConstructor
 public class LinkedinActivity {
 
-    @NotNull
+//    @NotNull
     private Instant updatedAt;
 
-    @NotNull
+//    @NotNull
     private LinkedinActivityType linkedinActivityType;
 
-    @NotNull
+//    @NotNull
     private LinkedinPost linkedinPost;
 }

@@ -12,24 +12,24 @@ import java.time.Instant;
 @NoArgsConstructor
 public class LinkedinBasicProfileInfo {
 
-    @NotNull
+//    @NotNull
     private Instant updatedAt;
 
-    @NotBlank
+//    @NotBlank
     private String headerSectionSource;
 
     private String aboutSectionSource;
 
-    @NotBlank
-    @Max(255)
+//    @NotBlank
+//    @Max(255)
     private String fullName;
 
-    @NotBlank
-    @Max(10)
+//    @NotBlank
+//    @Max(10)
     private String numberOfConnections;
 
-    @NotBlank
-    @Max(100)
+//    @NotBlank
+//    @Max(100)
     private String location;
 
     private String cachedImageUrl;

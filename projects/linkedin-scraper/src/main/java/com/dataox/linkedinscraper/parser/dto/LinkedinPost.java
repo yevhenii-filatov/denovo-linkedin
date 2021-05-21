@@ -18,33 +18,33 @@ public class LinkedinPost {
 
     private String url;
 
-    @NotBlank
+//    @NotBlank
     private String itemSource;
 
-    @NotBlank
-    @Max(20)
+//    @NotBlank
+//    @Max(20)
     private String relativePublicationDate;
 
-    @NotNull
+//    @NotNull
     private Instant collectedDate;
 
-    @NotNull
+//    @NotNull
     private Instant absolutePublicationDate;
 
-    @NotBlank
+//    @NotBlank
     private String authorProfileName;
 
-    @EqualsAndHashCode.Include
-    @NotBlank
+//    @EqualsAndHashCode.Include
+//    @NotBlank
     private String authorProfileUrl;
 
-    @NotBlank
+//    @NotBlank
     private String authorConnectionDegree;
 
-    @NotBlank
+//    @NotBlank
     private String authorHeadline;
 
-    @EqualsAndHashCode.Include
+//    @EqualsAndHashCode.Include
     private String content;
 
     private int numberOfComments;
