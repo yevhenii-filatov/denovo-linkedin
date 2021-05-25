@@ -50,4 +50,19 @@ public class LinkedinSkill {
 
     @OneToMany(mappedBy = "linkedinSkill", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<LinkedinEndorsement> linkedinEndorsements = new ArrayList<>();
+
+    @Override
+    public String toString() {
+        return "LinkedinSkill{" +
+                "id=" + id +
+                ", updatedAt=" + updatedAt +
+                ", itemSource='" + itemSource + '\'' +
+                ", name='" + name + '\'' +
+                ", category='" + category + '\'' +
+                ", url='" + url + '\'' +
+                ", numberOfEndorsements=" + numberOfEndorsements +
+                ", linkedinProfile=" + linkedinProfile +
+                ", linkedinProfile_id=" + linkedinProfile.getId() +
+                '}';
+    }
 }

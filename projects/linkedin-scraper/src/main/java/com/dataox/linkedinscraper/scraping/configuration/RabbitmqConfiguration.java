@@ -26,7 +26,7 @@ public class RabbitmqConfiguration {
     @PostConstruct
     public void init() throws IOException, TimeoutException {
         ConnectionFactory factory = new ConnectionFactory();
-        factory.setHost("161.97.130.43");
+        factory.setHost(rabbitmqProperties.getHost());
         factory.setUsername(rabbitmqProperties.getUsername());
         factory.setPassword(rabbitmqProperties.getPassword());
         connection = factory.newConnection();

@@ -44,4 +44,17 @@ public class LinkedinAccomplishment {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "linkedin_profile_id",referencedColumnName = "id")
     private LinkedinProfile linkedinProfile;
+
+    @Override
+    public String toString() {
+        return "LinkedinAccomplishment{" +
+                "id=" + id +
+                ", updatedAt=" + updatedAt +
+                ", itemSource='" + itemSource + '\'' +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", linkedinAccomplishmentType=" + linkedinAccomplishmentType +
+                ", linkedinProfile_id=" + linkedinProfile.getId() +
+                '}';
+    }
 }

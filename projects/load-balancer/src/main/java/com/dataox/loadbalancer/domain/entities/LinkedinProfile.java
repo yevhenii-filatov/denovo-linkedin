@@ -39,34 +39,34 @@ public class LinkedinProfile {
     @Column(name = "profile_url", columnDefinition = "TEXT")
     private String profileUrl;
 
-    @OneToOne(mappedBy = "linkedinProfile", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "linkedinProfile", cascade = CascadeType.PERSIST, orphanRemoval = true, fetch = FetchType.LAZY)
     private LinkedinBasicProfileInfo linkedinBasicProfileInfo;
 
-    @OneToMany(mappedBy = "linkedinProfile", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "linkedinProfile", cascade = CascadeType.PERSIST, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<LinkedinExperience> linkedinExperiences = new ArrayList<>();
 
-    @OneToMany(mappedBy = "linkedinProfile", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "linkedinProfile", cascade = CascadeType.PERSIST, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<LinkedinEducation> linkedinEducations = new ArrayList<>();
 
-    @OneToMany(mappedBy = "linkedinProfile", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "linkedinProfile", cascade = CascadeType.PERSIST, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<LinkedinRecommendation> linkedinRecommendations = new ArrayList<>();
 
-    @OneToMany(mappedBy = "linkedinProfile", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "linkedinProfile", cascade = CascadeType.PERSIST, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<LinkedinLicenseCertification> linkedinLicenseCertifications = new ArrayList<>();
 
-    @OneToMany(mappedBy = "linkedinProfile", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "linkedinProfile", cascade = CascadeType.PERSIST, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<LinkedinVolunteerExperience> linkedinVolunteerExperiences = new ArrayList<>();
 
-    @OneToMany(mappedBy = "linkedinProfile", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "linkedinProfile", cascade = CascadeType.PERSIST, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<LinkedinInterest> linkedinInterests = new ArrayList<>();
 
-    @OneToMany(mappedBy = "linkedinProfile", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "linkedinProfile", cascade = CascadeType.PERSIST, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<LinkedinSkill> linkedinSkills = new ArrayList<>();
 
-    @OneToMany(mappedBy = "linkedinProfile", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "linkedinProfile", cascade = CascadeType.PERSIST, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<LinkedinActivity> linkedinActivities = new ArrayList<>();
 
-    @OneToMany(mappedBy = "linkedinProfile", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "linkedinProfile", cascade = CascadeType.PERSIST, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<LinkedinAccomplishment> linkedinAccomplishments = new ArrayList<>();
 
     @PrePersist

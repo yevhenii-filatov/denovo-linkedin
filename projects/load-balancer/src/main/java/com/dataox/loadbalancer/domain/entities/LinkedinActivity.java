@@ -36,4 +36,15 @@ public class LinkedinActivity {
     @EqualsAndHashCode.Exclude
     @OneToOne(mappedBy = "linkedinActivity", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private LinkedinPost linkedinPost;
+
+    @Override
+    public String toString() {
+        return "LinkedinActivity{" +
+                "id=" + id +
+                ", updatedAt=" + updatedAt +
+                ", linkedinActivityType=" + linkedinActivityType +
+                ", linkedinPost=" + linkedinPost +
+                ", linkedinProfile_id=" + linkedinProfile.getId() +
+                '}';
+    }
 }

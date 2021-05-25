@@ -3,6 +3,7 @@ package com.dataox.loadbalancer.domain.entities;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -55,4 +56,20 @@ public class LinkedinBasicProfileInfo {
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "linkedin_profile_id",referencedColumnName = "id")
     private LinkedinProfile linkedinProfile;
+
+    @Override
+    public String toString() {
+        return "LinkedinBasicProfileInfo{" +
+                "id=" + id +
+                ", updatedAt=" + updatedAt +
+                ", headerSectionSource='" + headerSectionSource + '\'' +
+                ", aboutSectionSource='" + aboutSectionSource + '\'' +
+                ", fullName='" + fullName + '\'' +
+                ", numberOfConnections='" + numberOfConnections + '\'' +
+                ", location='" + location + '\'' +
+                ", cachedImageUrl='" + cachedImageUrl + '\'' +
+                ", about='" + about + '\'' +
+                ", linkedinProfile_id=" + linkedinProfile.getId() +
+                '}';
+    }
 }

@@ -51,4 +51,20 @@ public class LinkedinLicenseCertification {
     @ManyToOne
     @JoinColumn(name = "linkedin_profile_id", referencedColumnName = "id")
     private LinkedinProfile linkedinProfile;
+
+    @Override
+    public String toString() {
+        return "LinkedinLicenseCertification{" +
+                "id=" + id +
+                ", updatedAt=" + updatedAt +
+                ", itemSource='" + itemSource + '\'' +
+                ", name='" + name + '\'' +
+                ", issuer='" + issuer + '\'' +
+                ", issuerProfileUrl='" + issuerProfileUrl + '\'' +
+                ", issuedDate='" + issuedDate + '\'' +
+                ", expirationDate='" + expirationDate + '\'' +
+                ", credentialId='" + credentialId + '\'' +
+                ", linkedinProfile_id=" + linkedinProfile.getId() +
+                '}';
+    }
 }

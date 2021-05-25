@@ -53,7 +53,8 @@ public class DataLoaderService {
         MapperService.reSetLinkedinProfile(profileToUpdate);
         profileToUpdate.setUpdatedAt(Instant.now());
         searchResult.setLinkedinProfile(profileToUpdate);
-        linkedinProfileRepository.save(profileToUpdate);
+        linkedinProfileRepository.updateLinkedinProfile(profileToUpdate);
+//        linkedinProfileRepository.save(profileToUpdate);
     }
 
     private void initialSave(LinkedinProfile scrapedProfile, SearchResult searchResult) {

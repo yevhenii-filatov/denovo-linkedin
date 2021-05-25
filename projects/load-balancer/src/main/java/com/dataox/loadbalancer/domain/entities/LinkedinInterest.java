@@ -52,4 +52,19 @@ public class LinkedinInterest {
     @ManyToOne
     @JoinColumn(name = "linkedin_profile_id", referencedColumnName = "id")
     private LinkedinProfile linkedinProfile;
+
+    @Override
+    public String toString() {
+        return "LinkedinInterest{" +
+                "id=" + id +
+                ", updatedAt=" + updatedAt +
+                ", itemSource='" + itemSource + '\'' +
+                ", name='" + name + '\'' +
+                ", linkedinInterestType=" + linkedinInterestType +
+                ", profileUrl='" + profileUrl + '\'' +
+                ", headline='" + headline + '\'' +
+                ", numberOfFollowers='" + numberOfFollowers + '\'' +
+                ", linkedinProfile_id=" + linkedinProfile.getId() +
+                '}';
+    }
 }

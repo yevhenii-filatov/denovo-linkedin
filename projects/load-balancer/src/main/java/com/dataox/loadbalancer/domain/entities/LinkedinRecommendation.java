@@ -57,4 +57,20 @@ public class LinkedinRecommendation {
     @ManyToOne
     @JoinColumn(name = "linkedin_profile_id", referencedColumnName = "id")
     private LinkedinProfile linkedinProfile;
+
+    @Override
+    public String toString() {
+        return "LinkedinRecommendation{" +
+                "id=" + id +
+                ", updatedAt=" + updatedAt +
+                ", itemSource='" + itemSource + '\'' +
+                ", linkedinRecommendationType=" + linkedinRecommendationType +
+                ", personFullName='" + personFullName + '\'' +
+                ", personProfileUrl='" + personProfileUrl + '\'' +
+                ", personHeadline='" + personHeadline + '\'' +
+                ", personExtraInfo='" + personExtraInfo + '\'' +
+                ", description='" + description + '\'' +
+                ", linkedinProfile_id=" + linkedinProfile.getId() +
+                '}';
+    }
 }

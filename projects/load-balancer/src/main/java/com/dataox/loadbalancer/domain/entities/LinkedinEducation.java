@@ -59,4 +59,23 @@ public class LinkedinEducation {
     @ManyToOne
     @JoinColumn(name = "linkedin_profile_id", referencedColumnName = "id")
     private LinkedinProfile linkedinProfile;
+
+    @Override
+    public String toString() {
+        return "LinkedinEducation{" +
+                "id=" + id +
+                ", updatedAt=" + updatedAt +
+                ", itemSource='" + itemSource + '\'' +
+                ", institutionName='" + institutionName + '\'' +
+                ", institutionProfileUrl='" + institutionProfileUrl + '\'' +
+                ", degree='" + degree + '\'' +
+                ", fieldOfStudy='" + fieldOfStudy + '\'' +
+                ", grade='" + grade + '\'' +
+                ", startedYear='" + startedYear + '\'' +
+                ", finishedYear='" + finishedYear + '\'' +
+                ", activitiesAndSocieties='" + activitiesAndSocieties + '\'' +
+                ", description='" + description + '\'' +
+                ", linkedinProfile_id=" + linkedinProfile.getId() +
+                '}';
+    }
 }

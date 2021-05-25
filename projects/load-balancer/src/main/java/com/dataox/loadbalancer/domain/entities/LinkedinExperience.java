@@ -70,4 +70,25 @@ public class LinkedinExperience {
     @ManyToOne
     @JoinColumn(name = "linkedin_profile_id", referencedColumnName = "id")
     private LinkedinProfile linkedinProfile;
+
+    @Override
+    public String toString() {
+        return "LinkedinExperience{" +
+                "id=" + id +
+                ", updatedAt=" + updatedAt +
+                ", itemSource='" + itemSource + '\'' +
+                ", linkedinJobType=" + linkedinJobType +
+                ", companyName='" + companyName + '\'' +
+                ", companyProfileUrl='" + companyProfileUrl + '\'' +
+                ", position='" + position + '\'' +
+                ", dateStarted='" + dateStarted + '\'' +
+                ", dateStartedTimestamp=" + dateStartedTimestamp +
+                ", dateFinished='" + dateFinished + '\'' +
+                ", dateFinishedTimestamp=" + dateFinishedTimestamp +
+                ", location='" + location + '\'' +
+                ", description='" + description + '\'' +
+                ", totalDuration='" + totalDuration + '\'' +
+                ", linkedinProfile_id=" + linkedinProfile.getId() +
+                '}';
+    }
 }

@@ -60,4 +60,22 @@ public class LinkedinVolunteerExperience {
     @ManyToOne
     @JoinColumn(name = "linkedin_profile_id", referencedColumnName = "id")
     private LinkedinProfile linkedinProfile;
+
+    @Override
+    public String toString() {
+        return "LinkedinVolunteerExperience{" +
+                "id=" + id +
+                ", updatedAt=" + updatedAt +
+                ", itemSource='" + itemSource + '\'' +
+                ", companyName='" + companyName + '\'' +
+                ", companyProfileUrl='" + companyProfileUrl + '\'' +
+                ", position='" + position + '\'' +
+                ", dateStarted='" + dateStarted + '\'' +
+                ", dateFinished='" + dateFinished + '\'' +
+                ", totalDuration='" + totalDuration + '\'' +
+                ", fieldOfActivity='" + fieldOfActivity + '\'' +
+                ", description='" + description + '\'' +
+                ", linkedinProfile_id=" + linkedinProfile.getId() +
+                '}';
+    }
 }
