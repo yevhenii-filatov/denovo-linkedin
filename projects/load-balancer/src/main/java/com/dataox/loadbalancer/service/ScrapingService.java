@@ -119,7 +119,12 @@ public class ScrapingService {
         List<LinkedinProfile> successfulProfiles = scrapingResultsDTO.getSuccessfulProfiles();
         List<Long> searchResultsIds = resolveMinimalScrapedSearchResultsIds(successfulProfiles);
         dataLoaderService.saveLinkedinProfiles(successfulProfiles);
-        notificationsService.sendAll("LoadBalancer: Profiles has been successfully scraped: ".concat(successfulProfiles.toString()));
+        notificationsService.sendAll("LoadBalancer: Profiles has been successfully scraped: ".concat(
+                successfulProfiles
+                        .stream()
+                        .map(linkedinProfile -> searchResultRepository.findById(linkedinProfile.getSearchResult().getId()).get().getInitialDataRecord().getDenovoId())
+                        .collect(Collectors.toList())
+                        .toString()));
 //        processReusableNotScrapedProfiles(scrapingResultsDTO);
 //        processNotReusableProfiles(scrapingResultsDTO);
 //        List<SearchResult> searchResults = searchResultRepository.findAllByIdIn(searchResultsIds);
