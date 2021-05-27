@@ -42,16 +42,16 @@ class LinkedinBasicProfileInfoParserTest {
                 "and in a cost-effective way. Ask our clients about us! My goal is to apply our expertise as much as possible! " +
                 "Contact me at: mobile: +380 (98) 159 07 22 skype: aldemind e-mail: alex@dataox.io website: dataox.io"
         );
-        expected.setHeaderSectionSource("md5:12ae3d4eef02bf1126c82d7f7e6826b6");
-        expected.setAboutSectionSource("md5:737b7bb51cd188e24043c561827c7ee2");
+        expected.setHeaderSectionSource("md5:f91fc3e8dbcd08039acf901f779e9f2c");
+        expected.setAboutSectionSource("md5:df121967a73b145103cc139f37ce2c5b");
 
         assertThat(actual)
                 .as("all except sources")
                 .isEqualToIgnoringGivenFields(expected, "headerSectionSource","aboutSectionSource");
 
         assertThat(actual)
-                .as("actual about section source hash md5:" + DigestUtils.md5DigestAsHex(actual.getAboutSectionSource().getBytes()))
                 .as("actual header section source hash md5:" + DigestUtils.md5DigestAsHex(actual.getHeaderSectionSource().getBytes()))
+                .as("actual about section source hash md5:" + DigestUtils.md5DigestAsHex(actual.getAboutSectionSource().getBytes()))
                 .usingComparatorForFields(hashedStingComparator(), "headerSectionSource","aboutSectionSource")
                 .isEqualToComparingOnlyGivenFields(expected, "headerSectionSource","aboutSectionSource");
     }

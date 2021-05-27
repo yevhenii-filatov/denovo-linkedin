@@ -84,7 +84,7 @@ class LinkedinActivityParserTest {
                         " change starts with small actions. \uD83D\uDE80 #diversity #inclusion #genderequality " +
                         "#venturecapital #vc #founders #ceos #nextwaveoftech #usa"
         );
-        expectedActivityPost.setItemSource("md5:0717d3e63f5ed017f3c97943a4886b28");
+        expectedActivityPost.setItemSource("md5:65bcd9a40baccabde87cc298e3832cfe");
 
         assertThat(actualActivityPost)
                 .as("all except sources")
@@ -169,7 +169,7 @@ class LinkedinActivityParserTest {
         expectedActivityPost.setRelativePublicationDate("1yr");
         expectedActivityPost.setAbsolutePublicationDate(actualActivityPost.getAbsolutePublicationDate());
         expectedActivityPost.setContent("Which design color scheme do you prefer ? This is for a marketing campaign, I appreciate if you only pick one. 1 | 2 | 3 | 4 Thanks in advance");
-        expectedActivityPost.setItemSource("md5:bd8192f50f87256e196a7abbc4919643");
+        expectedActivityPost.setItemSource("md5:b55f1d0efd76800194b37fbc543e0f80");
 
         assertThat(actualActivityPost)
                 .as("all except sources")
