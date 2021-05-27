@@ -33,7 +33,7 @@ public class OperiaNotifications {
 
     private Long amountOfOperiaQueriesLeft = 0L;
 
-    @Scheduled(cron = "0 0 * * * *")
+    @Scheduled(cron = "0 0 10 * * *")
     public void check() {
 
         Request request = new Request.Builder()
