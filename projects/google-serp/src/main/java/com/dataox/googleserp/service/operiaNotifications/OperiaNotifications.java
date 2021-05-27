@@ -31,7 +31,7 @@ public class OperiaNotifications {
     private final NotificationsService notificationsService;
     private final NotificationsProperties notificationsProperties;
 
-    private Long amountOfOperiaQueriesLeft;
+    private Long amountOfOperiaQueriesLeft = 0L;
 
     @Scheduled(cron = "0 0 * * * *")
     public void check() {
