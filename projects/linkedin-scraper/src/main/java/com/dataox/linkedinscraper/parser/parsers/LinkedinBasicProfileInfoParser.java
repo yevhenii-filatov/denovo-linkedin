@@ -60,6 +60,6 @@ public class LinkedinBasicProfileInfoParser implements LinkedinParser<LinkedinBa
     }
 
     private String parseAbout(Element aboutElement) {
-        return substringBefore(text(aboutElement.selectFirst("header + p")), " ... see more");
+        return substringBefore(text(aboutElement.selectFirst("section > header+div")), " … see more");
     }
 }
