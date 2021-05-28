@@ -19,6 +19,7 @@ import static com.dataox.linkedinscraper.service.validator.ValidatorMessage.*;
 @Service
 public class ScraperValidator {
 
+    // init from db or hardcore data
     public static final String EXPECTED_HEADER = "";
     public static final String EXPECTED_PHOTO = "";
     public static final String EXPECTED_ABOUT = "";
@@ -51,6 +52,6 @@ public class ScraperValidator {
 
     private void equalsField(Object expected, Object actual, ValidatorMessage exceptionMessage) throws LinkedinValidatorException {
         if (Objects.deepEquals(expected, actual))
-            throw new LinkedinValidatorException(String.format("scraping %s", exceptionMessage));
+            throw new LinkedinValidatorException(exceptionMessage);
     }
 }

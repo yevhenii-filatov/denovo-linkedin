@@ -15,6 +15,8 @@ import static com.dataox.linkedinscraper.service.validator.ValidatorMessage.*;
  */
 @Service
 public class ParserValidator {
+
+    // init from db or hardcore data
     private static final List<LinkedinActivity> EXPECTED_ACTIVITIES = new ArrayList<>();
     private static final LinkedinBasicProfileInfo EXPECTED_INFO = new LinkedinBasicProfileInfo();
     private static final List<LinkedinEducation> EXPECTED_EDUCATION = new ArrayList<>();
@@ -41,6 +43,6 @@ public class ParserValidator {
 
     private void equalsField(Object expected, Object actual, ValidatorMessage exceptionMessage) throws LinkedinValidatorException {
         if (Objects.deepEquals(expected, actual))
-            throw new LinkedinValidatorException(String.format("parsing %s", exceptionMessage));
+            throw new LinkedinValidatorException(exceptionMessage);
     }
 }
