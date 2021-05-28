@@ -21,19 +21,19 @@ public class LinkedinSkill {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
+//    @NotNull
     @Column(name = "updated_at")
     private Instant updatedAt;
 
-    @NotBlank
+//    @NotBlank
     @Column(name = "item_source", columnDefinition = "TEXT")
     private String itemSource;
 
-    @NotBlank
+//    @NotBlank
     @Column(name = "name", columnDefinition = "TEXT")
     private String name;
 
-    @NotBlank
+//    @NotBlank
     @Column(name = "category", columnDefinition = "TEXT")
     private String category;
 
@@ -43,7 +43,7 @@ public class LinkedinSkill {
     @Column(name = "number_of_endorsements")
     private int numberOfEndorsements;
 
-    @NotNull
+//    @NotNull
     @ManyToOne
     @JoinColumn(name = "linkedin_profile_id", referencedColumnName = "id")
     private LinkedinProfile linkedinProfile;

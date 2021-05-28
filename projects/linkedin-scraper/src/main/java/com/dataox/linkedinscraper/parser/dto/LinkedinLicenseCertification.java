@@ -29,9 +29,9 @@ public class LinkedinLicenseCertification {
 //    @Max(20)
     private String issuedDate;
 
-    @Max(30)
+//    @Max(30)
     private String expirationDate;
 
-    @Max(50)
+//    @Max(50)
     private String credentialId;
 }

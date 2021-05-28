@@ -19,30 +19,30 @@ public class LinkedinEndorsement {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
+//    @NotNull
     @Column(name = "updated_at")
     private Instant updatedAt;
 
-    @NotBlank
+//    @NotBlank
     @Column(name = "item_source", columnDefinition = "TEXT")
     private String itemSource;
 
-    @NotBlank
+//    @NotBlank
     @Column(name = "endorser_full_name", columnDefinition = "TEXT")
     private String endorserFullName;
 
     @Column(name = "endorser_headline", columnDefinition = "TEXT")
     private String endorserHeadline;
 
-    @NotBlank
+//    @NotBlank
     @Column(name = "endorser_connection_degree", columnDefinition = "TEXT")
     private String endorserConnectionDegree;
 
-    @NotBlank
+//    @NotBlank
     @Column(name = "endorser_profile_url", columnDefinition = "TEXT")
     private String endorserProfileUrl;
 
-    @NotNull
+//    @NotNull
     @ManyToOne
     @JoinColumn(name = "skill_id", referencedColumnName = "id")
     private LinkedinSkill linkedinSkill;

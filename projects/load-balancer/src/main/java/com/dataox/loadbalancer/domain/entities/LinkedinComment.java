@@ -22,23 +22,23 @@ public class LinkedinComment {
     @Column(name = "url", columnDefinition = "TEXT")
     private String url;
 
-    @NotBlank
+//    @NotBlank
     @Column(name = "item_source", columnDefinition = "TEXT")
     private String itemSource;
 
-    @NotBlank
+//    @NotBlank
     @Column(name = "content", columnDefinition = "TEXT")
     private String content;
 
-    @NotBlank
+//    @NotBlank
     @Column(name = "relative_publication_date", columnDefinition = "TEXT")
     private String relativePublicationDate;
 
-    @NotNull
+//    @NotNull
     @Column(name = "collected_date")
     private Instant collectedDate;
 
-    @NotNull
+//    @NotNull
     @Column(name = "absolute_publication_date")
     private Instant absolutePublicationDate;
 
@@ -48,7 +48,7 @@ public class LinkedinComment {
     @Column(name = "number_of_replies")
     private int numberOfReplies;
 
-    @NotNull
+//    @NotNull
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "linkedin_post_id", referencedColumnName = "id")
     private LinkedinPost linkedinPost;

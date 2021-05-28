@@ -117,7 +117,7 @@ public class ScrapingService {
 
     public void processScrapingResults(ScrapingResultsDTO scrapingResultsDTO) {
         List<LinkedinProfile> successfulProfiles = scrapingResultsDTO.getSuccessfulProfiles();
-        List<Long> searchResultsIds = resolveMinimalScrapedSearchResultsIds(successfulProfiles);
+//        List<Long> searchResultsIds = resolveMinimalScrapedSearchResultsIds(successfulProfiles);
         dataLoaderService.saveLinkedinProfiles(successfulProfiles);
         notificationsService.sendAll("LoadBalancer: Profiles has been successfully scraped: ".concat(
                 successfulProfiles
