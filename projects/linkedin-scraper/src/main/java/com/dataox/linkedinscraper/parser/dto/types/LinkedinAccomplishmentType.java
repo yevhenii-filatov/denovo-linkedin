@@ -5,7 +5,9 @@ import lombok.Getter;
 @Getter
 public enum LinkedinAccomplishmentType{
     PUBLICATIONS("Publications"),
+    PUBLICATION("Publication"),
     LANGUAGES("Languages"),
+    LANGUAGE("Language"),
     PATENTS("Patents"),
     PROJECTS("Projects"),
     HONORS_AND_AWARDS("Honors & Awards"),

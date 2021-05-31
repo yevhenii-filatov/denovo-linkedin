@@ -24,32 +24,32 @@ public class LinkedinPost {
     @Column(name = "url", columnDefinition = "TEXT")
     private String url;
 
-    @NotBlank
+//    @NotBlank
     @Column(name = "item_source", columnDefinition = "TEXT")
     private String itemSource;
 
     @Column(name = "relative_publication_date", columnDefinition = "TEXT")
     private String relativePublicationDate;
 
-    @NotNull
+//    @NotNull
     @Column(name = "collected_date")
     private Instant collectedDate;
 
     @Column(name = "absolute_publication_date")
     private Instant absolutePublicationDate;
 
-    @NotBlank
+//    @NotBlank
     @Column(name = "author_name", columnDefinition = "TEXT")
     private String authorProfileName;
 
-    @NotBlank
+//    @NotBlank
     @Column(name = "author_profile_url", columnDefinition = "TEXT")
     private String authorProfileUrl;
 
     @Column(name = "author_connection_degree", columnDefinition = "TEXT")
     private String authorConnectionDegree;
 
-    @NotBlank
+//    @NotBlank
     @Column(name = "author_headline", columnDefinition = "TEXT")
     private String authorHeadline;
 
@@ -62,7 +62,7 @@ public class LinkedinPost {
     @Column(name = "number_of_reactions")
     private int numberOfReactions;
 
-    @NotNull
+//    @NotNull
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "linkedin_activity_id", referencedColumnName = "id")
     private LinkedinActivity linkedinActivity;

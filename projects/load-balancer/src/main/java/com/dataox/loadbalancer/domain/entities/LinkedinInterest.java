@@ -20,35 +20,35 @@ public class LinkedinInterest {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
+//    @NotNull
     @Column(name = "updated_at")
     private Instant updatedAt;
 
-    @NotBlank
+//    @NotBlank
     @Column(name = "item_source", columnDefinition = "TEXT")
     private String itemSource;
 
-    @NotBlank
+//    @NotBlank
     @Column(name = "name", columnDefinition = "TEXT")
     private String name;
 
-    @NotNull
+//    @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "type")
     private LinkedinInterestType linkedinInterestType;
 
 //    @NotBlank change in database to not null
-@Column(name = "profile_url", columnDefinition = "TEXT")
+    @Column(name = "profile_url", columnDefinition = "TEXT")
     private String profileUrl;
 
     @Column(name = "headline", columnDefinition = "TEXT")
     private String headline;
 
-    @NotBlank
+//    @NotBlank
     @Column(name = "number_of_followers", columnDefinition = "TEXT")
     private String numberOfFollowers;
 
-    @NotNull
+//    @NotNull
     @ManyToOne
     @JoinColumn(name = "linkedin_profile_id", referencedColumnName = "id")
     private LinkedinProfile linkedinProfile;

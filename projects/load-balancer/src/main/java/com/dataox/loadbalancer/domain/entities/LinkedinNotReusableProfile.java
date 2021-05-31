@@ -26,16 +26,16 @@ public class LinkedinNotReusableProfile {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    @NotNull
+//    @NotNull
     @Column(name = "error_description", columnDefinition = "TEXT")
     String errorDescription;
 
-    @NotNull
+//    @NotNull
     @OneToOne
     @JoinColumn(name = "search_result_id", referencedColumnName = "id")
     SearchResult searchResult;
 
-    @NotNull
+//    @NotNull
     @Column(name = "optional_fields")
     @Convert(converter = OptionalFieldsConverter.class)
     OptionalFieldsContainer optionalFieldsContainer;

@@ -22,20 +22,20 @@ public class LinkedinProfile {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
+//    @NotNull
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "search_result_id", referencedColumnName = "id")
     private SearchResult searchResult;
 
-    @NotNull
+//    @NotNull
     @Column(name = "created_at", updatable = false)
     private Instant createdAt;
 
-    @NotNull
+//    @NotNull
     @Column(name = "updated_at")
     private Instant updatedAt;
 
-    @NotBlank
+//    @NotBlank
     @Column(name = "profile_url", columnDefinition = "TEXT")
     private String profileUrl;
 

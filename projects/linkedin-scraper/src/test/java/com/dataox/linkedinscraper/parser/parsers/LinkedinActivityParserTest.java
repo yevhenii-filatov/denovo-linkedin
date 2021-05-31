@@ -21,7 +21,7 @@ import static com.dataox.linkedinscraper.parser.ParsingTestUtils.loadResource;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class LinkedinActivityParserTest {
-    private static final String ACTIVITY_SOURCE = "/sources/linkedin-activity-parser/activity-feed.html";
+    private static final String ACTIVITY_SOURCE = "/sources/linkedin-activity-parser/activity-source.html";
     private static List<LinkedinActivity> activitiesList;
 
     @BeforeAll

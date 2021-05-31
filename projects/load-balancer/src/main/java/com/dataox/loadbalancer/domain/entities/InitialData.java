@@ -29,26 +29,26 @@ public class InitialData {
     @Column(name = "updated_at")
     private Instant updatedAt;
 
-    @NotNull
+//    @NotNull
     @Column(name = "first_name", columnDefinition = "TEXT")
     private String firstName;
 
-    @NotNull
+//    @NotNull
     @Column(name = "middle_name", columnDefinition = "TEXT")
     private String middleName;
 
-    @NotNull
+//    @NotNull
     @Column(name = "last_name", columnDefinition = "TEXT")
     private String lastName;
 
-    @NotNull
+//    @NotNull
     @Column(name = "firm_name", columnDefinition = "TEXT")
     private String firmName;
 
     @Column(name = "linkedin_url", length = 1000)
     private String linkedinUrl;
 
-    @NotNull
+//    @NotNull
     @Column(name = "searched")
     private Boolean searched;
 

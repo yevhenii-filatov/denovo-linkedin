@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import okhttp3.MediaType;
 import okhttp3.Request;
 import okhttp3.RequestBody;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -57,9 +58,9 @@ public class Runner implements ApplicationRunner {
                     .build();
             try {
                 okHttpTemplate.request(request);
-            } catch (IOException e) {
+            } catch (Exception e) {
                 notificationsService.sendAll("LinkedIn Scraper Applicaton has unexpectedly finished it's work. Check logs for detailed information.");
-                notificationsService.sendInternal(e.getMessage());
+                notificationsService.sendInternal(ExceptionUtils.getStackTrace(e));
             }
         }
     }

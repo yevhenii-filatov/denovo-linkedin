@@ -16,11 +16,11 @@ public class SearchMetadata {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
+//    @NotNull
     @Column(name = "search_page_source", columnDefinition = "TEXT")
     private String searchPageSource;
 
-    @NotNull
+//    @NotNull
     @Column(name = "query_url", columnDefinition = "TEXT")
     private String queryUrl;
 

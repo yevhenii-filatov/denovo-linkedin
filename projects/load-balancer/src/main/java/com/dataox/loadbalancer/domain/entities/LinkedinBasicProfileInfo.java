@@ -22,26 +22,26 @@ public class LinkedinBasicProfileInfo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
+//    @NotNull
     @Column(name = "updated_at")
     private Instant updatedAt;
 
-    @NotBlank
+//    @NotBlank
     @Column(name = "header_section_source", columnDefinition = "TEXT")
     private String headerSectionSource;
 
     @Column(name = "about_section_source", columnDefinition = "TEXT")
     private String aboutSectionSource;
 
-    @NotBlank
+//    @NotBlank
     @Column(name = "full_name", columnDefinition = "TEXT")
     private String fullName;
 
-    @NotBlank
+//    @NotBlank
     @Column(name = "number_of_connections", columnDefinition = "TEXT")
     private String numberOfConnections;
 
-    @NotEmpty
+//    @NotEmpty
     @Column(name = "location", columnDefinition = "TEXT")
     private String location;
 
@@ -51,7 +51,7 @@ public class LinkedinBasicProfileInfo {
     @Column(name = "about", columnDefinition = "TEXT")
     private String about;
 
-    @NotNull
+//    @NotNull
     @EqualsAndHashCode.Exclude
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "linkedin_profile_id",referencedColumnName = "id")

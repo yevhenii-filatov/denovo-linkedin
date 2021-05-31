@@ -10,7 +10,8 @@ public enum LinkedinActivityType {
     REPLIED_TO_COMMENT("replied to"),
     JOB_UPDATE("job update"),
     CUSTOM_POST("a"),
-    LIKED_COMMENT("liked");
+    LIKED_COMMENT("liked"),
+    FINDS_THIS_INSIGHTFUL("finds this insightful");
 
     private final String type;
 

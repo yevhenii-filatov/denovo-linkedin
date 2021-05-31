@@ -23,12 +23,12 @@ public class LinkedinActivity {
     @Column(name = "updated_at")
     private Instant updatedAt;
 
-    @NotNull
+//    @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "type")
     LinkedinActivityType linkedinActivityType;
 
-    @NotNull
+//    @NotNull
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "linkedin_profile_id",referencedColumnName = "id")
     private LinkedinProfile linkedinProfile;

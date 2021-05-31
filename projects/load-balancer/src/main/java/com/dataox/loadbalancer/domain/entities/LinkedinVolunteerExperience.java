@@ -19,34 +19,34 @@ public class LinkedinVolunteerExperience {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
+//    @NotNull
     @Column(name = "updated_at")
     private Instant updatedAt;
 
-    @NotBlank
+//    @NotBlank
     @Column(name = "item_source", columnDefinition = "TEXT")
     private String itemSource;
 
-    @NotBlank
+//    @NotBlank
     @Column(name = "company_name", columnDefinition = "TEXT")
     private String companyName;
 
     @Column(name = "company_profile_url", columnDefinition = "TEXT")
     private String companyProfileUrl;
 
-    @NotBlank
+//    @NotBlank
     @Column(name = "position", columnDefinition = "TEXT")
     private String position;
 
-    @NotBlank
+//    @NotBlank
     @Column(name = "date_started", columnDefinition = "TEXT")
     private String dateStarted;
 
-    @NotBlank
+//    @NotBlank
     @Column(name = "date_finished", columnDefinition = "TEXT")
     private String dateFinished;
 
-    @NotBlank
+//    @NotBlank
     @Column(name = "total_duration", columnDefinition = "TEXT")
     private String totalDuration;
 
@@ -56,7 +56,7 @@ public class LinkedinVolunteerExperience {
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
-    @NotNull
+//    @NotNull
     @ManyToOne
     @JoinColumn(name = "linkedin_profile_id", referencedColumnName = "id")
     private LinkedinProfile linkedinProfile;

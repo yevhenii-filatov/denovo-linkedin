@@ -20,27 +20,27 @@ public class LinkedinAccomplishment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
+//    @NotNull
     @Column(name = "updated_at")
     private Instant updatedAt;
 
-    @NotBlank
+//    @NotBlank
     @Column(name = "item_source", columnDefinition = "TEXT")
     private String itemSource;
 
-    @NotBlank
+//    @NotBlank
     @Column(name = "title", columnDefinition = "TEXT")
     private String title;
 
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
-    @NotNull
+//    @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "type")
     private LinkedinAccomplishmentType linkedinAccomplishmentType;
 
-    @NotNull
+//    @NotNull
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "linkedin_profile_id",referencedColumnName = "id")
     private LinkedinProfile linkedinProfile;
