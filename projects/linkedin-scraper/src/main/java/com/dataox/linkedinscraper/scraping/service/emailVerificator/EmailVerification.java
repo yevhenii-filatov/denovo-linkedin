@@ -13,6 +13,9 @@ import org.openqa.selenium.interactions.Actions;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -34,9 +37,12 @@ public class EmailVerification {
     static By SUBMIT_BUTTON = By.xpath("//*[@id=\"email-pin-submit-button\"]");
 
     @SuppressWarnings("unchecked")
-    public static void verifyEmail(WebDriver webDriver) {
-        Scanner sc = new Scanner(System.in);
+    public static void verifyEmail(WebDriver webDriver) throws IOException, InterruptedException {
+        File verificationFile = new File("./verificationCode.txt");
+        Scanner sc = new Scanner(verificationFile);
+        Thread.sleep(120000);
         String code = sc.nextLine();
+        log.info("Verification code used: {}", code);
         WebElement emailVerificationField = findWebElementBy(webDriver, EMAIL_VERIFICATION_FIELD)
                 .orElseThrow(() -> ElementNotFoundException.create("Email verification field"));
         WebElement submitButton = findWebElementBy(webDriver, SUBMIT_BUTTON)

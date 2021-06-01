@@ -31,6 +31,8 @@ public class ChromeOptionsConfiguration {
         options.addArguments("--window-size=1920,1080");
         options.addArguments("--no-sandbox");
         options.addArguments("--incognito");
+        options.addArguments("--lang=en");
+
 
         options.setHeadless(chromedriverProperties.isHeadless());
         options.addArguments("--log-level=3");

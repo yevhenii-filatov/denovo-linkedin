@@ -18,6 +18,9 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.stereotype.Service;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
 import static com.dataox.CommonUtils.randomLong;
 import static com.dataox.WebDriverUtils.*;
 import static com.dataox.linkedinscraper.scraping.service.emailVerificator.EmailVerification.verifyEmail;
@@ -60,11 +63,12 @@ public class LoginService {
         }
     }
 
-    private void checkForErrors(WebDriver webDriver) {
+    private void checkForErrors(WebDriver webDriver) throws IOException, InterruptedException {
         LinkedinError linkedinError = errorDetector.detect(webDriver);
         if (linkedinError == LinkedinError.EMAIL_VERIFICATION) {
             verifyEmail(webDriver);
-        } else if (linkedinError != LinkedinError.NO_ERRORS) {
+        }
+        if (linkedinError != LinkedinError.NO_ERRORS && linkedinError != LinkedinError.EMAIL_VERIFICATION) {
             log.error(CANT_LOGIN_MESSAGE + " Error occurred {}", linkedinError);
             throw LinkedinLoginException.failedToLogin(linkedinProperties.getProfileLogin(), linkedinProperties.getProfilePassword(), linkedinError);
         }

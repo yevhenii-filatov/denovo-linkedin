@@ -19,8 +19,6 @@ import static com.dataox.WebDriverUtils.ScrollingDirection.*;
 @Slf4j
 public final class WebDriverUtils {
 
-    private static Long lastScrollYInElementPosition;
-
     private WebDriverUtils() {
         throw new UnsupportedOperationException("utility class");
     }
