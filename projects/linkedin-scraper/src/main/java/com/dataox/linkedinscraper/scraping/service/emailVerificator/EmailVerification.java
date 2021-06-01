@@ -2,6 +2,7 @@ package com.dataox.linkedinscraper.scraping.service.emailVerificator;
 
 import com.dataox.linkedinscraper.dto.LinkedinProfileToScrapeDTO;
 import com.dataox.linkedinscraper.scraping.exceptions.ElementNotFoundException;
+import com.dataox.notificationservice.service.NotificationsService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -13,6 +14,7 @@ import org.openqa.selenium.interactions.Actions;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 
+import javax.management.Notification;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -33,6 +35,7 @@ import static com.dataox.WebDriverUtils.*;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class EmailVerification {
 
+    private static NotificationsService notificationsService;
     static By EMAIL_VERIFICATION_FIELD = By.xpath("//*[@id=\"input__email_verification_pin\"]");
     static By SUBMIT_BUTTON = By.xpath("//*[@id=\"email-pin-submit-button\"]");
 
@@ -40,9 +43,11 @@ public class EmailVerification {
     public static void verifyEmail(WebDriver webDriver) throws IOException, InterruptedException {
         File verificationFile = new File("./verificationCode.txt");
         Scanner sc = new Scanner(verificationFile);
+        notificationsService.sendAll("LinkedinScraper: waiting 120 seconds for verification code to be entered.");
         Thread.sleep(120000);
         String code = sc.nextLine();
         log.info("Verification code used: {}", code);
+        notificationsService.sendAll("Verification code used: ".concat(code));
         WebElement emailVerificationField = findWebElementBy(webDriver, EMAIL_VERIFICATION_FIELD)
                 .orElseThrow(() -> ElementNotFoundException.create("Email verification field"));
         WebElement submitButton = findWebElementBy(webDriver, SUBMIT_BUTTON)

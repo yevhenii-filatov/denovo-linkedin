@@ -62,7 +62,7 @@ public class InterestsScraper implements Scraper<List<InterestsSource>> {
 
     private List<InterestsSource> collectInterestsByGroups(WebDriver webDriver) {
         List<InterestsSource> interestsSources = new ArrayList<>();
-        WebDriverWait wait = new WebDriverWait(webDriver, 45);
+        WebDriverWait wait = new WebDriverWait(webDriver, 120);
         Actions actions = new Actions(webDriver);
 
         clickSeeAllButton(webDriver, wait, actions);
