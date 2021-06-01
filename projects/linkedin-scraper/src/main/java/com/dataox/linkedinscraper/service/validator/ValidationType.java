@@ -33,7 +33,7 @@ public enum ValidationType {
         this.value = value;
     }
 
-    private String value;
+    private final String value;
 
     String getMessage() {
         return this.value;

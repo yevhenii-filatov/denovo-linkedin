@@ -27,6 +27,7 @@ public class ScraperValidator {
 
     public List<ValidationField> checkScraper(CollectedProfileSourcesDTO profile) throws LinkedinValidatorException {
         return Arrays.asList(
+                checkAboutSection(profile.getAboutSectionSource()),
                 checkHeaderSection(profile.getHeaderSectionSource()),
                 checkProfilePhotoUrl(profile.getProfilePhotoUrl()),
                 checkExperiencesSource(profile.getExperiencesSource()),
@@ -42,13 +43,18 @@ public class ScraperValidator {
         );
     }
 
+    private ValidationField checkAboutSection(String aboutSectionSource) {
+        if (isNotBlank(aboutSectionSource)) return null;
+        else return new ValidationField(SCRAPED_VOLUNTEERS, EMPTY);
+    }
+
     private ValidationField checkActivitiesSources(List<String> activitiesSources) {
-        if(!activitiesSources.isEmpty() && activitiesSources.stream().allMatch(StringUtils::isNotBlank)) return null;
-        else return new ValidationField(SCRAPED_HEADER, EMPTY);
+        if (!activitiesSources.isEmpty() && activitiesSources.stream().allMatch(StringUtils::isNotBlank)) return null;
+        else return new ValidationField(SCRAPED_ACTIVITIES, EMPTY);
     }
 
     private ValidationField checkInterestsSources(List<InterestsSource> interestsSources) {
-        if(!interestsSources.isEmpty() && interestsSources.stream().allMatch(Objects::nonNull)) return null;
+        if (!interestsSources.isEmpty() && interestsSources.stream().allMatch(Objects::nonNull)) return null;
         else return new ValidationField(SCRAPED_INTERESTS, EMPTY);
     }
 
