@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import static com.dataox.CommonUtils.randomLong;
 import static com.dataox.WebDriverUtils.*;
+import static com.dataox.linkedinscraper.scraping.service.emailVerificator.EmailVerification.verifyEmail;
 import static java.util.Objects.nonNull;
 
 /**
@@ -61,7 +62,9 @@ public class LoginService {
 
     private void checkForErrors(WebDriver webDriver) {
         LinkedinError linkedinError = errorDetector.detect(webDriver);
-        if (linkedinError != LinkedinError.NO_ERRORS) {
+        if (linkedinError == LinkedinError.EMAIL_VERIFICATION) {
+            verifyEmail(webDriver);
+        } else if (linkedinError != LinkedinError.NO_ERRORS) {
             log.error(CANT_LOGIN_MESSAGE + " Error occurred {}", linkedinError);
             throw LinkedinLoginException.failedToLogin(linkedinProperties.getProfileLogin(), linkedinProperties.getProfilePassword(), linkedinError);
         }
