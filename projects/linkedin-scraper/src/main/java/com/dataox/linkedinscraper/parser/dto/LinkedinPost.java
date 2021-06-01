@@ -4,9 +4,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
@@ -31,10 +28,11 @@ public class LinkedinPost {
 //    @NotNull
     private Instant absolutePublicationDate;
 
+    @EqualsAndHashCode.Include
 //    @NotBlank
     private String authorProfileName;
 
-//    @EqualsAndHashCode.Include
+    @EqualsAndHashCode.Include
 //    @NotBlank
     private String authorProfileUrl;
 
@@ -44,7 +42,7 @@ public class LinkedinPost {
 //    @NotBlank
     private String authorHeadline;
 
-//    @EqualsAndHashCode.Include
+    @EqualsAndHashCode.Include
     private String content;
 
     private int numberOfComments;

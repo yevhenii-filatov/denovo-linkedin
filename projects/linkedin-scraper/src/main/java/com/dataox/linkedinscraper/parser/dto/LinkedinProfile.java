@@ -2,58 +2,57 @@ package com.dataox.linkedinscraper.parser.dto;
 
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
+@EqualsAndHashCode(exclude = {"createdAt", "updatedAt"})
 @NoArgsConstructor
 public class LinkedinProfile {
 
-//    @NotNull
+    //    @NotNull
     private SearchResult searchResult;
 
-//    @NotNull
+    //    @NotNull
     private Instant createdAt;
 
-//    @NotNull
+    //    @NotNull
     private Instant updatedAt;
 
-//    @NotBlank
+    //    @NotBlank
     private String profileUrl;
 
-//    @Valid
+    //    @Valid
     private LinkedinBasicProfileInfo linkedinBasicProfileInfo;
 
-//    @Valid
+    //    @Valid
     private List<LinkedinExperience> linkedinExperiences = new ArrayList<>();
 
-//    @Valid
+    //    @Valid
     private List<LinkedinEducation> linkedinEducations = new ArrayList<>();
 
-//    @Valid
+    //    @Valid
     private List<LinkedinRecommendation> linkedinRecommendations = new ArrayList<>();
 
-//    @Valid
+    //    @Valid
     private List<LinkedinLicenseCertification> linkedinLicenseCertifications = new ArrayList<>();
 
-//    @Valid
+    //    @Valid
     private List<LinkedinVolunteerExperience> linkedinVolunteerExperiences = new ArrayList<>();
 
-//    @Valid
+    //    @Valid
     private List<LinkedinInterest> linkedinInterests = new ArrayList<>();
 
-//    @Valid
+    //    @Valid
     private List<LinkedinSkill> linkedinSkills = new ArrayList<>();
 
-//    @Valid
+    //    @Valid
     private List<LinkedinActivity> linkedinActivities = new ArrayList<>();
 
-//    @Valid
+    //    @Valid
     private List<LinkedinAccomplishment> linkedinAccomplishments = new ArrayList<>();
 }

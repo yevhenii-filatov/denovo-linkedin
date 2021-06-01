@@ -2,14 +2,13 @@ package com.dataox.linkedinscraper.parser.dto;
 
 import com.dataox.linkedinscraper.parser.dto.types.LinkedinRecommendationType;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.time.Instant;
 
 @Data
+@EqualsAndHashCode(exclude = {"updatedAt", "itemSource"})
 @NoArgsConstructor
 public class LinkedinRecommendation {
 

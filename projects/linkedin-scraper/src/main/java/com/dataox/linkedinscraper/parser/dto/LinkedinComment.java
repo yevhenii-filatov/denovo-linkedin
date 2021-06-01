@@ -4,9 +4,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.time.Instant;
 
 @Data
@@ -20,7 +17,7 @@ public class LinkedinComment {
     private String itemSource;
 
 //    @NotBlank
-//    @EqualsAndHashCode.Include
+    @EqualsAndHashCode.Include
     private String content;
 
 //    @NotBlank

@@ -1,34 +1,37 @@
 package com.dataox.linkedinscraper.parser.dto;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.time.Instant;
 
 @Data
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @NoArgsConstructor
 public class LinkedinBasicProfileInfo {
 
-//    @NotNull
+    //    @NotNull
+    @EqualsAndHashCode.Exclude
     private Instant updatedAt;
 
-//    @NotBlank
+    //    @NotBlank
+    @EqualsAndHashCode.Exclude
     private String headerSectionSource;
 
+    @EqualsAndHashCode.Exclude
     private String aboutSectionSource;
 
-//    @NotBlank
+    //    @NotBlank
 //    @Max(255)
     private String fullName;
 
-//    @NotBlank
+    //    @NotBlank
 //    @Max(10)
+    @EqualsAndHashCode.Exclude
     private String numberOfConnections;
 
-//    @NotBlank
+    //    @NotBlank
 //    @Max(100)
     private String location;
 

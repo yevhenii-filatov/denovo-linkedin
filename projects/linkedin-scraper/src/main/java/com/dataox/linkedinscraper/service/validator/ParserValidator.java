@@ -1,54 +1,55 @@
 package com.dataox.linkedinscraper.service.validator;
 
-import com.dataox.linkedinscraper.parser.dto.*;
+import com.dataox.linkedinscraper.parser.dto.LinkedinProfile;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-import static com.dataox.linkedinscraper.service.validator.ValidatorMessage.*;
+import static com.dataox.linkedinscraper.service.validator.ValidationType.*;
 
 /**
  * @author Mykola Kostyshyn
  * @since 27/05/2021
  */
 @Service
+@RequiredArgsConstructor
 public class ParserValidator {
 
-    // init from db or hardcore data
-    private static final List<LinkedinActivity> EXPECTED_ACTIVITIES = getExpectedActivities();
+    public static final String FORMAT = "Expected: %s\nActual: %s";
 
-    private static final LinkedinBasicProfileInfo EXPECTED_INFO = new LinkedinBasicProfileInfo();
-    private static final List<LinkedinEducation> EXPECTED_EDUCATION = new ArrayList<>();
-    private static final List<LinkedinSkill> EXPECTED_SKILLS = new ArrayList<>();
-    private static final List<LinkedinExperience> EXPECTED_EXPERIENCE = new ArrayList<>();
-    private static final List<LinkedinInterest> EXPECTED_INTERESTS = new ArrayList<>();
-    private static final List<LinkedinLicenseCertification> EXPECTED_LICENSE = new ArrayList<>();
-    private static final List<LinkedinRecommendation> EXPECTED_RECOMMENDATIONS = new ArrayList<>();
-    private static final List<LinkedinVolunteerExperience> EXPECTED_VOLUNTEERS = new ArrayList<>();
-    private static final List<LinkedinAccomplishment> EXPECTED_ACCOMPLISHMENTS = new ArrayList<>();
+    private final ObjectMapper mapper;
 
-    public void checkParser(LinkedinProfile profile) throws LinkedinValidatorException {
-        equalsField(EXPECTED_ACTIVITIES, profile.getLinkedinActivities(), PARSER_ACTIVITIES);
-        equalsField(EXPECTED_INFO, profile.getLinkedinBasicProfileInfo(), PARSER_INFO);
-        equalsField(EXPECTED_EDUCATION, profile.getLinkedinEducations(), PARSER_EDUCATION);
-        equalsField(EXPECTED_SKILLS, profile.getLinkedinSkills(), PARSER_SKILLS);
-        equalsField(EXPECTED_EXPERIENCE, profile.getLinkedinExperiences(), PARSER_EXPERIENCE);
-        equalsField(EXPECTED_INTERESTS, profile.getLinkedinInterests(), PARSER_INTERESTS);
-        equalsField(EXPECTED_LICENSE, profile.getLinkedinLicenseCertifications(), PARSER_LICENSE);
-        equalsField(EXPECTED_RECOMMENDATIONS, profile.getLinkedinRecommendations(), PARSER_RECOMMENDATIONS);
-        equalsField(EXPECTED_VOLUNTEERS, profile.getLinkedinVolunteerExperiences(), PARSER_VOLUNTEERS);
-        equalsField(EXPECTED_ACCOMPLISHMENTS, profile.getLinkedinAccomplishments(), PARSER_ACCOMPLISHMENTS);
+    public List<ValidationField> checkParser(LinkedinProfile actual) {
+        LinkedinProfile expected = getExpectedProfile();
+
+        return Arrays.asList(
+                equalsField(expected.getLinkedinActivities(), actual.getLinkedinActivities(), PARSER_ACTIVITIES),
+                equalsField(expected.getLinkedinBasicProfileInfo(), actual.getLinkedinBasicProfileInfo(), PARSER_INFO),
+                equalsField(expected.getLinkedinEducations(), actual.getLinkedinEducations(), PARSER_EDUCATION),
+                equalsField(expected.getLinkedinSkills(), actual.getLinkedinSkills(), PARSER_SKILLS),
+                equalsField(expected.getLinkedinExperiences(), actual.getLinkedinExperiences(), PARSER_EXPERIENCE),
+                equalsField(expected.getLinkedinInterests(), actual.getLinkedinInterests(), PARSER_INTERESTS),
+                equalsField(expected.getLinkedinLicenseCertifications(), actual.getLinkedinLicenseCertifications(), PARSER_LICENSE),
+                equalsField(expected.getLinkedinRecommendations(), actual.getLinkedinRecommendations(), PARSER_RECOMMENDATIONS),
+                equalsField(expected.getLinkedinVolunteerExperiences(), actual.getLinkedinVolunteerExperiences(), PARSER_VOLUNTEERS),
+                equalsField(expected.getLinkedinAccomplishments(), actual.getLinkedinAccomplishments(), PARSER_ACCOMPLISHMENTS));
     }
 
-    private void equalsField(Object expected, Object actual, ValidatorMessage exceptionMessage) throws LinkedinValidatorException {
-        if (Objects.deepEquals(expected, actual))
-            throw new LinkedinValidatorException(exceptionMessage);
+    private LinkedinProfile getExpectedProfile() {
+        try {
+            return mapper.readValue(getClass().getResource("/validator/parser/parsedprofile.json"), LinkedinProfile.class);
+        } catch (IOException e) {
+            throw new LinkedinValidatorException(e.getMessage());
+        }
     }
 
-    private static List<LinkedinActivity> getExpectedActivities() {
-        return Arrays.asList();
+    private ValidationField equalsField(Object expected, Object actual, ValidationType type) {
+        if (Objects.deepEquals(expected, actual)) return null;
+        else return new ValidationField(type, String.format(FORMAT, expected.toString(), actual.toString()));
     }
 }
