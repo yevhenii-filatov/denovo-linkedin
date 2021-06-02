@@ -4,11 +4,13 @@ import com.dataox.linkedinscraper.parser.dto.types.LinkedinInterestType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.time.Instant;
 
 @Data
 @EqualsAndHashCode(exclude = {"updatedAt", "itemSource", "numberOfFollowers"})
+@ToString(exclude = {"updatedAt", "itemSource", "numberOfFollowers"})
 @NoArgsConstructor
 public class LinkedinInterest {
 

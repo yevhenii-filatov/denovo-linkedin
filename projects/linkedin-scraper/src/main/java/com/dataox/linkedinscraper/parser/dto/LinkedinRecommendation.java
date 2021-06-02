@@ -4,11 +4,13 @@ import com.dataox.linkedinscraper.parser.dto.types.LinkedinRecommendationType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.time.Instant;
 
 @Data
 @EqualsAndHashCode(exclude = {"updatedAt", "itemSource"})
+@ToString(exclude = {"updatedAt", "itemSource"})
 @NoArgsConstructor
 public class LinkedinRecommendation {
 

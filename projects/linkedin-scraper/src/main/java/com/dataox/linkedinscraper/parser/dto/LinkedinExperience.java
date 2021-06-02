@@ -4,12 +4,14 @@ import com.dataox.linkedinscraper.parser.dto.types.LinkedinJobType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.time.Instant;
 import java.time.LocalDate;
 
 @Data
 @EqualsAndHashCode(exclude = {"updatedAt", "itemSource"})
+@ToString(exclude = {"updatedAt", "itemSource"})
 @NoArgsConstructor
 public class LinkedinExperience {
 

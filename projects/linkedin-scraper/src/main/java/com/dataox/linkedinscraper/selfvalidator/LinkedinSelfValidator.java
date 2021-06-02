@@ -37,6 +37,10 @@ public class LinkedinSelfValidator {
         List<ValidationField> validationResult = new ArrayList<>();
         LinkedinProfileToScrapeDTO profileToScrape = getProfileToScrape();
 
+        chromeOptions.addArguments("--no-sandbox");
+        chromeOptions.addArguments("--disable-dev-shm-usage");
+        chromeOptions.addArguments("--remote-debugging-port=9222");
+
         try (ChromeDriverLauncher launcher = new ChromeDriverLauncher(chromeOptions)) {
             WebDriver webDriver = launcher.getWebDriver();
             loginService.performLogin(webDriver);
