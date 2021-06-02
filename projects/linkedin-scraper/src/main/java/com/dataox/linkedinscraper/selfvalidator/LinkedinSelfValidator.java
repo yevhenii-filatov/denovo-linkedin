@@ -8,7 +8,6 @@ import com.dataox.linkedinscraper.parser.LinkedinProfileParser;
 import com.dataox.linkedinscraper.parser.dto.LinkedinProfile;
 import com.dataox.linkedinscraper.scraping.scrapers.LinkedinProfileScraper;
 import com.dataox.linkedinscraper.scraping.service.login.LoginService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -33,8 +32,6 @@ public class LinkedinSelfValidator {
     private final ChromeOptions chromeOptions;
     private final ScraperSelfValidator scraperValidator;
     private final ParserSelfValidator parserValidator;
-
-    private final ObjectMapper mapper;
 
     public List<ValidationField> validate() throws LinkedinSelfValidatorException {
         List<ValidationField> validationResult = new ArrayList<>();
