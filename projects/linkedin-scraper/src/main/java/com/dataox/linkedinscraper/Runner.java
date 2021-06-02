@@ -61,6 +61,7 @@ public class Runner implements ApplicationRunner {
             } catch (Exception e) {
                 notificationsService.sendAll("LinkedIn Scraper Applicaton has unexpectedly finished it's work. Check logs for detailed information.");
                 notificationsService.sendInternal(ExceptionUtils.getStackTrace(e));
+                log.error("LinkedInScraper: Error has been occured: {}", e.getMessage());
             }
         }
     }

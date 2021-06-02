@@ -45,7 +45,7 @@ public class ActivitiesScraper implements Scraper<List<String>> {
 
     @Override
     public List<String> scrape(WebDriver webDriver) {
-        WebDriverWait wait = new WebDriverWait(webDriver, 60);
+        WebDriverWait wait = new WebDriverWait(webDriver, 120);
         wait.until(ExpectedConditions.presenceOfElementLocated(SEE_ALL_ACTIVITIES_BUTTON));
         WebElement seeAllButton = findWebElementBy(webDriver, SEE_ALL_ACTIVITIES_BUTTON)
                 .orElseThrow(() -> ElementNotFoundException.create("See all activity button"));
