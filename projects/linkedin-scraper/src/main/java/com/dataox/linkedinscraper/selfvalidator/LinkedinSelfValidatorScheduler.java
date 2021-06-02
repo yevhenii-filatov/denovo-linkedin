@@ -33,7 +33,7 @@ public class LinkedinSelfValidatorScheduler {
         try {
             List<ValidationField> validationResult = validator.validate();
             if (validationResult.size() > 0) {
-                message = String.format(EXCEPTION_FORMAT, validationResult);
+                message = String.format(VALIDATION_FORMAT, validationResult);
             }
         } catch (LinkedinSelfValidatorException e) {
             message = String.format(EXCEPTION_FORMAT, e.getMessage());
