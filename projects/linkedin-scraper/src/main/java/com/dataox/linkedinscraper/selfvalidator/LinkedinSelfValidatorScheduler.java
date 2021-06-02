@@ -37,8 +37,8 @@ public class LinkedinSelfValidatorScheduler {
             }
         } catch (LinkedinSelfValidatorException e) {
             message = String.format(EXCEPTION_FORMAT, e.getMessage());
-            log.warn(message);
         }
+        log.warn(message);
         notificationsService.sendInternal(message);
     }
 
