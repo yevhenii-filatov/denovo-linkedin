@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Objects;
 
 import static com.dataox.jsouputils.JsoupUtils.text;
 import static com.dataox.linkedinscraper.parser.utils.ParsingUtils.toElement;
@@ -52,7 +53,13 @@ public class LinkedinBasicProfileInfoParser implements LinkedinParser<LinkedinBa
     }
 
     private String parseNumberOfConnections(Element headerElement) {
-        return substringBefore(text(headerElement.selectFirst("span:contains(connections)")), "connections").trim();
+        String text;
+        Element connections = headerElement.selectFirst("span:contains(connections)");
+        if (Objects.isNull(connections)) {
+            connections = headerElement.selectFirst("span:contains(connection)");
+            text = substringBefore(text(connections), "connection").trim();
+        } else text = substringBefore(text(connections), "connections").trim();
+        return text;
     }
 
     private String parseLocation(Element headerElement) {

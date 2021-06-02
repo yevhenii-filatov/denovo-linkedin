@@ -1,4 +1,4 @@
-package com.dataox.linkedinscraper.service.validator;
+package com.dataox.linkedinscraper.selfvalidator;
 
 import com.dataox.ChromeDriverLauncher;
 import com.dataox.linkedinscraper.dto.CollectedProfileSourcesDTO;
@@ -13,23 +13,33 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+
 /**
  * @author Mykola Kostyshyn
  * @since 27/05/2021
  */
 @Service
 @RequiredArgsConstructor
-public class LinkedinValidator{
+public class LinkedinSelfValidator {
 
     private final LinkedinProfileScraper scraper;
     private final LinkedinProfileParser parser;
     private final LoginService loginService;
     private final ChromeOptions chromeOptions;
-    private final ScraperValidator scraperValidator;
-    private final ParserValidator parserValidator;
+    private final ScraperSelfValidator scraperValidator;
+    private final ParserSelfValidator parserValidator;
 
-    public void validate() throws LinkedinValidatorException {
+    public List<ValidationField> validate() throws LinkedinSelfValidatorException {
+        List<ValidationField> validationResult = new ArrayList<>();
         LinkedinProfileToScrapeDTO profileToScrape = getProfileToScrape();
+
+        chromeOptions.addArguments("--no-sandbox");
+        chromeOptions.addArguments("--disable-dev-shm-usage");
+        chromeOptions.addArguments("--remote-debugging-port=9222");
 
         try (ChromeDriverLauncher launcher = new ChromeDriverLauncher(chromeOptions)) {
             WebDriver webDriver = launcher.getWebDriver();
@@ -37,17 +47,22 @@ public class LinkedinValidator{
 
             CollectedProfileSourcesDTO scrapedProfile = scraper.scrape(webDriver, profileToScrape);
 
-            scraperValidator.checkScraper(scrapedProfile);
+            validationResult.addAll(scraperValidator.checkScraper(scrapedProfile));
 
             LinkedinProfile parsedProfile = parser.parse(scrapedProfile);
 
-            parserValidator.checkParser(parsedProfile);
+            validationResult.addAll(parserValidator.checkParser(parsedProfile));
+
+            return validationResult
+                    .stream()
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.toList());
         }
     }
 
     private LinkedinProfileToScrapeDTO getProfileToScrape() {
         LinkedinProfileToScrapeDTO profileToScrape = new LinkedinProfileToScrapeDTO();
-        profileToScrape.setProfileURL("URL");
+        profileToScrape.setProfileURL("https://www.linkedin.com/in/john-tester-603570213/");
         profileToScrape.setOptionalFieldsContainer(getProfileOptionalFieldsContainer());
         profileToScrape.setSearchResultId(0L);
         return profileToScrape;
