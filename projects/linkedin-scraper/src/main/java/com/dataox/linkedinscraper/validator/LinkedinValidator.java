@@ -1,4 +1,4 @@
-package com.dataox.linkedinscraper.service.validator;
+package com.dataox.linkedinscraper.validator;
 
 import com.dataox.ChromeDriverLauncher;
 import com.dataox.linkedinscraper.dto.CollectedProfileSourcesDTO;
@@ -37,6 +37,10 @@ public class LinkedinValidator {
         List<ValidationField> validationResult = new ArrayList<>();
         LinkedinProfileToScrapeDTO profileToScrape = getProfileToScrape();
 
+        chromeOptions.addArguments("--no-sandbox");
+        chromeOptions.addArguments("--disable-dev-shm-usage");
+        chromeOptions.addArguments("--remote-debugging-port=9222");
+
         try (ChromeDriverLauncher launcher = new ChromeDriverLauncher(chromeOptions)) {
             WebDriver webDriver = launcher.getWebDriver();
             loginService.performLogin(webDriver);
@@ -58,7 +62,7 @@ public class LinkedinValidator {
 
     private LinkedinProfileToScrapeDTO getProfileToScrape() {
         LinkedinProfileToScrapeDTO profileToScrape = new LinkedinProfileToScrapeDTO();
-        profileToScrape.setProfileURL("https://www.linkedin.com/in/alexander-demchenko/");
+        profileToScrape.setProfileURL("https://www.linkedin.com/in/john-tester-603570213/");
         profileToScrape.setOptionalFieldsContainer(getProfileOptionalFieldsContainer());
         profileToScrape.setSearchResultId(0L);
         return profileToScrape;

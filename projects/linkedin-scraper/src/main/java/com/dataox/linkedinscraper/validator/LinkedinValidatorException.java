@@ -1,4 +1,4 @@
-package com.dataox.linkedinscraper.service.validator;
+package com.dataox.linkedinscraper.validator;
 
 import java.util.function.Supplier;
 

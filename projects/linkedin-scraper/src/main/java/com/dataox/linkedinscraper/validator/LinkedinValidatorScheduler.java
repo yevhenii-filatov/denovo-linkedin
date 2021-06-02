@@ -1,4 +1,4 @@
-package com.dataox.linkedinscraper.service.validator;
+package com.dataox.linkedinscraper.validator;
 
 import com.dataox.notificationservice.service.NotificationsService;
 import lombok.RequiredArgsConstructor;

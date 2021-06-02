@@ -1,4 +1,4 @@
-package com.dataox.linkedinscraper.service.validator;
+package com.dataox.linkedinscraper.validator;
 
 import com.dataox.linkedinscraper.dto.CollectedProfileSourcesDTO;
 import com.dataox.linkedinscraper.dto.sources.InterestsSource;
@@ -12,7 +12,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-import static com.dataox.linkedinscraper.service.validator.ValidationType.*;
+import static com.dataox.linkedinscraper.validator.ValidationType.*;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 /**

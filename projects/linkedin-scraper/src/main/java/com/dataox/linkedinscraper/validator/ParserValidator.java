@@ -1,4 +1,4 @@
-package com.dataox.linkedinscraper.service.validator;
+package com.dataox.linkedinscraper.validator;
 
 import com.dataox.linkedinscraper.parser.dto.LinkedinProfile;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -10,7 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-import static com.dataox.linkedinscraper.service.validator.ValidationType.*;
+import static com.dataox.linkedinscraper.validator.ValidationType.*;
 
 /**
  * @author Mykola Kostyshyn
