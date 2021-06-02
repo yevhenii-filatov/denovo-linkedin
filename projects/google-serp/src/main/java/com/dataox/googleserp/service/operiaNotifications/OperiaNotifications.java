@@ -56,6 +56,7 @@ public class OperiaNotifications {
 
         if (amountOfOperiaQueriesLeft != amountOfOperiaQueriesLeftCheck) {
 
+            amountOfOperiaQueriesLeft = amountOfOperiaQueriesLeftCheck;
             Map<String, String> formBody = new HashMap<>();
             formBody.put("token", notificationsProperties.getSlack().getSlackToken());
             formBody.put("channel", "operia_notififications");
