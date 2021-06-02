@@ -46,7 +46,7 @@ public class ScraperSelfValidator {
 
     private ValidationField checkAboutSection(String aboutSectionSource) {
         if (isNotBlank(aboutSectionSource)) return null;
-        else return new ValidationField(SCRAPED_VOLUNTEERS, EMPTY);
+        else return new ValidationField(SCRAPED_ABOUT, EMPTY);
     }
 
     private ValidationField checkActivitiesSources(List<String> activitiesSources) {
