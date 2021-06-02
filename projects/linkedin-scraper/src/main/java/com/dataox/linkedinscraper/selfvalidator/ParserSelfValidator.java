@@ -1,4 +1,4 @@
-package com.dataox.linkedinscraper.validator;
+package com.dataox.linkedinscraper.selfvalidator;
 
 import com.dataox.linkedinscraper.parser.dto.LinkedinProfile;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -10,7 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-import static com.dataox.linkedinscraper.validator.ValidationType.*;
+import static com.dataox.linkedinscraper.selfvalidator.SelfValidationType.*;
 
 /**
  * @author Mykola Kostyshyn
@@ -18,7 +18,7 @@ import static com.dataox.linkedinscraper.validator.ValidationType.*;
  */
 @Service
 @RequiredArgsConstructor
-public class ParserValidator {
+public class ParserSelfValidator {
 
     public static final String FORMAT = "Expected: %s\nActual: %s";
 
@@ -44,11 +44,11 @@ public class ParserValidator {
         try {
             return mapper.readValue(getClass().getResource("/validator/parser/parsedprofile.json"), LinkedinProfile.class);
         } catch (IOException e) {
-            throw new LinkedinValidatorException(e.getMessage());
+            throw new LinkedinSelfValidatorException(e.getMessage());
         }
     }
 
-    private ValidationField equalsField(Object expected, Object actual, ValidationType type) {
+    private ValidationField equalsField(Object expected, Object actual, SelfValidationType type) {
         if (Objects.deepEquals(expected, actual)) return null;
         else return new ValidationField(type, String.format(FORMAT, expected.toString(), actual.toString()));
     }

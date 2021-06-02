@@ -1,4 +1,4 @@
-package com.dataox.linkedinscraper.validator;
+package com.dataox.linkedinscraper.selfvalidator;
 
 import com.dataox.linkedinscraper.dto.CollectedProfileSourcesDTO;
 import com.dataox.linkedinscraper.dto.sources.InterestsSource;
@@ -12,7 +12,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-import static com.dataox.linkedinscraper.validator.ValidationType.*;
+import static com.dataox.linkedinscraper.selfvalidator.SelfValidationType.*;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 /**
@@ -21,11 +21,11 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
  */
 @Slf4j
 @Service
-public class ScraperValidator {
+public class ScraperSelfValidator {
 
     private static final String EMPTY = "Empty";
 
-    public List<ValidationField> checkScraper(CollectedProfileSourcesDTO profile) throws LinkedinValidatorException {
+    public List<ValidationField> checkScraper(CollectedProfileSourcesDTO profile) throws LinkedinSelfValidatorException {
         return Arrays.asList(
                 checkAboutSection(profile.getAboutSectionSource()),
                 checkHeaderSection(profile.getHeaderSectionSource()),
@@ -36,10 +36,11 @@ public class ScraperValidator {
                 checkVolunteersSource(profile.getVolunteersSource()),
                 checkSkillsWithEndorsementsSources(profile.getSkillsWithEndorsementsSources()),
                 checkAllSkillsSource(profile.getAllSkillsSource()),
-                checkRecommendationsSources(profile.getRecommendationsSources()),
+//                checkRecommendationsSources(profile.getRecommendationsSources()),
                 checkAccomplishmentsSources(profile.getAccomplishmentsSources()),
-                checkInterestsSources(profile.getInterestsSources()),
-                checkActivitiesSources(profile.getActivitiesSources())
+//                checkActivitiesSources(profile.getActivitiesSources()),
+                checkInterestsSources(profile.getInterestsSources())
+
         );
     }
 

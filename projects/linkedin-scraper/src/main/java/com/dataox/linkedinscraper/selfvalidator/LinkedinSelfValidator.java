@@ -1,4 +1,4 @@
-package com.dataox.linkedinscraper.validator;
+package com.dataox.linkedinscraper.selfvalidator;
 
 import com.dataox.ChromeDriverLauncher;
 import com.dataox.linkedinscraper.dto.CollectedProfileSourcesDTO;
@@ -8,11 +8,13 @@ import com.dataox.linkedinscraper.parser.LinkedinProfileParser;
 import com.dataox.linkedinscraper.parser.dto.LinkedinProfile;
 import com.dataox.linkedinscraper.scraping.scrapers.LinkedinProfileScraper;
 import com.dataox.linkedinscraper.scraping.service.login.LoginService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -24,18 +26,24 @@ import java.util.stream.Collectors;
  */
 @Service
 @RequiredArgsConstructor
-public class LinkedinValidator {
+public class LinkedinSelfValidator {
 
     private final LinkedinProfileScraper scraper;
     private final LinkedinProfileParser parser;
     private final LoginService loginService;
     private final ChromeOptions chromeOptions;
-    private final ScraperValidator scraperValidator;
-    private final ParserValidator parserValidator;
+    private final ScraperSelfValidator scraperValidator;
+    private final ParserSelfValidator parserValidator;
 
-    public List<ValidationField> validate() throws LinkedinValidatorException {
+    private final ObjectMapper mapper;
+
+    public List<ValidationField> validate() throws LinkedinSelfValidatorException {
         List<ValidationField> validationResult = new ArrayList<>();
         LinkedinProfileToScrapeDTO profileToScrape = getProfileToScrape();
+
+        chromeOptions.addArguments("--no-sandbox");
+        chromeOptions.addArguments("--disable-dev-shm-usage");
+        chromeOptions.addArguments("--remote-debugging-port=9222");
 
         try (ChromeDriverLauncher launcher = new ChromeDriverLauncher(chromeOptions)) {
             WebDriver webDriver = launcher.getWebDriver();
@@ -46,6 +54,13 @@ public class LinkedinValidator {
             validationResult.addAll(scraperValidator.checkScraper(scrapedProfile));
 
             LinkedinProfile parsedProfile = parser.parse(scrapedProfile);
+
+            String str;
+            try {
+                str = mapper.writeValueAsString(parsedProfile);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
             validationResult.addAll(parserValidator.checkParser(parsedProfile));
 

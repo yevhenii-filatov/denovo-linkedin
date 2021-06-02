@@ -1,4 +1,4 @@
-package com.dataox.linkedinscraper.validator;
+package com.dataox.linkedinscraper.selfvalidator;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,6 +7,6 @@ import lombok.Data;
 @AllArgsConstructor
 public class ValidationField {
 
-    private ValidationType validationType;
+    private SelfValidationType validationType;
     private String value;
 }

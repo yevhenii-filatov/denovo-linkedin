@@ -1,10 +1,10 @@
-package com.dataox.linkedinscraper.validator;
+package com.dataox.linkedinscraper.selfvalidator;
 
 /**
  * @author Mykola Kostyshyn
  * @since 27/05/2021
  */
-public enum ValidationType {
+public enum SelfValidationType {
     SCRAPED_HEADER("Scraped Header Section Source"),
     SCRAPED_PHOTO("Scraped Profile Photo Url"),
     SCRAPED_ABOUT("Scraped About Section Source"),
@@ -29,7 +29,7 @@ public enum ValidationType {
     PARSER_VOLUNTEERS("Parsed Volunteer Experiences"),
     PARSER_ACCOMPLISHMENTS("Parsed Accomplishments");
 
-    ValidationType(String value) {
+    SelfValidationType(String value) {
         this.value = value;
     }
 
