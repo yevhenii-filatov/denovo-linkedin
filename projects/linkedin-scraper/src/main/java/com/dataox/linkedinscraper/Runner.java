@@ -60,7 +60,7 @@ public class Runner implements ApplicationRunner {
                 okHttpTemplate.request(request);
             } catch (Exception e) {
                 notificationsService.sendAll("LinkedIn Scraper Applicaton has unexpectedly finished it's work. Check logs for detailed information.");
-                notificationsService.sendInternal(ExceptionUtils.getStackTrace(e));
+                notificationsService.sendInternal(e.getMessage() + "-----" +ExceptionUtils.getStackTrace(e));
                 log.error("LinkedInScraper: Error has been occured: {}", e.getMessage());
             }
         }
