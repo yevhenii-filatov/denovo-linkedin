@@ -52,7 +52,7 @@ public class Runner implements ApplicationRunner {
             objectMapper.registerModule(new JavaTimeModule());
             ScrapingResultsDTO scrape = scrapeLinkedinProfileService.scrape(profileToScrapeDTOS);
             Request request = new Request.Builder()
-                    .url("https://localhost:8080/api/v1/scraping/receive/scraped")
+                    .url("http://localhost:8080/api/v1/scraping/receive/scraped")
                     .method("POST", RequestBody.create(MediaType.get("application/json"), objectMapper.writeValueAsString(scrape)))
                     .addHeader("Content-Type", "application/json")
                     .build();
@@ -60,7 +60,7 @@ public class Runner implements ApplicationRunner {
                 okHttpTemplate.request(request);
             } catch (Exception e) {
                 notificationsService.sendAll("LinkedIn Scraper Applicaton has unexpectedly finished it's work. Check logs for detailed information.");
-                notificationsService.sendInternal(e.getMessage() + "-----" +ExceptionUtils.getStackTrace(e));
+                notificationsService.sendInternal(e.getMessage() + "-----" + ExceptionUtils.getStackTrace(e));
                 log.error("LinkedInScraper: Error has been occured: {}", e.getMessage());
             }
         }
