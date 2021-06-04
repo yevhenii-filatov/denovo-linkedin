@@ -27,7 +27,7 @@ public class LinkedinSelfValidatorScheduler {
     private final LinkedinSelfValidator validator;
     private final NotificationsService notificationsService;
 
-    @Scheduled(cron = "0 0 10 * * *")
+//    @Scheduled(cron = "0 0 10 * * *")
     public void checkLinkedin(){
         String message = "Validator_Notification\n" + "No changes.";
         try {

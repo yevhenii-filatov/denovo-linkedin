@@ -52,7 +52,7 @@ public class Runner implements ApplicationRunner {
             objectMapper.registerModule(new JavaTimeModule());
             ScrapingResultsDTO scrape = scrapeLinkedinProfileService.scrape(profileToScrapeDTOS);
             Request request = new Request.Builder()
-                    .url("http://localhost:8080/api/v1/scraping/receive/scraped")
+                    .url("https://localhost:8080/api/v1/scraping/receive/scraped")
                     .method("POST", RequestBody.create(MediaType.get("application/json"), objectMapper.writeValueAsString(scrape)))
                     .addHeader("Content-Type", "application/json")
                     .build();

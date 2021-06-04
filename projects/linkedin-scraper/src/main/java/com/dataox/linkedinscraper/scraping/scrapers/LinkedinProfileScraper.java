@@ -46,7 +46,7 @@ public class LinkedinProfileScraper {
         try {
             OptionalFieldsContainer optionalFieldsContainer = profile.getOptionalFieldsContainer();
             log.info("Scraping profile: {}", profile.getProfileURL());
-            notificationsService.sendAll("LinkedinScraper: Scraping profile with denovoId: ".concat(Long.toString(profile.getSearchResultId())));
+            notificationsService.sendAll("LinkedinScraper: Scraping profile with searchResultId: ".concat(Long.toString(profile.getSearchResultId())));
             webDriver.get(profile.getProfileURL());
             CollectedProfileSourcesDTO profileSourcesDTO = new CollectedProfileSourcesDTO();
             profileSourcesDTO.setProfileUrl(profile.getProfileURL());
