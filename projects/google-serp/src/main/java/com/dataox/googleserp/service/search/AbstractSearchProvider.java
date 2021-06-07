@@ -38,7 +38,9 @@ public abstract class AbstractSearchProvider<T> implements SearchProvider<T> {
         SearchQuery searchQuery;
         T searchResultsContainer;
         SearchResultParser<T> parser = resolveParser();
-        for (searchStep++; searchStep <= SEARCH_STEPS_AMOUNT; searchStep++) {
+        if (searchStep == 1) { searchStep++; }
+
+        for (; searchStep <= SEARCH_STEPS_AMOUNT; searchStep++) {
             searchQuery = new SearchQueryProvider(initialData).getQuery(searchStep);
             String queryUrl = prepareQueryUrl(searchQuery);
 

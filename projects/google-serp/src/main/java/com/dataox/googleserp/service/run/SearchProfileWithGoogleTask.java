@@ -12,6 +12,7 @@ import javax.transaction.Transactional;
 import java.time.Instant;
 import java.util.Collection;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * @author Yevhenii Filatov
@@ -29,15 +30,18 @@ public class SearchProfileWithGoogleTask implements Runnable {
         GoogleSearchProvider searchProvider = BeanUtils.getBean(GoogleSearchProvider.class);
         InitialDataRepository initialDataRepository = BeanUtils.getBean(InitialDataRepository.class);
         Collection<SearchResult> results = searchProvider.search(initialData, searchStep);
+        Long denovoId = initialData.getDenovoId();
         if (Objects.isNull(results)) {
             return;
         }
         results.forEach(searchResult -> searchResult.setInitialDataRecord(initialData));
         initialData.setNoResults(results.isEmpty());
         initialData.setSearched(true);
-        initialData.getSearchResults().clear(); //uncomment when pinchun finish playing with results
+        initialData.getSearchResults().clear();
         initialData.getSearchResults().addAll(results);
         initialData.setUpdatedAt(Instant.now());
+        Optional<InitialData> initialDataOptional = initialDataRepository.findByDenovoId(denovoId);
+        initialDataOptional.ifPresent(initialDataRepository::delete);
         initialDataRepository.save(initialData);
     }
 }
