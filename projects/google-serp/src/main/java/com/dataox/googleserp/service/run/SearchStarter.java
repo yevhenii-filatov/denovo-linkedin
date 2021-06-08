@@ -33,7 +33,7 @@ public class SearchStarter {
         try {
             CompletableFuture.runAsync(() -> {
                 searchWithInitialData(dataAndStep);
-                chooseBestApiTrigger.triggerAPI(denovoIds);
+//                chooseBestApiTrigger.triggerAPI(denovoIds);
             }).exceptionally(throwable -> {
                 notificationsService.sendInternal(createErrorMessage(throwable));
                 return null;

@@ -10,6 +10,7 @@ import javax.validation.constraints.NotNull;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author Yevhenii Filatov
@@ -66,4 +67,17 @@ public class InitialData {
 
     @OneToMany(mappedBy = "initialDataRecord", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<SearchResult> searchResults = new ArrayList<>();
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        InitialData that = (InitialData) o;
+        return Objects.equals(denovoId, that.denovoId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(denovoId);
+    }
 }

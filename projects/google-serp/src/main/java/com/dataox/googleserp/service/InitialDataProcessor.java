@@ -8,10 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Dmitriy Lysko
@@ -25,17 +23,32 @@ public class InitialDataProcessor {
 
     public Map<InitialData, Integer> processInitialData(List<InitialDataDTO> initialDataDTOS) {
         Map<InitialData, Integer> dataAndStep = new HashMap<>();
+
         for (InitialDataDTO initialDataDTO : initialDataDTOS) {
             InitialData initialData = getInitialData(initialDataDTO);
             dataAndStep.put(initialData, initialDataDTO.getSearchStep());
         }
+
+        if (initialDataDTOS.size() != dataAndStep.size()) {
+            throw new IllegalArgumentException("Wrong JSON file: input JSON has same denovoId's");
+        }
+
         return dataAndStep;
     }
 
     @Transactional
     protected InitialData getInitialData(InitialDataDTO initialDataDTO) {
+        waitForInitialData(3);
         Optional<InitialData> initialData = initialDataRepository.findByDenovoId(initialDataDTO.getDenovoId());
         initialData.ifPresent(initialDataRepository::delete);
         return initialDataRepository.save(InitialDataMapper.toInitialData(initialDataDTO));
+    }
+
+    public void waitForInitialData(Integer seconds) {
+        try {
+            TimeUnit.SECONDS.sleep(seconds);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

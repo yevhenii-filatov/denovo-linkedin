@@ -34,11 +34,8 @@ public abstract class AbstractSearchProvider<T> implements SearchProvider<T> {
 
     @Override
     public Collection<SearchResult> search(InitialData initialData, int searchStep) {
-        InitialDataRepository initialDataRepository = BeanUtils.getBean(InitialDataRepository.class);
 
         if (1 == searchStep && isNotBlank(initialData.getLinkedinUrl())) {
-            Optional<InitialData> initialDataOptional = initialDataRepository.findByDenovoId(initialData.getDenovoId());
-            initialDataOptional.ifPresent(initialDataRepository::delete);
             return Collections.singletonList(createSingleSearchResult(initialData.getLinkedinUrl()));
         }
         Collection<SearchResult> searchResults = emptyList();

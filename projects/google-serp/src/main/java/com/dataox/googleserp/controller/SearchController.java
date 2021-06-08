@@ -40,6 +40,12 @@ public class SearchController {
         return ResponseEntity.ok(initialData);
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<String> handleIllegalArgumentException(Exception e) {
+        notificationsService.sendAll("GoogleSearch: Received JSON with same denovoId: ".concat(e.getMessage()));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Received JSON with same denovoId: ".concat(e.getMessage()));
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> handleException(Exception e) {
         notificationsService.sendAll("GoogleSearch: Failed to start search: ".concat(e.getMessage()));
