@@ -21,6 +21,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.springframework.context.ApplicationContext;
@@ -71,7 +72,7 @@ public class ScrapeLinkedinProfileService {
             this.isWorking = false;
 
             notificationsService.sendAll("LinkedinScraper: LinkedinException at ScrapeLinkedinProfileService: scrapeService has stopped working.");
-            notificationsService.sendInternal(NotificationUtils.createScraperStoppedMessage(e, applicationContext.getId()));
+            notificationsService.sendInternal(ExceptionUtils.getStackTrace(e));
 
             log.error("LinkedinException at ScrapeLinkedinProfileService: scrapeService has stopped working.");
             e.printStackTrace();

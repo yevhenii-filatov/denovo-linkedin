@@ -1,15 +1,16 @@
-package com.dataox.loadbalancer;
-
-import org.junit.jupiter.api.Test;
+package com.dataox.googleserp;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
+import org.testng.annotations.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-
-class LoadBalancerApplicationTests {
-
+/**
+ * @author Viacheslav_Yakovenko
+ * @since 09.06.2021
+ */
+public class GoogleSearchApplicationTest {
     @Test
     void hibernateSettings() throws FileNotFoundException {
         File properties = new File(getClass().getResource("/application.yaml").getFile());
@@ -23,5 +24,4 @@ class LoadBalancerApplicationTests {
         }
         assertThat(correctDdlAuto).isTrue();
     }
-
 }
