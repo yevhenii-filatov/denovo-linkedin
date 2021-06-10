@@ -18,8 +18,10 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.stereotype.Service;
 
-import java.io.FileNotFoundException;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 import static com.dataox.CommonUtils.randomLong;
 import static com.dataox.WebDriverUtils.*;
@@ -50,6 +52,7 @@ public class LoginService {
     public void performLogin(WebDriver webDriver) {
         try {
             webDriver.get(LINKEDIN_LOGIN_PAGE_URL);
+            savePage(webDriver.getPageSource());
             log.info("Performing login to linkedin with user credentials: Login:{} Password:{}",
                     linkedinProperties.getProfileLogin(),
                     linkedinProperties.getProfilePassword());
@@ -60,6 +63,17 @@ public class LoginService {
             wait.until(ExpectedConditions.presenceOfElementLocated(PROFILE_SECTION));
         } catch (Exception e) {
             throw new LinkedinLoginException(e);
+        }
+    }
+
+    private void savePage(String pageSource) throws IOException {
+        File file = new File("./page.html");
+        if (!file.exists())
+            file.createNewFile();
+        try (FileOutputStream out = new FileOutputStream(file)) {
+            out.write(pageSource.getBytes(StandardCharsets.UTF_8));
+        } catch (IOException e) {
+            log.error("FATAL ERROR!");
         }
     }
 
