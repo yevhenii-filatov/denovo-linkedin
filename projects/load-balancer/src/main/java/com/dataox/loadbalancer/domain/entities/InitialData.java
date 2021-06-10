@@ -14,7 +14,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@Table(name = "initial_data")
+@Table(name = "google_initial_data")
 @ToString(exclude = "searchResults")
 @JsonIgnoreProperties(value = {"searchMetadata", "searchResults"})
 public class InitialData {

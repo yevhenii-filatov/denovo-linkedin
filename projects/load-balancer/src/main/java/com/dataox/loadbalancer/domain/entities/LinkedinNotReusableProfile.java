@@ -18,7 +18,7 @@ import javax.validation.constraints.NotNull;
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
-@Table(name = "not_reusable_profile")
+@Table(name = "Linkedin_not_reusable_profile")
 @NoArgsConstructor
 public class LinkedinNotReusableProfile {
 

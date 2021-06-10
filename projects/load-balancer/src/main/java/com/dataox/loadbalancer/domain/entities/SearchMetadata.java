@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 @Entity
-@Table(name = "search_metadata")
+@Table(name = "google_search_metadata")
 public class SearchMetadata {
     @Id
     @Column(name = "id")

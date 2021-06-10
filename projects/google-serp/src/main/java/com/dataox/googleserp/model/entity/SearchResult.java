@@ -17,7 +17,7 @@ import java.time.Instant;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "search_result")
+@Table(name = "google_search_result")
 public class SearchResult {
 
     public SearchResult(String url, int searchPosition, int searchStep, InitialData initialDataRecord) {

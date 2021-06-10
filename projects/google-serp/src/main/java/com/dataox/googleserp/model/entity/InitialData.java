@@ -20,7 +20,7 @@ import java.util.Objects;
 @Getter
 @Setter
 @Entity
-@Table(name = "initial_data")
+@Table(name = "google_initial_data")
 @ToString(exclude = "searchResults")
 @JsonIgnoreProperties(value = {"searchMetadata", "searchResults"})
 public class InitialData {
