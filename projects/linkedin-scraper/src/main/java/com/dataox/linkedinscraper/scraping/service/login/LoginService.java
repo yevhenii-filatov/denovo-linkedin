@@ -4,6 +4,7 @@ import com.dataox.captchasolver.CaptchaSolver;
 import com.dataox.linkedinscraper.exceptions.linkedin.LinkedinLoginException;
 import com.dataox.linkedinscraper.scraping.configuration.property.LinkedinProperties;
 import com.dataox.linkedinscraper.scraping.exceptions.ElementNotFoundException;
+import com.dataox.linkedinscraper.scraping.service.emailVerificator.EmailVerificationService;
 import com.dataox.linkedinscraper.service.error.detector.LinkedinError;
 import com.dataox.linkedinscraper.service.error.detector.LinkedinErrorDetector;
 import lombok.AccessLevel;
@@ -26,7 +27,6 @@ import java.nio.charset.StandardCharsets;
 import static com.dataox.CommonUtils.randomLong;
 import static com.dataox.CommonUtils.randomSleep;
 import static com.dataox.WebDriverUtils.*;
-import static com.dataox.linkedinscraper.scraping.service.emailVerificator.EmailVerification.verifyEmail;
 import static java.util.Objects.nonNull;
 
 /**
@@ -42,6 +42,8 @@ public class LoginService {
     LinkedinProperties linkedinProperties;
     CaptchaSolver captchaSolver;
     LinkedinErrorDetector errorDetector;
+    EmailVerificationService emailVerificationService;
+
     static String LINKEDIN_LOGIN_PAGE_URL = "https://www.linkedin.com/";
     static String CANT_LOGIN_MESSAGE = "Can't login into account.";
     static By LOGIN_INPUT_FIELD = By.xpath("//input[@autocomplete='username'] | //input[@id='username'][@type='text']");
@@ -50,6 +52,7 @@ public class LoginService {
     static By SUBMIT_BUTTON = By.xpath("//button[@class='sign-in-form__submit-button'][@type='submit'] | //button[@class='btn__primary--large from__button--floating'][@type='submit']");
     static By PROFILE_SECTION = By.xpath("//div[contains(@class,'artdeco-card overflow-hidden')]");
     static By CAPTCHA_FORM = By.cssSelector("form#captcha-challenge");
+    static By REMEMBER_ME = By.xpath("//button[@class='btn__primary--large'][@data-cie-control-urn='checkpoint_remember_me_save_info_yes']");
 
     public void performLogin(WebDriver webDriver) {
         try {
@@ -62,6 +65,15 @@ public class LoginService {
             fillFieldsAndSubmitForm(webDriver);
             solveCaptcha(webDriver);
             checkForErrors(webDriver);
+
+            if (!webDriver.findElements(REMEMBER_ME).isEmpty()) {
+                randomSleep(1000, 2000);
+                WebElement rememberMeButton = findWebElementBy(webDriver, REMEMBER_ME)
+                        .orElseThrow(() -> ElementNotFoundException.create("Remember me button"));
+                clickOnElement(rememberMeButton, new Actions(webDriver));
+                randomSleep(1000, 2000);
+            }
+
             wait.until(ExpectedConditions.presenceOfElementLocated(PROFILE_SECTION));
         } catch (Exception e) {
             throw new LinkedinLoginException(e);
@@ -82,7 +94,7 @@ public class LoginService {
     private void checkForErrors(WebDriver webDriver) throws IOException, InterruptedException {
         LinkedinError linkedinError = errorDetector.detect(webDriver);
         if (linkedinError == LinkedinError.EMAIL_VERIFICATION) {
-            verifyEmail(webDriver);
+            emailVerificationService.verifyEmail(webDriver);
         }
         if (linkedinError != LinkedinError.NO_ERRORS && linkedinError != LinkedinError.EMAIL_VERIFICATION) {
             log.error(CANT_LOGIN_MESSAGE + " Error occurred {}", linkedinError);

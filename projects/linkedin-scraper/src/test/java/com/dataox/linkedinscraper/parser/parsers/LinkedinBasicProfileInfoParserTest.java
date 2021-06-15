@@ -4,12 +4,10 @@ import com.dataox.linkedinscraper.parser.LinkedinParser;
 import com.dataox.linkedinscraper.parser.dto.LinkedinBasicProfileInfo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.util.DigestUtils;
 
 import java.io.IOException;
 import java.util.List;
 
-import static com.dataox.linkedinscraper.parser.ParsingTestUtils.hashedStingComparator;
 import static com.dataox.linkedinscraper.parser.ParsingTestUtils.loadResource;
 import static org.assertj.core.api.Assertions.assertThat;
 
