@@ -13,7 +13,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class GoogleSearchApplicationTest {
     @Test
     void hibernateSettings() throws FileNotFoundException {
-        File properties = new File(getClass().getResource("/application.yaml").getFile());
+        File configProperties = new File("./config/application.yaml");
+        File properties;
+        if (configProperties.exists()){
+            properties = configProperties;
+        } else {
+            properties = new File(getClass().getResource("/application.yaml").getFile());
+        }
+
         Scanner scanner = new Scanner(properties);
         Boolean correctDdlAuto = false;
         while (scanner.hasNextLine()) {

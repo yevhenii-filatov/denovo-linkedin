@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 import static com.dataox.CommonUtils.randomLong;
+import static com.dataox.CommonUtils.randomSleep;
 import static com.dataox.WebDriverUtils.*;
 import static com.dataox.linkedinscraper.scraping.service.emailVerificator.EmailVerification.verifyEmail;
 import static java.util.Objects.nonNull;
@@ -43,9 +44,10 @@ public class LoginService {
     LinkedinErrorDetector errorDetector;
     static String LINKEDIN_LOGIN_PAGE_URL = "https://www.linkedin.com/";
     static String CANT_LOGIN_MESSAGE = "Can't login into account.";
-    static By LOGIN_INPUT_FIELD = By.xpath("//input[@autocomplete='username']");
-    static By PASSWORD_INPUT_FIELD = By.xpath("//input[@autocomplete='current-password']");
-    static By SUBMIT_BUTTON = By.xpath("//button[@class='sign-in-form__submit-button'][@type='submit']");
+    static By LOGIN_INPUT_FIELD = By.xpath("//input[@autocomplete='username'] | //input[@id='username'][@type='text']");
+    static By PASSWORD_INPUT_FIELD = By.xpath("//input[@autocomplete='current-password'] | //input[@id='password'][@type='password']");
+    static By LOGIN_BUTTON = By.xpath("//a[@class='nav__button-secondary']");
+    static By SUBMIT_BUTTON = By.xpath("//button[@class='sign-in-form__submit-button'][@type='submit'] | //button[@class='btn__primary--large from__button--floating'][@type='submit']");
     static By PROFILE_SECTION = By.xpath("//div[contains(@class,'artdeco-card overflow-hidden')]");
     static By CAPTCHA_FORM = By.cssSelector("form#captcha-challenge");
 
@@ -96,6 +98,14 @@ public class LoginService {
     }
 
     private void fillFieldsAndSubmitForm(WebDriver webDriver) {
+
+        if (!webDriver.findElements(LOGIN_BUTTON).isEmpty()) {
+            WebElement loginButtonField = findWebElementBy(webDriver, LOGIN_BUTTON)
+                    .orElseThrow(() -> ElementNotFoundException.create("Login button"));
+            randomSleep(200, 500);
+            clickOnElement(loginButtonField, new Actions(webDriver));
+        }
+
         WebElement loginInputField = findWebElementBy(webDriver, LOGIN_INPUT_FIELD)
                 .orElseThrow(() -> ElementNotFoundException.create("Login input field"));
         WebElement passwordInputField = findWebElementBy(webDriver, PASSWORD_INPUT_FIELD)
