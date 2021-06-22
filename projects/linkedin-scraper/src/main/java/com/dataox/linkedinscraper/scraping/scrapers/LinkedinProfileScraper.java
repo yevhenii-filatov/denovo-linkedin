@@ -4,12 +4,20 @@ import com.dataox.linkedinscraper.dto.CollectedProfileSourcesDTO;
 import com.dataox.linkedinscraper.dto.LinkedinProfileToScrapeDTO;
 import com.dataox.linkedinscraper.dto.OptionalFieldsContainer;
 import com.dataox.linkedinscraper.exceptions.linkedin.LinkedinScrapingException;
+import com.dataox.linkedinscraper.parser.LinkedinProfileParser;
 import com.dataox.linkedinscraper.scraping.scrapers.subscrapers.*;
 import com.dataox.notificationservice.service.NotificationsService;
+import com.dataox.okhttputils.OkHttpTemplate;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import okhttp3.MediaType;
+import okhttp3.Request;
+import okhttp3.RequestBody;
 import org.openqa.selenium.WebDriver;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
@@ -41,6 +49,8 @@ public class LinkedinProfileScraper {
     InterestsScraper interestsScraper;
     AccomplishmentsScraper accomplishmentsScraper;
     NotificationsService notificationsService;
+    ObjectMapper objectMapper;
+    OkHttpTemplate okHttpTemplate;
 
     public CollectedProfileSourcesDTO scrape(WebDriver webDriver, LinkedinProfileToScrapeDTO profile) {
         try {
@@ -63,6 +73,17 @@ public class LinkedinProfileScraper {
             profileSourcesDTO.setAccomplishmentsSources(scrapeSafe(webDriver, accomplishmentsScraper, emptyList(), optionalFieldsContainer.isScrapeAccomplishments()));
             profileSourcesDTO.setInterestsSources(scrapeSafe(webDriver, interestsScraper, emptyList(), optionalFieldsContainer.isScrapeInterests()));
             profileSourcesDTO.setActivitiesSources(scrapeSafe(webDriver, activitiesScraper, emptyList(), optionalFieldsContainer.isScrapeActivities()));
+
+            ImageCredentials imageCredentials = new ImageCredentials(profileSourcesDTO.getProfilePhotoUrl(), Long.toString(profile.getDenovoId()));
+
+            Request request = new Request.Builder()
+                    .url("http://localhost:8084/api/v1/image/save")
+                    .method("POST", RequestBody.create(MediaType.get("application/json"), objectMapper.writeValueAsString(imageCredentials)))
+                    .addHeader("Content-Type", "application/json")
+                    .build();
+            okHttpTemplate.request(request);
+
+
             return profileSourcesDTO;
         } catch (Exception e) {
             log.error("Scraper failed to scrape profile: {}", profile.getProfileURL());
@@ -75,5 +96,11 @@ public class LinkedinProfileScraper {
 
     private <T> T scrapeSafe(WebDriver webDriver, Scraper<T> scraper, T defaultValue, boolean optional) {
         return optional ? scraper.scrape(webDriver) : defaultValue;
+    }
+    @Data
+    @AllArgsConstructor
+    public static class ImageCredentials {
+        private String url;
+        private String fileName;
     }
 }

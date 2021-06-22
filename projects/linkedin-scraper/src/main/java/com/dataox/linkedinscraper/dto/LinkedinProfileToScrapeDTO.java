@@ -17,4 +17,5 @@ public class LinkedinProfileToScrapeDTO implements Serializable {
     Long searchResultId;
     String profileURL;
     OptionalFieldsContainer optionalFieldsContainer;
+    Long denovoId;
 }

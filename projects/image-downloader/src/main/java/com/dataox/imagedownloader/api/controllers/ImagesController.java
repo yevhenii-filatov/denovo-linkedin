@@ -26,7 +26,7 @@ public class ImagesController {
     }
 
     @GetMapping(value = "/get/one/{imageName}")
-    public HttpEntity<byte[]> getOneImage(@PathVariable String imageName) {
+    public HttpEntity<byte[]> getOneImage(@PathVariable("imageName") String imageName) {
         return imageService.getOneImage(imageName);
     }
 

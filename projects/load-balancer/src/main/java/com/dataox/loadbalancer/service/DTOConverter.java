@@ -34,6 +34,7 @@ public class DTOConverter {
         optionalFieldsContainer.setScrapeRecommendations(true);
         profileToScrapeDTO.setSearchResultId(searchResult.getId());
         profileToScrapeDTO.setOptionalFieldsContainer(optionalFieldsContainer);
+        profileToScrapeDTO.setDenovoId(searchResult.getInitialDataRecord().getDenovoId());
         return profileToScrapeDTO;
     }
 

@@ -27,7 +27,9 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static java.util.Objects.isNull;
@@ -61,8 +63,6 @@ public class ScrapingService {
         List<InitialDataSearchPosition> searchedAndFoundInitialData = initialDataSearchPositions.stream()
                 .filter(data -> data.getInitialData().getSearched())
                 .filter(data -> !data.getInitialData().getNoResults())
-//                .filter(data -> data.getInitialData().getSearchResults().size() == 1)
-//                .filter(data -> data.getSearchPosition() == data.getInitialData().getSearchResults())
                 .collect(Collectors.toList());
         List<InitialData> notSearchedInitialData = initialDataSearchPositions.stream()
                 .map(InitialDataSearchPosition::getInitialData)
@@ -80,9 +80,6 @@ public class ScrapingService {
                 .map(dto -> {
                     InitialData initialData = initialDataRepository.findByDenovoId(dto.getDenovoId())
                             .orElseThrow(() -> new IllegalArgumentException(dto.getDenovoId() + " doesn't exists"));
-//                    notificationsService.sendAll("LoadBalancer: DenovoId {"
-//                                        .concat(Long.toString(dto.getDenovoId()))
-//                                        .concat("} doesn't exists"));
                     return new InitialDataSearchPosition(initialData, dto.getSearchPosition());
                 })
                 .collect(Collectors.toList());

@@ -41,7 +41,7 @@ public class Runner implements ApplicationRunner {
     @SuppressWarnings("unchecked")
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        notificationsService.sendAll("LinkedIn Scraper Applicaton has been started.");
+        notificationsService.sendInternal("LinkedIn Scraper Applicaton has been started.");
         while (scrapeLinkedinProfileService.isWorking()) {
             List<LinkedinProfileToScrapeDTO> profileToScrapeDTOS = (List<LinkedinProfileToScrapeDTO>) rabbitTemplate.receiveAndConvert();
             while (isNull(profileToScrapeDTOS)) {

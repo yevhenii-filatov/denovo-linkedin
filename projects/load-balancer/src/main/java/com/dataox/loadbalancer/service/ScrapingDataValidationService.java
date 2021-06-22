@@ -33,7 +33,7 @@ public class ScrapingDataValidationService {
         if (!notFoundDenovoIds.isEmpty())
             notificationsService.sendAll(String.format("LoadBalancer: Denovo ids %s was not found in database", notFoundDenovoIds));
         if (!moreThanOneSearchResultDenovoIds.isEmpty())
-            notificationsService.sendAll(String.format("LoadBalancer: Initial data with given denovo ids %s has more than one search result", moreThanOneSearchResultDenovoIds));
+            notificationsService.sendInternal(String.format("LoadBalancer: Initial data with given denovo ids %s has more than one search result", moreThanOneSearchResultDenovoIds));
     }
 
     private List<Long> checkSearchResults(List<InitialData> initialData) {

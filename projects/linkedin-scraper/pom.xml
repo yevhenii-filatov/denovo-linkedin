@@ -110,6 +110,12 @@
             <artifactId>jackson-datatype-jsr310</artifactId>
             <version>2.12.2</version>
         </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.dataox</groupId>-->
+<!--            <artifactId>image-downloader</artifactId>-->
+<!--            <version>1.0</version>-->
+<!--            <scope>compile</scope>-->
+<!--        </dependency>-->
 
     </dependencies>
 
