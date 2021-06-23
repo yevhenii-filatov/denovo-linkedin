@@ -56,7 +56,6 @@ public class SearchResult {
 
     @NotNull
     @ManyToOne(cascade = CascadeType.ALL)
-//    @Cascade(org.hibernate.annotations.CascadeType.DELETE)
     @JoinColumn(name = "initial_data_record_id", nullable = false)
     private InitialData initialDataRecord;
 

@@ -30,7 +30,6 @@ public class SearchMetadata {
     @Column(name = "query_url", columnDefinition="varchar(1000)")
     private String queryUrl;
 
-//    @Cascade(org.hibernate.annotations.CascadeType.DELETE)
     @OneToOne(mappedBy = "searchMetadata", cascade = CascadeType.ALL)
     private InitialData initialData;
 }
