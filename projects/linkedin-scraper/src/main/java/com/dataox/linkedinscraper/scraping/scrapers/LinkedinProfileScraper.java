@@ -77,7 +77,7 @@ public class LinkedinProfileScraper {
             ImageCredentials imageCredentials = new ImageCredentials(profileSourcesDTO.getProfilePhotoUrl(), Long.toString(profile.getDenovoId()));
 
             Request request = new Request.Builder()
-                    .url("http://localhost:8084/api/v1/image/save")
+                    .url("https://localhost:8084/api/v1/image/save")
                     .method("POST", RequestBody.create(MediaType.get("application/json"), objectMapper.writeValueAsString(imageCredentials)))
                     .addHeader("Content-Type", "application/json")
                     .build();

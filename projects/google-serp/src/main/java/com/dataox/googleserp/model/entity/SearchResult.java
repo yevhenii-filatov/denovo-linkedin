@@ -2,6 +2,7 @@ package com.dataox.googleserp.model.entity;
 
 import com.sun.istack.NotNull;
 import lombok.*;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import java.time.Instant;
@@ -50,11 +51,12 @@ public class SearchResult {
     private int searchPosition;
 
     @NotNull
-    @Column(name = "searchStep")
+    @Column(name = "search_step")
     private int searchStep;
 
     @NotNull
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
+//    @Cascade(org.hibernate.annotations.CascadeType.DELETE)
     @JoinColumn(name = "initial_data_record_id", nullable = false)
     private InitialData initialDataRecord;
 

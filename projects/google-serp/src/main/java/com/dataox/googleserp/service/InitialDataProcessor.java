@@ -38,7 +38,7 @@ public class InitialDataProcessor {
 
     @Transactional
     protected InitialData getInitialData(InitialDataDTO initialDataDTO) {
-        waitForInitialData(3);
+//        waitForInitialData(3);
         Optional<InitialData> initialData = initialDataRepository.findByDenovoId(initialDataDTO.getDenovoId());
         initialData.ifPresent(initialDataRepository::delete);
         return initialDataRepository.save(InitialDataMapper.toInitialData(initialDataDTO));

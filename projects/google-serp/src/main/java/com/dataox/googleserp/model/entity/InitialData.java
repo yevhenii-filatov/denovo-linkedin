@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -61,10 +62,12 @@ public class InitialData {
     @Column(name = "no_results")
     private Boolean noResults;
 
+//    @Cascade(org.hibernate.annotations.CascadeType.DELETE)
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "search_metadata_id", referencedColumnName = "id")
     private SearchMetadata searchMetadata;
 
+//    @Cascade(org.hibernate.annotations.CascadeType.DELETE)
     @OneToMany(mappedBy = "initialDataRecord", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<SearchResult> searchResults = new ArrayList<>();
 

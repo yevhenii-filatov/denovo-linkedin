@@ -10,13 +10,8 @@ import com.dataox.linkedinscraper.parser.service.validator.ParsingValidator;
 import com.dataox.okhttputils.OkHttpTemplate;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import okhttp3.MediaType;
-import okhttp3.Request;
-import okhttp3.RequestBody;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -40,8 +35,6 @@ public class LinkedinProfileParser implements LinkedinParser<LinkedinProfile, Co
     LinkedinVolunteerExperienceParser volunteerExperienceParser;
     LinkedinAccomplishmentParser accomplishmentParser;
     ParsingValidator parsingValidator;
-    ObjectMapper objectMapper;
-    OkHttpTemplate okHttpTemplate;
 
     @Override
     public LinkedinProfile parse(CollectedProfileSourcesDTO source) {
@@ -60,15 +53,6 @@ public class LinkedinProfileParser implements LinkedinParser<LinkedinProfile, Co
             linkedinProfile.setLinkedinAccomplishments(accomplishmentParser.parse(source.getAccomplishmentsSources()));
 
             parsingValidator.validate(linkedinProfile);
-
-//            ImageCredentials imageCredentials = new ImageCredentials(source.getProfilePhotoUrl(), "source.get");
-//
-//            Request request = new Request.Builder()
-//                    .url("http://localhost:8084/api/v1/image/save")
-//                    .method("POST", RequestBody.create(MediaType.get("application/json"), objectMapper.writeValueAsString(imageCredentials)))
-//                    .addHeader("Content-Type", "application/json")
-//                    .build();
-//            okHttpTemplate.request(request);
 
             return linkedinProfile;
         } catch (Exception e) {
@@ -94,10 +78,4 @@ public class LinkedinProfileParser implements LinkedinParser<LinkedinProfile, Co
 
         return union(skillsWithEndorsements, skillsWithoutEndorsements);
     }
-//    @Data
-//    @AllArgsConstructor
-//    public static class ImageCredentials {
-//        private String url;
-//        private String fileName;
-//    }
 }

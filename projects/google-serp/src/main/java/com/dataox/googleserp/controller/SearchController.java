@@ -26,20 +26,15 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("api/v1/search")
+@RequestMapping("/v1/search")
 public class SearchController {
 
-    public static final String QUERY_TOKEN = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwibmFtZSI6IkRlbm92byIsImlhdCI6MTUxNjIzOTAyMn0.YFIQ2YFyyejhrvyzTsUO4RDP35cy8aJ4wtS8BgHu9Os";
     private final SearchStarter searchStarter;
     private final InitialDataProcessor initialDataProcessor;
     private final NotificationsService notificationsService;
 
     @PostMapping
-    public ResponseEntity<List<InitialData>> startSearch(@RequestHeader Map<String, String> headers,
-                                                         @RequestBody @Valid List<InitialDataDTO> initialDataDTOS) {
-//        if (!checkHeadersForToken(headers)) {
-//            throw new NotAuthorizedException("Token authorization failed");
-//        }
+    public ResponseEntity<List<InitialData>> startSearch(@RequestBody @Valid List<InitialDataDTO> initialDataDTOS) {
         Map<InitialData, Integer> dataAndStep = initialDataProcessor.processInitialData(initialDataDTOS);
         List<InitialData> initialData = new ArrayList<>(dataAndStep.keySet());
         searchStarter.startSearch(dataAndStep);
@@ -63,10 +58,4 @@ public class SearchController {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to start search: ".concat(e.getMessage()));
     }
 
-    public boolean checkHeadersForToken(Map<String, String> headers) {
-        if (headers.containsKey("authorization")) {
-            return headers.get("authorization").equals(QUERY_TOKEN);
-        }
-        return false;
-    }
 }
