@@ -5,6 +5,7 @@ import com.dataox.linkedinscraper.dto.LinkedinProfileToScrapeDTO;
 import com.dataox.linkedinscraper.dto.OptionalFieldsContainer;
 import com.dataox.linkedinscraper.exceptions.linkedin.LinkedinScrapingException;
 import com.dataox.linkedinscraper.parser.LinkedinProfileParser;
+import com.dataox.linkedinscraper.scraping.configuration.property.QueryProperties;
 import com.dataox.linkedinscraper.scraping.scrapers.subscrapers.*;
 import com.dataox.notificationservice.service.NotificationsService;
 import com.dataox.okhttputils.OkHttpTemplate;
@@ -21,6 +22,8 @@ import okhttp3.RequestBody;
 import org.openqa.selenium.WebDriver;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
+
+import javax.net.ssl.SSLException;
 
 import static java.util.Collections.emptyList;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
@@ -51,6 +54,7 @@ public class LinkedinProfileScraper {
     NotificationsService notificationsService;
     ObjectMapper objectMapper;
     OkHttpTemplate okHttpTemplate;
+    QueryProperties queryProperties;
 
     public CollectedProfileSourcesDTO scrape(WebDriver webDriver, LinkedinProfileToScrapeDTO profile) {
         try {
@@ -76,13 +80,13 @@ public class LinkedinProfileScraper {
 
             ImageCredentials imageCredentials = new ImageCredentials(profileSourcesDTO.getProfilePhotoUrl(), Long.toString(profile.getDenovoId()));
 
-            Request request = new Request.Builder()
-                    .url("https://localhost:8084/api/v1/image/save")
-                    .method("POST", RequestBody.create(MediaType.get("application/json"), objectMapper.writeValueAsString(imageCredentials)))
-                    .addHeader("Content-Type", "application/json")
-                    .build();
-            okHttpTemplate.request(request);
-
+                Request request = new Request.Builder()
+                        .url("http://localhost:8084/api/v1/image/save")
+                        .method("POST", RequestBody.create(MediaType.get("application/json"), objectMapper.writeValueAsString(imageCredentials)))
+                        .addHeader("Content-Type", "application/json")
+                        .addHeader("Authorization", queryProperties.getToken())
+                        .build();
+                okHttpTemplate.request(request);
 
             return profileSourcesDTO;
         } catch (Exception e) {

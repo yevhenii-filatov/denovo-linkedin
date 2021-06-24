@@ -51,4 +51,8 @@ public class InitialDataProcessor {
             e.printStackTrace();
         }
     }
+
+    public void deleteIfExistsLinkedinProfile(Long denovoId) {
+
+    }
 }

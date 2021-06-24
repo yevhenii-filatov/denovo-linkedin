@@ -3,6 +3,7 @@ package com.dataox.linkedinscraper;
 import com.dataox.linkedinscraper.dto.LinkedinProfileToScrapeDTO;
 import com.dataox.linkedinscraper.dto.ScrapingResultsDTO;
 import com.dataox.linkedinscraper.parser.dto.LinkedinProfile;
+import com.dataox.linkedinscraper.scraping.configuration.property.QueryProperties;
 import com.dataox.linkedinscraper.service.ScrapeLinkedinProfileService;
 import com.dataox.notificationservice.service.NotificationsService;
 import com.dataox.okhttputils.OkHttpTemplate;
@@ -37,6 +38,7 @@ public class Runner implements ApplicationRunner {
     private final RabbitTemplate rabbitTemplate;
     private final ObjectMapper objectMapper;
     private final OkHttpTemplate okHttpTemplate;
+    private final QueryProperties queryProperties;
 
     @SuppressWarnings("unchecked")
     @Override
@@ -55,6 +57,7 @@ public class Runner implements ApplicationRunner {
                     .url("http://localhost:8080/api/v1/scraping/receive/scraped")
                     .method("POST", RequestBody.create(MediaType.get("application/json"), objectMapper.writeValueAsString(scrape)))
                     .addHeader("Content-Type", "application/json")
+                    .addHeader("Authorization", queryProperties.getToken())
                     .build();
             try {
                 okHttpTemplate.request(request);
