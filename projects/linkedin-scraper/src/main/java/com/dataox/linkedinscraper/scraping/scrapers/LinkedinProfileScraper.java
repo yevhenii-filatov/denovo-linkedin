@@ -84,7 +84,7 @@ public class LinkedinProfileScraper {
                         .url("http://localhost:8084/api/v1/image/save")
                         .method("POST", RequestBody.create(MediaType.get("application/json"), objectMapper.writeValueAsString(imageCredentials)))
                         .addHeader("Content-Type", "application/json")
-                        .addHeader("Authorization", queryProperties.getToken())
+                        .addHeader("Authorization", "Bearer " + queryProperties.getToken())
                         .build();
                 okHttpTemplate.request(request);
 

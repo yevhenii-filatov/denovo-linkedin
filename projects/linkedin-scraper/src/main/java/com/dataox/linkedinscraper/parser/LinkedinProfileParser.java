@@ -63,10 +63,11 @@ public class LinkedinProfileParser implements LinkedinParser<LinkedinProfile, Co
     private List<String> getBasicProfileSource(CollectedProfileSourcesDTO source) {
         String headerSectionSource = source.getHeaderSectionSource();
         String aboutSectionSource = source.getAboutSectionSource();
+        String photoUrl = source.getProfilePhotoUrl();
 
         return isNotBlank(aboutSectionSource)
-                ? List.of(headerSectionSource, aboutSectionSource)
-                : List.of(headerSectionSource);
+                ? List.of(headerSectionSource, photoUrl, aboutSectionSource)
+                : List.of(headerSectionSource, photoUrl);
     }
 
     private List<LinkedinSkill> getAllLinkedinSkills(CollectedProfileSourcesDTO source) {

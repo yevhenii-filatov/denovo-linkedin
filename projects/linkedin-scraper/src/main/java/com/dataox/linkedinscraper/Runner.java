@@ -2,7 +2,6 @@ package com.dataox.linkedinscraper;
 
 import com.dataox.linkedinscraper.dto.LinkedinProfileToScrapeDTO;
 import com.dataox.linkedinscraper.dto.ScrapingResultsDTO;
-import com.dataox.linkedinscraper.parser.dto.LinkedinProfile;
 import com.dataox.linkedinscraper.scraping.configuration.property.QueryProperties;
 import com.dataox.linkedinscraper.service.ScrapeLinkedinProfileService;
 import com.dataox.notificationservice.service.NotificationsService;
@@ -20,7 +19,6 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.util.List;
 
 import static java.util.Objects.isNull;
@@ -57,7 +55,7 @@ public class Runner implements ApplicationRunner {
                     .url("http://localhost:8080/api/v1/scraping/receive/scraped")
                     .method("POST", RequestBody.create(MediaType.get("application/json"), objectMapper.writeValueAsString(scrape)))
                     .addHeader("Content-Type", "application/json")
-                    .addHeader("Authorization", queryProperties.getToken())
+                    .addHeader("Authorization", "Bearer " + queryProperties.getToken())
                     .build();
             try {
                 okHttpTemplate.request(request);
@@ -67,25 +65,5 @@ public class Runner implements ApplicationRunner {
                 log.error("LinkedInScraper: Error has been occured: {}", e.getMessage());
             }
         }
-    }
-
-    private void removeSources(LinkedinProfile profile) {
-        profile.getLinkedinBasicProfileInfo().setHeaderSectionSource("");
-        profile.getLinkedinBasicProfileInfo().setAboutSectionSource("");
-        profile.getLinkedinActivities().forEach(linkedinActivity -> {
-            linkedinActivity.getLinkedinPost().setItemSource("");
-            linkedinActivity.getLinkedinPost().getLinkedinComments().forEach(linkedinComment -> linkedinComment.setItemSource(""));
-        });
-        profile.getLinkedinEducations().forEach(linkedinEducation -> linkedinEducation.setItemSource(""));
-        profile.getLinkedinSkills().forEach(linkedinSkill -> {
-            linkedinSkill.setItemSource("");
-            linkedinSkill.getLinkedinEndorsements().forEach(linkedinEndorsement -> linkedinEndorsement.setItemSource(""));
-        });
-        profile.getLinkedinExperiences().forEach(linkedinExperience -> linkedinExperience.setItemSource(""));
-        profile.getLinkedinInterests().forEach(linkedinInterest -> linkedinInterest.setItemSource(""));
-        profile.getLinkedinLicenseCertifications().forEach(linkedinLicenseCertification -> linkedinLicenseCertification.setItemSource(""));
-        profile.getLinkedinRecommendations().forEach(linkedinRecommendation -> linkedinRecommendation.setItemSource(""));
-        profile.getLinkedinVolunteerExperiences().forEach(linkedinVolunteerExperience -> linkedinVolunteerExperience.setItemSource(""));
-        profile.getLinkedinAccomplishments().forEach(linkedinAccomplishment -> linkedinAccomplishment.setItemSource(""));
     }
 }

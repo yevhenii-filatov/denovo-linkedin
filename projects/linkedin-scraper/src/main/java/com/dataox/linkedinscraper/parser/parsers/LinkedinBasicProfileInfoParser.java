@@ -26,10 +26,12 @@ public class LinkedinBasicProfileInfoParser implements LinkedinParser<LinkedinBa
         }
 
         String headerSectionSource = source.get(0);
+        String photoUrl = source.get(1);
         Element headerElement = toElement(headerSectionSource);
 
         LinkedinBasicProfileInfo basicProfileInfo = new LinkedinBasicProfileInfo();
         basicProfileInfo.setUpdatedAt(Instant.now());
+        basicProfileInfo.setCachedImageUrl(photoUrl);
         basicProfileInfo.setHeaderSectionSource(headerSectionSource);
         basicProfileInfo.setFullName(parseFullName(headerElement));
         basicProfileInfo.setNumberOfConnections(parseNumberOfConnections(headerElement));
@@ -40,8 +42,8 @@ public class LinkedinBasicProfileInfoParser implements LinkedinParser<LinkedinBa
     }
 
     private void setAboutIfExists(List<String> source, LinkedinBasicProfileInfo basicProfileInfo) {
-        if (source.size() == 2) {
-            String aboutSectionSource = source.get(1);
+        if (source.size() == 3) {
+            String aboutSectionSource = source.get(2);
             Element aboutElement = toElement(aboutSectionSource);
             basicProfileInfo.setAbout(parseAbout(aboutElement));
             basicProfileInfo.setAboutSectionSource(aboutSectionSource);
