@@ -1,9 +1,8 @@
 package com.dataox.googleserp.service.run;
 
 import com.dataox.googleserp.configuration.properties.SearchProperties;
+import com.dataox.googleserp.exceptions.SearchException;
 import com.dataox.googleserp.model.entity.InitialData;
-import com.dataox.googleserp.repository.InitialDataRepository;
-import com.dataox.googleserp.service.ChooseBestApiTrigger;
 import com.dataox.notificationservice.service.NotificationsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,8 +22,8 @@ import static com.dataox.googleserp.util.NotificationUtils.createSearchFailedMes
 public class SearchStarter {
 
     private final ExecutorService searchExecutorService;
-    private final InitialDataRepository initialDataRepository;
-    private final ChooseBestApiTrigger chooseBestApiTrigger;
+    //    private final InitialDataRepository initialDataRepository;
+//    private final ChooseBestApiTrigger chooseBestApiTrigger;
     private final SearchProperties searchProperties;
     private final NotificationsService notificationsService;
 
@@ -40,7 +39,7 @@ public class SearchStarter {
             });
         } catch (Exception e) {
             notificationsService.sendInternal(createErrorMessage(e));
-            throw e;
+            throw SearchException.create(e);
         }
     }
 

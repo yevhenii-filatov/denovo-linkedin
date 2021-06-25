@@ -98,7 +98,7 @@ class LinkedinAccomplishmentParserTest {
         LinkedinAccomplishment expected = new LinkedinAccomplishment();
         expected.setTitle("Member, Academy of Arts and Sciences");
         expected.setDescription(
-                        "honor description Founded during the American Revolution by John Adams, James Bowdoin, John Hancock, " +
+                "honor description Founded during the American Revolution by John Adams, James Bowdoin, John Hancock, " +
                         "and other prominent contributors to the establishment of the new nation, the Academy has a " +
                         "rich intellectual history spanning more than 230 years. Since its founding in 1780, " +
                         "the Academy has provided a forum for scholars, members of the learned professions, " +
@@ -133,7 +133,7 @@ class LinkedinAccomplishmentParserTest {
         LinkedinAccomplishment expected = new LinkedinAccomplishment();
         expected.setTitle("GM’s Inclusion Advisory Board");
         expected.setDescription("organization date Jun 2020 – Present");
-        expected.setLinkedinAccomplishmentType(LinkedinAccomplishmentType.ORGANIZATIONS);;
+        expected.setLinkedinAccomplishmentType(LinkedinAccomplishmentType.ORGANIZATIONS);
         expected.setUpdatedAt(actual.getUpdatedAt());
         expected.setItemSource("md5:3a3a6441d00727db906f0761bd73abf6");
 

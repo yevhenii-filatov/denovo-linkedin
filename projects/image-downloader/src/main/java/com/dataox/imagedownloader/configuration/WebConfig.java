@@ -1,8 +1,6 @@
 package com.dataox.imagedownloader.configuration;
 
 import com.dataox.imagedownloader.api.dto.ImageCredentials;
-//import com.dataox.imagedownloader.model.entity.InitialData;
-//import com.dataox.imagedownloader.repository.InitialDataRepository;
 import com.dataox.imagedownloader.security.models.User;
 import com.dataox.imagedownloader.security.repository.UserRepository;
 import org.springframework.boot.SpringBootConfiguration;

@@ -4,7 +4,6 @@ import com.dataox.notificationservice.service.NotificationsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,8 +26,8 @@ public class LinkedinSelfValidatorScheduler {
     private final LinkedinSelfValidator validator;
     private final NotificationsService notificationsService;
 
-//    @Scheduled(cron = "0 0 10 * * *")
-    public void checkLinkedin(){
+    //    @Scheduled(cron = "0 0 10 * * *")
+    public void checkLinkedin() {
         String message = "Validator_Notification\n" + "No changes.";
         try {
             List<ValidationField> validationResult = validator.validate();

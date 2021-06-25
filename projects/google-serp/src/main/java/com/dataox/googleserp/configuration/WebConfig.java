@@ -1,18 +1,13 @@
 package com.dataox.googleserp.configuration;
 
-import com.dataox.googleserp.model.dto.InitialDataDTO;
 import com.dataox.googleserp.model.entity.InitialData;
 import com.dataox.googleserp.repository.InitialDataRepository;
-//import com.introlabsystems.denovo.api.permission.repository.PermissionSearchDataRepository;
-//import com.introlabsystems.denovo.apps.permissioncollector.PermissionCollectorApplicationConfiguration;
-//import com.introlabsystems.denovo.permission.PermissionCollectConfiguration;
 import com.dataox.googleserp.security.models.User;
 import com.dataox.googleserp.security.repository.UserRepository;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Import;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.method.HandlerTypePredicate;
@@ -35,8 +30,6 @@ import java.util.List;
 @EntityScan(basePackageClasses = {InitialData.class, User.class})
 @EnableJpaRepositories(basePackageClasses = {InitialDataRepository.class, UserRepository.class})
 @ComponentScan("com.dataox.googleserp")
-//@Import({PermissionCollectConfiguration.class,
-//        PermissionCollectorApplicationConfiguration.class})
 @EnableSwagger2
 public class WebConfig implements WebMvcConfigurer {
 

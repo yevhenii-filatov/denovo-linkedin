@@ -44,7 +44,7 @@ public class TimeConverter {
 
     }
 
-    private  LocalDate parseExactDate(String date) {
+    private LocalDate parseExactDate(String date) {
         LocalDate localDate = null;
         if (isNotBlank(date)) {
             try {

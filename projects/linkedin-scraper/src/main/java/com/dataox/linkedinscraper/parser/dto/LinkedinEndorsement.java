@@ -13,22 +13,22 @@ import java.time.Instant;
 @NoArgsConstructor
 public class LinkedinEndorsement {
 
-//    @NotNull
+    //    @NotNull
     private Instant updatedAt;
 
-//    @NotBlank
+    //    @NotBlank
     private String itemSource;
 
-//    @NotBlank
+    //    @NotBlank
 //    @Max(100)
     private String endorserFullName;
 
     private String endorserHeadline;
 
-//    @NotBlank
+    //    @NotBlank
 //    @Max(10)
     private String endorserConnectionDegree;
 
-//    @NotBlank
+    //    @NotBlank
     private String endorserProfileUrl;
 }

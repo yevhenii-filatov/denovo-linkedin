@@ -67,7 +67,7 @@ class LinkedinActivityParserTest {
         expectedActivityPost.setRelativePublicationDate("1yr");
         expectedActivityPost.setAbsolutePublicationDate(actualActivityPost.getAbsolutePublicationDate());
         expectedActivityPost.setContent(
-                        "In 1963, President John F. Kennedy ordered the U.S. Army 2nd Infantry Division to enforce the racial" +
+                "In 1963, President John F. Kennedy ordered the U.S. Army 2nd Infantry Division to enforce the racial" +
                         " integration of The University of Alabama. In a vain attempt to halt the enrollment of " +
                         "black students, Governor George Wallace stood in defiance, refusing to allow admission " +
                         "to these exceptional students. Almost 60 years later, America is a country more divided than " +

@@ -4,8 +4,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.time.Instant;
 
 @Data
@@ -19,15 +17,15 @@ public class LinkedinEducation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-//    @NotNull
+    //    @NotNull
     @Column(name = "updated_at")
     private Instant updatedAt;
 
-//    @NotBlank
+    //    @NotBlank
     @Column(name = "item_source", columnDefinition = "TEXT")
     private String itemSource;
 
-//    @NotBlank
+    //    @NotBlank
     @Column(name = "institution_name", columnDefinition = "TEXT")
     private String institutionName;
 
@@ -55,7 +53,7 @@ public class LinkedinEducation {
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
-//    @NotNull
+    //    @NotNull
     @ManyToOne
     @JoinColumn(name = "linkedin_profile_id", referencedColumnName = "id")
     private LinkedinProfile linkedinProfile;

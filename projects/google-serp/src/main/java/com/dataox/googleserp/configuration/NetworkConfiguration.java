@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 @Configuration
 public class NetworkConfiguration {
     @Bean
-    public OkHttpTemplate okHttpTemplate (OkHttpClient okHttpClient) {
+    public OkHttpTemplate okHttpTemplate(OkHttpClient okHttpClient) {
         return new SimpleOkHttpTemplate(okHttpClient);
     }
 

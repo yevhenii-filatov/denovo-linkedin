@@ -4,16 +4,13 @@ import com.dataox.googleserp.model.entity.InitialData;
 import com.dataox.googleserp.model.entity.SearchMetadata;
 import com.dataox.googleserp.model.entity.SearchResult;
 import com.dataox.googleserp.model.search.SearchQuery;
-import com.dataox.googleserp.repository.InitialDataRepository;
 import com.dataox.googleserp.service.parsing.SearchResultParser;
-import com.dataox.googleserp.util.BeanUtils;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Optional;
 
 import static com.dataox.googleserp.util.GoogleSearchParameters.prepareParameter;
 import static java.util.Collections.emptyList;
@@ -42,7 +39,9 @@ public abstract class AbstractSearchProvider<T> implements SearchProvider<T> {
         SearchQuery searchQuery;
         T searchResultsContainer;
         SearchResultParser<T> parser = resolveParser();
-        if (searchStep == 1) { searchStep++; }
+        if (searchStep == 1) {
+            searchStep++;
+        }
 
         for (; searchStep <= SEARCH_STEPS_AMOUNT; searchStep++) {
             searchQuery = new SearchQueryProvider(initialData).getQuery(searchStep);

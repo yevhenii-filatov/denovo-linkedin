@@ -16,15 +16,15 @@ public class LinkedinComment {
     @ToString.Include
     private String url;
 
-//    @NotBlank
+    //    @NotBlank
     private String itemSource;
 
-//    @NotBlank
-@EqualsAndHashCode.Include
-@ToString.Include
+    //    @NotBlank
+    @EqualsAndHashCode.Include
+    @ToString.Include
     private String content;
 
-//    @NotBlank
+    //    @NotBlank
 //    @Max(20)
     private String relativePublicationDate;
 
@@ -36,9 +36,9 @@ public class LinkedinComment {
 //    @NotNull
     private Instant absolutePublicationDate;
 
-//    @EqualsAndHashCode.Include
+    //    @EqualsAndHashCode.Include
     private int numberOfReactions;
 
-//    @EqualsAndHashCode.Include
+    //    @EqualsAndHashCode.Include
     private int numberOfReplies;
 }

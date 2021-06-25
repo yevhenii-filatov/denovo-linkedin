@@ -42,6 +42,7 @@ public class Runner implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
         notificationsService.sendInternal("LinkedIn Scraper Applicaton has been started.");
+
         while (scrapeLinkedinProfileService.isWorking()) {
             List<LinkedinProfileToScrapeDTO> profileToScrapeDTOS = (List<LinkedinProfileToScrapeDTO>) rabbitTemplate.receiveAndConvert();
             while (isNull(profileToScrapeDTOS)) {

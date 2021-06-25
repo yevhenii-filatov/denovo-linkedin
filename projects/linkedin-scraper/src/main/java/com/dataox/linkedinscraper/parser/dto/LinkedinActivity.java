@@ -17,9 +17,9 @@ public class LinkedinActivity {
     //    @NotNull
     private Instant updatedAt;
 
-//    @NotNull
+    //    @NotNull
     private LinkedinActivityType linkedinActivityType;
 
-//    @NotNull
+    //    @NotNull
     private LinkedinPost linkedinPost;
 }

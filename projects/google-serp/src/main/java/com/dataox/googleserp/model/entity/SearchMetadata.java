@@ -2,7 +2,6 @@ package com.dataox.googleserp.model.entity;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -23,11 +22,11 @@ public class SearchMetadata {
     private Long id;
 
     @NotNull
-    @Column(name = "search_page_source", columnDefinition="MEDIUMTEXT")
+    @Column(name = "search_page_source", columnDefinition = "MEDIUMTEXT")
     private String searchPageSource;
 
     @NotNull
-    @Column(name = "query_url", columnDefinition="varchar(1000)")
+    @Column(name = "query_url", columnDefinition = "varchar(1000)")
     private String queryUrl;
 
     @OneToOne(mappedBy = "searchMetadata", cascade = CascadeType.ALL)

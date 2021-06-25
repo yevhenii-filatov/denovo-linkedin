@@ -60,52 +60,55 @@ public class ScraperSelfValidator {
     }
 
     private ValidationField checkAccomplishmentsSources(List<String> accomplishmentsSources) {
-        if(!accomplishmentsSources.isEmpty() && accomplishmentsSources.stream().allMatch(StringUtils::isNotBlank)) return null;
+        if (!accomplishmentsSources.isEmpty() && accomplishmentsSources.stream().allMatch(StringUtils::isNotBlank))
+            return null;
         else return new ValidationField(SCRAPED_ACCOMPLISHMENTS, EMPTY);
     }
 
     private ValidationField checkRecommendationsSources(List<RecommendationsSource> recommendationsSources) {
-        if(!recommendationsSources.isEmpty() && recommendationsSources.stream().allMatch(Objects::nonNull)) return null;
+        if (!recommendationsSources.isEmpty() && recommendationsSources.stream().allMatch(Objects::nonNull))
+            return null;
         else return new ValidationField(SCRAPED_RECOMMENDATIONS, EMPTY);
     }
 
     private ValidationField checkAllSkillsSource(String allSkillsSource) {
-        if(isNotBlank(allSkillsSource)) return null;
+        if (isNotBlank(allSkillsSource)) return null;
         else return new ValidationField(SCRAPED_ALL_SKILLS, EMPTY);
     }
 
     private ValidationField checkSkillsWithEndorsementsSources(List<SkillsSource> skillsWithEndorsementsSources) {
-        if(!skillsWithEndorsementsSources.isEmpty() && skillsWithEndorsementsSources.stream().allMatch(Objects::nonNull)) return null;
+        if (!skillsWithEndorsementsSources.isEmpty() && skillsWithEndorsementsSources.stream().allMatch(Objects::nonNull))
+            return null;
         else return new ValidationField(SCRAPED_SKILLS, EMPTY);
     }
 
     private ValidationField checkVolunteersSource(String volunteersSource) {
-        if(isNotBlank(volunteersSource)) return null;
+        if (isNotBlank(volunteersSource)) return null;
         else return new ValidationField(SCRAPED_VOLUNTEERS, EMPTY);
     }
 
     private ValidationField checkLicenseSource(String licenseSource) {
-        if(isNotBlank(licenseSource)) return null;
+        if (isNotBlank(licenseSource)) return null;
         else return new ValidationField(SCRAPED_LICENSE, EMPTY);
     }
 
     private ValidationField checkEducationsSource(String educationsSource) {
-        if(isNotBlank(educationsSource)) return null;
+        if (isNotBlank(educationsSource)) return null;
         else return new ValidationField(SCRAPED_EDUCATION, EMPTY);
     }
 
     private ValidationField checkExperiencesSource(String experiencesSource) {
-        if(isNotBlank(experiencesSource)) return null;
+        if (isNotBlank(experiencesSource)) return null;
         else return new ValidationField(SCRAPED_EXPERIENCE, EMPTY);
     }
 
     private ValidationField checkProfilePhotoUrl(String profilePhotoUrl) {
-        if(isNotBlank(profilePhotoUrl)) return null;
+        if (isNotBlank(profilePhotoUrl)) return null;
         else return new ValidationField(SCRAPED_PHOTO, EMPTY);
     }
 
     private ValidationField checkHeaderSection(String headerSectionSource) {
-        if(isNotBlank(headerSectionSource)) return null;
+        if (isNotBlank(headerSectionSource)) return null;
         else return new ValidationField(SCRAPED_HEADER, EMPTY);
     }
 }

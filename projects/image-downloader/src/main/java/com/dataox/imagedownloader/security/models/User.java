@@ -3,12 +3,11 @@ package com.dataox.imagedownloader.security.models;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.Set;
-
-import javax.persistence.*;
 
 @Data
 @Entity

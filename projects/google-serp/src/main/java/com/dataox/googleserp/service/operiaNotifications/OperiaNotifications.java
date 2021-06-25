@@ -5,14 +5,11 @@ import com.dataox.notificationservice.service.NotificationsService;
 import com.dataox.okhttputils.OkHttpTemplate;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import okhttp3.MediaType;
 import okhttp3.Request;
-import okhttp3.RequestBody;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import javax.management.Notification;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;

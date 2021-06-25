@@ -2,8 +2,8 @@ package com.dataox.linkedinscraper.parser.parsers;
 
 import com.dataox.linkedinscraper.parser.LinkedinParser;
 import com.dataox.linkedinscraper.parser.dto.LinkedinExperience;
-import com.dataox.linkedinscraper.parser.service.mappers.LinkedinJobTypeMapper;
 import com.dataox.linkedinscraper.parser.service.TimeConverter;
+import com.dataox.linkedinscraper.parser.service.mappers.LinkedinJobTypeMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.nodes.Element;

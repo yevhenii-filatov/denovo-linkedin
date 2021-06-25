@@ -41,9 +41,9 @@ class LinkedinRecommendationParserTest {
         expected.setPersonExtraInfo("May 6, 2019, Alexander was senior to Dmitry but didn’t manage directly");
         expected.setDescription(
                 "I have worked with Dmitry more than 2 years and can say he is very responsible, " +
-                "honest and clever. His code is high quality and he saw any obstacles in advance. Besides working on " +
-                "projects he talked to our clients directly and they were excited to work with him. " +
-                "Very recommend to work with Dmitry and if you want to know more information please contact me."
+                        "honest and clever. His code is high quality and he saw any obstacles in advance. Besides working on " +
+                        "projects he talked to our clients directly and they were excited to work with him. " +
+                        "Very recommend to work with Dmitry and if you want to know more information please contact me."
         );
         expected.setItemSource("md5:d116d0bddecf386a86a8bf3a90a08f09");
 

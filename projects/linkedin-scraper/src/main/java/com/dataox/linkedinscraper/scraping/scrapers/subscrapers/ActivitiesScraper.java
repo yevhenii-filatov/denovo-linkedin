@@ -31,7 +31,6 @@ import static java.util.Objects.nonNull;
 @RequiredArgsConstructor
 public class ActivitiesScraper implements Scraper<List<String>> {
 
-    private final ScraperProperties scraperProperties;
     private static final By EMPTY_ACTIVITIES = By.xpath("//h1[text()='Nothing to see for now']");
     private static final By ACTIVITY_POSTS = By.xpath("//div[contains(@class,'pv-recent-activity-detail__outlet-container')]" +
             "/div/div[contains(@class,'occludable-update ember-view')]");
@@ -42,6 +41,7 @@ public class ActivitiesScraper implements Scraper<List<String>> {
             "/a/span[text()='See all activity'][1]");
     private static final By LINK_COPIED_NOTIFICATION = By.xpath("//li[@data-test-artdeco-toast-item-type='success']");
     private static final By POST_LINK = By.xpath("//li[@data-test-artdeco-toast-item-type='success']//a");
+    private final ScraperProperties scraperProperties;
 
     @Override
     public List<String> scrape(WebDriver webDriver) {
@@ -55,7 +55,7 @@ public class ActivitiesScraper implements Scraper<List<String>> {
         try {
             waitPageToLoad(wait);
         } catch (TimeoutException e) {
-            executeJavascript(webDriver,"window.scrollBy(0,1000)");
+            executeJavascript(webDriver, "window.scrollBy(0,1000)");
             waitPageToLoad(wait);
         }
         WebElement emptyActivitiesMessage = findElementBy(webDriver, EMPTY_ACTIVITIES);

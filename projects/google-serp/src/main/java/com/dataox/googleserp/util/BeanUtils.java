@@ -15,12 +15,12 @@ import javax.validation.constraints.NotNull;
 public class BeanUtils implements ApplicationContextAware {
     private static ApplicationContext context;
 
+    public static <T> T getBean(Class<T> beanClass) {
+        return context.getBean(beanClass);
+    }
+
     @Override
     public void setApplicationContext(@NotNull ApplicationContext applicationContext) {
         context = applicationContext;
-    }
-
-    public static <T> T getBean(Class<T> beanClass) {
-        return context.getBean(beanClass);
     }
 }

@@ -39,6 +39,36 @@
       "name": "app.service.choose-best-endpoint-url",
       "type": "java.lang.String",
       "description": "Url of choose best endpoint."
+    },
+    {
+      "name": "app.notifications.telegram.bot-token",
+      "type": "java.lang.String",
+      "description": "Token for the telegram bot."
+    },
+    {
+      "name": "app.notifications.telegram.chat-id",
+      "type": "java.lang.String",
+      "description": "Chat id for the telegram bot."
+    },
+    {
+      "name": "app.notifications.slack.slack-token",
+      "type": "java.lang.String",
+      "description": "Token for the Slack bot."
+    },
+    {
+      "name": "app.notifications.slack.notifications-channel",
+      "type": "java.lang.String",
+      "description": "Channel for the Slack bot."
+    },
+    {
+      "name": "jwtSecret",
+      "type": "java.lang.String",
+      "description": "Description for jwtSecret."
+    },
+    {
+      "name": "jwtExpirationMs",
+      "type": "java.lang.String",
+      "description": "Description for jwtExpirationMs."
     }
   ]
 }

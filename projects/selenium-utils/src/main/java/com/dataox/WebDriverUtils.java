@@ -130,7 +130,7 @@ public final class WebDriverUtils {
 
     public static Long getScrollY(WebDriver webDriver) {
         JavascriptExecutor js = (JavascriptExecutor) webDriver;
-        if (js.executeScript("return scrollY").getClass()   .equals(Long.class)) {
+        if (js.executeScript("return scrollY").getClass().equals(Long.class)) {
             return (Long) js.executeScript("return scrollY");
         }
         Double scrollY = (Double) js.executeScript("return scrollY");
@@ -151,7 +151,7 @@ public final class WebDriverUtils {
 
     public static Long getCurrentScrollYInElement(WebDriver webDriver, WebElement scrollingElement) {
         JavascriptExecutor js = (JavascriptExecutor) webDriver;
-        if (js.executeScript("return arguments[0].scrollTop", scrollingElement).getClass()   .equals(Long.class)) {
+        if (js.executeScript("return arguments[0].scrollTop", scrollingElement).getClass().equals(Long.class)) {
             return (Long) js.executeScript("return arguments[0].scrollTop", scrollingElement);
         }
         Double scrollY = (Double) js.executeScript("return arguments[0].scrollTop", scrollingElement);

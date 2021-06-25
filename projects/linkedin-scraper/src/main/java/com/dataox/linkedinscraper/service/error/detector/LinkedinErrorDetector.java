@@ -3,7 +3,6 @@ package com.dataox.linkedinscraper.service.error.detector;
 import com.dataox.WebDriverUtils;
 import com.dataox.notificationservice.service.NotificationsService;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.springframework.stereotype.Service;

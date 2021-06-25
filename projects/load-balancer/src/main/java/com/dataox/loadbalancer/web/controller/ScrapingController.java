@@ -1,7 +1,7 @@
 package com.dataox.loadbalancer.web.controller;
 
-import com.dataox.loadbalancer.dto.LinkedinProfileToUpdateDTO;
 import com.dataox.loadbalancer.domain.dto.ScrapingDTO;
+import com.dataox.loadbalancer.dto.LinkedinProfileToUpdateDTO;
 import com.dataox.loadbalancer.exception.DataNotFoundException;
 import com.dataox.loadbalancer.service.ScrapingService;
 import lombok.AccessLevel;
@@ -35,7 +35,7 @@ public class ScrapingController {
         scrapingService.startInitialScraping(scrapingDTOS);
         return ResponseEntity.ok("NICE");
     }
-  
+
     @PostMapping("/rescrape")
     public ResponseEntity<String> rescrapeFixedProfiles(@RequestBody List<Long> notReusableProfileIds) {
         scrapingService.rescrapeFixedProfiles(notReusableProfileIds);

@@ -25,11 +25,11 @@ import static org.apache.commons.lang3.StringUtils.appendIfMissing;
 @Slf4j
 public class ImageSaver {
 
+    private final ImageDownloader imageDownloader;
     @Value("${images.directory.path}")
     private String imagesDirectoryPath;
-    private final ImageDownloader imageDownloader;
 
-    public void saveImage(ImageCredentials imageCredentials)  {
+    public void saveImage(ImageCredentials imageCredentials) {
         log.info("Started saving image {}, {}", imageCredentials.getUrl(), imageCredentials.getFileName());
         try {
             byte[] imageBytes = imageDownloader.downloadImage(imageCredentials.getUrl());

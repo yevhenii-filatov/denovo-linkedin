@@ -6,7 +6,6 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.time.Instant;
 
 @Data
@@ -15,22 +14,19 @@ import java.time.Instant;
 @NoArgsConstructor
 public class LinkedinActivity {
 
+    //    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(name = "type")
+    LinkedinActivityType linkedinActivityType;
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @Column(name = "updated_at")
     private Instant updatedAt;
-
-//    @NotNull
-    @Enumerated(EnumType.STRING)
-    @Column(name = "type")
-    LinkedinActivityType linkedinActivityType;
-
-//    @NotNull
+    //    @NotNull
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "linkedin_profile_id",referencedColumnName = "id")
+    @JoinColumn(name = "linkedin_profile_id", referencedColumnName = "id")
     private LinkedinProfile linkedinProfile;
 
     @EqualsAndHashCode.Exclude

@@ -29,11 +29,11 @@ public enum SelfValidationType {
     PARSER_VOLUNTEERS("Parsed Volunteer Experiences"),
     PARSER_ACCOMPLISHMENTS("Parsed Accomplishments");
 
+    private final String value;
+
     SelfValidationType(String value) {
         this.value = value;
     }
-
-    private final String value;
 
     String getMessage() {
         return this.value;

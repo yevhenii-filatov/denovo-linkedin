@@ -52,7 +52,11 @@ public class ScrapeLinkedinProfileService {
     private final NotificationsService notificationsService;
     private final ApplicationContext applicationContext;
     @Getter
-    private boolean isWorking = true;
+    private final boolean isWorking = true;
+
+    private static NotScrapedLinkedinProfile createReusableNotScrapedProfile(LinkedinProfileToScrapeDTO profile) {
+        return new NotScrapedLinkedinProfile(profile, StringUtils.EMPTY, true);
+    }
 
     public ScrapingResultsDTO scrape(List<LinkedinProfileToScrapeDTO> linkedinProfilesToScrape) {
         List<LinkedinProfile> successfullyScraped = new ArrayList<>();
@@ -69,7 +73,7 @@ public class ScrapeLinkedinProfileService {
             }
         } catch (LinkedinException e) {
             addTheRestOfProfilesToNotScrapedList(currentProfileToScrape, linkedinProfilesToScrape, notScraped);
-            this.isWorking = false;
+//            this.isWorking = false; // commented to make it work all the time.
 
             notificationsService.sendAll("LinkedinScraper: LinkedinException at ScrapeLinkedinProfileService: scrapeService has stopped working.");
             notificationsService.sendInternal(ExceptionUtils.getStackTrace(e));
@@ -96,10 +100,6 @@ public class ScrapeLinkedinProfileService {
                     .map(ScrapeLinkedinProfileService::createReusableNotScrapedProfile)
                     .forEach(notScraped::add);
         }
-    }
-
-    private static NotScrapedLinkedinProfile createReusableNotScrapedProfile(LinkedinProfileToScrapeDTO profile) {
-        return new NotScrapedLinkedinProfile(profile, StringUtils.EMPTY, true);
     }
 
     private LinkedinProfile scrapeSingleProfile(LinkedinProfileToScrapeDTO profileToScrape, WebDriver webDriver, List<NotScrapedLinkedinProfile> notScraped) {

@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
@@ -16,11 +15,11 @@ public class SearchMetadata {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-//    @NotNull
+    //    @NotNull
     @Column(name = "search_page_source", columnDefinition = "MEDIUMTEXT")
     private String searchPageSource;
 
-//    @NotNull
+    //    @NotNull
     @Column(name = "query_url", columnDefinition = "varchar(1000)")
     private String queryUrl;
 

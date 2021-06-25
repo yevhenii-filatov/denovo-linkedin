@@ -39,11 +39,6 @@ import static java.util.Objects.nonNull;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class LoginService {
 
-    LinkedinProperties linkedinProperties;
-    CaptchaSolver captchaSolver;
-    LinkedinErrorDetector errorDetector;
-    EmailVerificationService emailVerificationService;
-
     static String LINKEDIN_LOGIN_PAGE_URL = "https://www.linkedin.com/";
     static String CANT_LOGIN_MESSAGE = "Can't login into account.";
     static By LOGIN_INPUT_FIELD = By.xpath("//input[@autocomplete='username'] | //input[@id='username'][@type='text']");
@@ -53,6 +48,10 @@ public class LoginService {
     static By PROFILE_SECTION = By.xpath("//div[contains(@class,'artdeco-card overflow-hidden')]");
     static By CAPTCHA_FORM = By.cssSelector("form#captcha-challenge");
     static By REMEMBER_ME = By.xpath("//button[@class='btn__primary--large'][@data-cie-control-urn='checkpoint_remember_me_save_info_yes']");
+    LinkedinProperties linkedinProperties;
+    CaptchaSolver captchaSolver;
+    LinkedinErrorDetector errorDetector;
+    EmailVerificationService emailVerificationService;
 
     public void performLogin(WebDriver webDriver) {
         try {

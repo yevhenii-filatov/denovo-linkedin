@@ -13,35 +13,35 @@ import java.time.Instant;
 @NoArgsConstructor
 public class LinkedinVolunteerExperience {
 
-//    @NotNull
+    //    @NotNull
     private Instant updatedAt;
 
-//    @NotBlank
+    //    @NotBlank
     private String itemSource;
 
-//    @NotBlank
+    //    @NotBlank
 //    @Max(100)
     private String companyName;
 
     private String companyProfileUrl;
 
-//    @NotBlank
+    //    @NotBlank
 //    @Max(100)
     private String position;
 
-//    @NotBlank
+    //    @NotBlank
 //    @Max(20)
     private String dateStarted;
 
-//    @NotBlank
+    //    @NotBlank
 //    @Max(20)
     private String dateFinished;
 
-//    @NotBlank
+    //    @NotBlank
 //    @Max(20)
     private String totalDuration;
 
-//    @Max(100)
+    //    @Max(100)
     private String fieldOfActivity;
 
     private String description;

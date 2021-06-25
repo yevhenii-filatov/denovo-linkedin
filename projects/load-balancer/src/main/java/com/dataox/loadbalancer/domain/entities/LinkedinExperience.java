@@ -5,8 +5,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.time.Instant;
 import java.time.LocalDate;
 
@@ -21,11 +19,11 @@ public class LinkedinExperience {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-//    @NotNull
+    //    @NotNull
     @Column(name = "updated_at")
     private Instant updatedAt;
 
-//    @NotBlank
+    //    @NotBlank
     @Column(name = "item_source", columnDefinition = "TEXT")
     private String itemSource;
 
@@ -33,15 +31,15 @@ public class LinkedinExperience {
     @Column(name = "job_type")
     private LinkedinJobType linkedinJobType;
 
-//    @NotBlank
+    //    @NotBlank
     @Column(name = "company_name", columnDefinition = "TEXT")
     private String companyName;
 
-//    @NotBlank
+    //    @NotBlank
     @Column(name = "company_profile_url", columnDefinition = "TEXT")
     private String companyProfileUrl;
 
-//    @NotBlank
+    //    @NotBlank
     @Column(name = "position", columnDefinition = "TEXT")
     private String position;
 
@@ -66,7 +64,7 @@ public class LinkedinExperience {
     @Column(name = "total_duration", columnDefinition = "TEXT")
     private String totalDuration;
 
-//    @NotNull
+    //    @NotNull
     @ManyToOne
     @JoinColumn(name = "linkedin_profile_id", referencedColumnName = "id")
     private LinkedinProfile linkedinProfile;

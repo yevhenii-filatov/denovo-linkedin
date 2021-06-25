@@ -4,5 +4,6 @@
       "name": "app.scraping.batch-size",
       "type": "java.lang.String",
       "description": "Amount of profiles in one message for scrapers."
-  }
-] }
+    }
+  ]
+}

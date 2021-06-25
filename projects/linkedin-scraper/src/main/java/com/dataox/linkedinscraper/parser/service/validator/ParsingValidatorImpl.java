@@ -18,9 +18,9 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ParsingValidatorImpl implements ParsingValidator {
 
+    private static final String COMMON_MESSAGE = "Parsing validation failed for -> ";
     private final NotificationsService notificationsService;
     private final Validator validator;
-    private static final String COMMON_MESSAGE = "Parsing validation failed for -> ";
 
     @Override
     public void validate(LinkedinProfile profile) {

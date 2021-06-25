@@ -13,26 +13,26 @@ import java.time.Instant;
 @NoArgsConstructor
 public class LinkedinLicenseCertification {
 
-//    @NotNull
+    //    @NotNull
     private Instant updatedAt;
 
-//    @NotBlank
+    //    @NotBlank
     private String itemSource;
 
-//    @NotBlank
+    //    @NotBlank
     private String name;
 
-//    @NotBlank
+    //    @NotBlank
     private String issuer;
 
     private String issuerProfileUrl;
 
-//    @Max(20)
+    //    @Max(20)
     private String issuedDate;
 
-//    @Max(30)
+    //    @Max(30)
     private String expirationDate;
 
-//    @Max(50)
+    //    @Max(50)
     private String credentialId;
 }

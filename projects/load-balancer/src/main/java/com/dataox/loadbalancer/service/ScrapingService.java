@@ -27,12 +27,8 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
-
-import static java.util.Objects.isNull;
 
 /**
  * @author Dmitriy Lysko
@@ -122,35 +118,6 @@ public class ScrapingService {
                         .map(linkedinProfile -> searchResultRepository.findById(linkedinProfile.getSearchResult().getId()).get().getInitialDataRecord().getDenovoId())
                         .collect(Collectors.toList())
                         .toString()));
-//        processReusableNotScrapedProfiles(scrapingResultsDTO);
-//        processNotReusableProfiles(scrapingResultsDTO);
-//        List<SearchResult> searchResults = searchResultRepository.findAllByIdIn(searchResultsIds);
-//        List<Long> minimalScrapedLinkedinProfiles = searchResults.stream()
-//                .map(SearchResult::getLinkedinProfile)
-//                .map(LinkedinProfile::getId)
-//                .collect(Collectors.toList());
-//        triggerChooseCorrectResultEndpoint(minimalScrapedLinkedinProfiles);
-    }
-
-//    private void triggerChooseCorrectResultEndpoint(List<Long> minimalScrapedLinkedinProfiles) {
-//        log.info("Triggering choose correct result endpoint with linkedin profiles ids: {}", minimalScrapedLinkedinProfiles);
-//    }
-
-    private List<Long> resolveMinimalScrapedSearchResultsIds(List<LinkedinProfile> successfulProfiles) {
-        List<Long> searchResultIds = successfulProfiles.stream()
-                .map(LinkedinProfile::getSearchResult)
-                .map(SearchResult::getId)
-                .collect(Collectors.toList());
-        List<SearchResult> searchResults = searchResultRepository.findAllByIdIn(searchResultIds);
-        return searchResults.stream()
-                .filter(searchResult -> isNull(searchResult.getLinkedinProfile()))
-                .map(SearchResult::getId)
-                .collect(Collectors.toList());
-    }
-
-    private void processNotReusableProfiles(ScrapingResultsDTO scrapingResultsDTO) {
-        List<LinkedinNotReusableProfile> notReusableProfiles = convertResultsToNotReusableProfiles(scrapingResultsDTO);
-        dataLoaderService.saveNotReusableProfiles(notReusableProfiles);
     }
 
     private List<LinkedinNotReusableProfile> convertResultsToNotReusableProfiles(ScrapingResultsDTO scrapingResultsDTO) {
@@ -169,16 +136,6 @@ public class ScrapingService {
             notReusableProfiles.add(notReusableProfile);
         }
         return notReusableProfiles;
-    }
-
-    private void processReusableNotScrapedProfiles(ScrapingResultsDTO scrapingResultsDTO) {
-        List<LinkedinProfileToScrapeDTO> profilesToScrape = scrapingResultsDTO.getNotScrapedLinkedinProfiles().stream()
-                .filter(NotScrapedLinkedinProfile::isReusable)
-                .map(NotScrapedLinkedinProfile::getProfileToScrapeDTO)
-                .collect(Collectors.toList());
-        List<List<LinkedinProfileToScrapeDTO>> splittedProfiles = ListUtils.partition(profilesToScrape, scrapingProperties.getBatchSize());
-        if (!profilesToScrape.isEmpty())
-            sendToQueue(splittedProfiles);
     }
 
     private void startScraping(List<InitialDataSearchPosition> initialDataSearchPositions) {
@@ -201,7 +158,12 @@ public class ScrapingService {
                 .map(ArrayList::new)
                 .collect(Collectors.toList());
         profileToScrapeBatchesLists.forEach(rabbitTemplate::convertAndSend);
-        log.info("Sent {} batches to queue with batch size: {}", profileToScrapeBatchesLists.size(), scrapingProperties.getBatchSize());
+        log.info("Sent {} batches to queue with batch size: {}. Denovo Id: {}", profileToScrapeBatchesLists.size(), scrapingProperties.getBatchSize(),
+                profileToScrapeBatchesLists.stream().map(
+                        list -> list.stream().map(
+                                e -> String.valueOf(e.getDenovoId())
+                        ).collect(Collectors.toList())
+                ).collect(Collectors.toList()));
         notificationsService.sendAll("LoadBalancer: Sent "
                 .concat(String.valueOf(profileToScrapeBatchesLists.size()))
                 .concat(" batches to queue with batch size:")

@@ -5,8 +5,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.time.Instant;
 
 @Data
@@ -20,36 +18,36 @@ public class LinkedinRecommendation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-//    @NotNull
+    //    @NotNull
     @Column(name = "updated_at")
     private Instant updatedAt;
 
-//    @NotBlank
+    //    @NotBlank
     @Column(name = "item_source", columnDefinition = "TEXT")
     private String itemSource;
 
-//    @NotNull
+    //    @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "type")
     private LinkedinRecommendationType linkedinRecommendationType;
 
-//    @NotBlank
+    //    @NotBlank
     @Column(name = "person_full_name", columnDefinition = "TEXT")
     private String personFullName;
 
-//    @NotBlank
+    //    @NotBlank
     @Column(name = "person_profile_url", columnDefinition = "TEXT")
     private String personProfileUrl;
 
-//    @NotBlank
+    //    @NotBlank
     @Column(name = "person_headline", columnDefinition = "TEXT")
     private String personHeadline;
 
-//    @NotBlank
+    //    @NotBlank
     @Column(name = "person_extra_info", columnDefinition = "TEXT")
     private String personExtraInfo;
 
-//    @NotBlank
+    //    @NotBlank
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 

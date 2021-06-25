@@ -15,17 +15,17 @@ import java.util.List;
 @NoArgsConstructor
 public class LinkedinSkill {
 
-//    @NotNull
+    //    @NotNull
     private Instant updatedAt;
 
-//    @NotBlank
+    //    @NotBlank
     private String itemSource;
 
-//    @NotBlank
+    //    @NotBlank
 //    @Max(100)
     private String name;
 
-//    @NotBlank
+    //    @NotBlank
 //    @Max(100)
     private String category;
 

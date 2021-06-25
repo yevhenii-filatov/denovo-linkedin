@@ -4,8 +4,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.time.Instant;
 
 @Data
@@ -19,19 +17,19 @@ public class LinkedinLicenseCertification {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-//    @NotNull
+    //    @NotNull
     @Column(name = "updated_at")
     private Instant updatedAt;
 
-//    @NotBlank
+    //    @NotBlank
     @Column(name = "item_source", columnDefinition = "TEXT")
     private String itemSource;
 
-//    @NotBlank
+    //    @NotBlank
     @Column(name = "name", columnDefinition = "TEXT")
     private String name;
 
-//    @NotBlank
+    //    @NotBlank
     @Column(name = "issuer", columnDefinition = "TEXT")
     private String issuer;
 
@@ -47,7 +45,7 @@ public class LinkedinLicenseCertification {
     @Column(name = "credential_id", columnDefinition = "TEXT")
     private String credentialId;
 
-//    @NotNull
+    //    @NotNull
     @ManyToOne
     @JoinColumn(name = "linkedin_profile_id", referencedColumnName = "id")
     private LinkedinProfile linkedinProfile;

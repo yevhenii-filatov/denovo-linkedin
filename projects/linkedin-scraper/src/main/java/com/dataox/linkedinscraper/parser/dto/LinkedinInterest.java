@@ -14,25 +14,25 @@ import java.time.Instant;
 @NoArgsConstructor
 public class LinkedinInterest {
 
-//    @NotNull
+    //    @NotNull
     private Instant updatedAt;
 
-//    @NotBlank
+    //    @NotBlank
     private String itemSource;
 
-//    @NotBlank
+    //    @NotBlank
 //    @Max(100)
     private String name;
 
-//    @NotNull
+    //    @NotNull
     private LinkedinInterestType linkedinInterestType;
 
-//    @NotBlank
+    //    @NotBlank
     private String profileUrl;
 
     private String headline;
 
-//    @NotBlank
+    //    @NotBlank
 //    @Max(50)
     private String numberOfFollowers;
 }

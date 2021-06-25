@@ -1,7 +1,6 @@
 package com.dataox.linkedinscraper.exceptions.linkedin;
 
 import com.dataox.linkedinscraper.service.error.detector.LinkedinError;
-import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 

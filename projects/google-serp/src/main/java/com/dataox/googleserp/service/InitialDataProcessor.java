@@ -8,7 +8,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -52,7 +55,4 @@ public class InitialDataProcessor {
         }
     }
 
-    public void deleteIfExistsLinkedinProfile(Long denovoId) {
-
-    }
 }

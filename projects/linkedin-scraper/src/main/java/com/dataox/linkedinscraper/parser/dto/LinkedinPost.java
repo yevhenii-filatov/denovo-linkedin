@@ -17,17 +17,17 @@ public class LinkedinPost {
 
     private String url;
 
-//    @NotBlank
+    //    @NotBlank
     private String itemSource;
 
-//    @NotBlank
+    //    @NotBlank
 //    @Max(20)
     private String relativePublicationDate;
 
-//    @NotNull
+    //    @NotNull
     private Instant collectedDate;
 
-//    @NotNull
+    //    @NotNull
     private Instant absolutePublicationDate;
 
     @EqualsAndHashCode.Include
@@ -40,10 +40,10 @@ public class LinkedinPost {
 //    @NotBlank
     private String authorProfileUrl;
 
-//    @NotBlank
+    //    @NotBlank
     private String authorConnectionDegree;
 
-//    @NotBlank
+    //    @NotBlank
     private String authorHeadline;
 
     @EqualsAndHashCode.Include

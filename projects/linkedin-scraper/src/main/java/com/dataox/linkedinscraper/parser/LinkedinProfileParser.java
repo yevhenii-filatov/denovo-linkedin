@@ -7,8 +7,6 @@ import com.dataox.linkedinscraper.parser.dto.LinkedinProfile;
 import com.dataox.linkedinscraper.parser.dto.LinkedinSkill;
 import com.dataox.linkedinscraper.parser.parsers.*;
 import com.dataox.linkedinscraper.parser.service.validator.ParsingValidator;
-import com.dataox.okhttputils.OkHttpTemplate;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;

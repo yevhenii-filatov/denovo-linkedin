@@ -2,9 +2,7 @@ package com.dataox.linkedinscraper.scraping.service.emailVerificator;
 
 import com.dataox.linkedinscraper.scraping.exceptions.ElementNotFoundException;
 import com.dataox.notificationservice.service.NotificationsService;
-import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -28,10 +26,9 @@ import static com.dataox.WebDriverUtils.*;
 @RequiredArgsConstructor
 public class EmailVerificationService {
 
-    private final NotificationsService notificationsService;
-
     static By EMAIL_VERIFICATION_FIELD = By.xpath("//*[@id=\"input__email_verification_pin\"]");
     static By SUBMIT_BUTTON = By.xpath("//*[@id=\"email-pin-submit-button\"]");
+    private final NotificationsService notificationsService;
 
     public void verifyEmail(WebDriver webDriver) throws IOException, InterruptedException {
         File verificationFile = new File("./verificationCode.txt");

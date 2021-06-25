@@ -13,30 +13,30 @@ import java.time.Instant;
 @NoArgsConstructor
 public class LinkedinEducation {
 
-//    @NotNull
+    //    @NotNull
     private Instant updatedAt;
 
-//    @NotBlank
+    //    @NotBlank
     private String itemSource;
 
-//    @NotBlank
+    //    @NotBlank
     private String institutionName;
 
     private String institutionProfileUrl;
 
-//    @Max(20)
+    //    @Max(20)
     private String degree;
 
-//    @Max(50)
+    //    @Max(50)
     private String fieldOfStudy;
 
-//    @Max(20)
+    //    @Max(20)
     private String grade;
 
-//    @Max(20)
+    //    @Max(20)
     private String startedYear;
 
-//    @Max(20)
+    //    @Max(20)
     private String finishedYear;
 
     private String activitiesAndSocieties;

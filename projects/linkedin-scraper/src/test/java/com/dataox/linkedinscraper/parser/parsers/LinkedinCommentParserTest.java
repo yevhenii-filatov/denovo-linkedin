@@ -4,16 +4,13 @@ import com.dataox.linkedinscraper.parser.LinkedinParser;
 import com.dataox.linkedinscraper.parser.dto.LinkedinComment;
 import com.dataox.linkedinscraper.parser.service.TimeConverter;
 import org.junit.jupiter.api.Test;
-import org.springframework.util.DigestUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import static com.dataox.linkedinscraper.parser.ParsingTestUtils.hashedStingComparator;
 import static com.dataox.linkedinscraper.parser.ParsingTestUtils.loadResource;
-import static org.assertj.core.api.Assertions.assertThat;
 
 class LinkedinCommentParserTest {
 

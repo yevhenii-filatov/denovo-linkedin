@@ -2,8 +2,8 @@ package com.dataox.linkedinscraper.parser.parsers;
 
 import com.dataox.linkedinscraper.parser.LinkedinParser;
 import com.dataox.linkedinscraper.parser.dto.LinkedinExperience;
-import com.dataox.linkedinscraper.parser.service.mappers.LinkedinJobTypeMapper;
 import com.dataox.linkedinscraper.parser.service.TimeConverter;
+import com.dataox.linkedinscraper.parser.service.mappers.LinkedinJobTypeMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.util.DigestUtils;
 

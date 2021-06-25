@@ -14,7 +14,7 @@ public class LinkedinAccomplishmentTypeMapper {
     public LinkedinAccomplishmentType map(String type) {
         log.debug("Type to map: {}", type);
         return Arrays.stream(LinkedinAccomplishmentType.values())
-                .filter(linkedinType-> linkedinType.getType().equals(type))
+                .filter(linkedinType -> linkedinType.getType().equals(type))
                 .findFirst().orElseThrow(() -> new LinkedinTypeMappingException("failed map LinkedinAccomplishmentType: " + type));
     }
 }

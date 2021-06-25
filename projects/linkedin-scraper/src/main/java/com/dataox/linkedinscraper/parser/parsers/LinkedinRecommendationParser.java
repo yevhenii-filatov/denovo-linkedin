@@ -89,8 +89,8 @@ public class LinkedinRecommendationParser implements LinkedinParser<List<Linkedi
     private String parseDescription(Element recommendationElement) {
         return normalizeSpace(
                 text(recommendationElement.selectFirst(".pv-recommendation-entity__text > div"))
-                .replace(" See less", "")
-                .replace("... See more", "")
+                        .replace(" See less", "")
+                        .replace("... See more", "")
         );
     }
 }

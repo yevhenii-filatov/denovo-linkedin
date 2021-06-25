@@ -10,12 +10,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
-import javax.management.Notification;
 import javax.validation.Valid;
-import java.util.List;
 
 /**
  * @author Dmitriy Lysko
@@ -39,7 +36,7 @@ public class ServicesController {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> handleException(Exception e) {
-        log.error(                        "LoadBalancer: Exception appeared during POST query to /scraping/receive/scraped. Exception message: ".concat(e.getMessage()));
+        log.error("LoadBalancer: Exception appeared during POST query to /scraping/receive/scraped. Exception message: ".concat(e.getMessage()));
         notificationsService.sendInternal("LoadBalancer: Exception appeared during POST query to /scraping/receive/scraped. Exception message: ".concat(e.getMessage()));
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
     }

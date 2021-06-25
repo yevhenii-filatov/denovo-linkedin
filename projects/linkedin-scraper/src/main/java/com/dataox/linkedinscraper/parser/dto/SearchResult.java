@@ -11,16 +11,11 @@ import java.time.Instant;
 @NoArgsConstructor
 public class SearchResult {
 
-    private Long id;
-
-    private Instant collectedAt;
-
-    private String title;
-
-//    @NotNull
-    private String url;
-
-    private String description;
-
     LinkedinProfile linkedinProfile;
+    private Long id;
+    private Instant collectedAt;
+    private String title;
+    //    @NotNull
+    private String url;
+    private String description;
 }

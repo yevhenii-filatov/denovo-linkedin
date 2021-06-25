@@ -14,28 +14,28 @@ import java.time.Instant;
 @NoArgsConstructor
 public class LinkedinRecommendation {
 
-//    @NotNull
+    //    @NotNull
     private Instant updatedAt;
 
-//    @NotBlank
+    //    @NotBlank
     private String itemSource;
 
-//    @NotNull
+    //    @NotNull
     private LinkedinRecommendationType linkedinRecommendationType;
 
-//    @NotBlank
+    //    @NotBlank
 //    @Max(255)
     private String personFullName;
 
-//    @NotBlank
+    //    @NotBlank
     private String personProfileUrl;
 
-//    @NotBlank
+    //    @NotBlank
     private String personHeadline;
 
-//    @NotBlank
+    //    @NotBlank
     private String personExtraInfo;
 
-//    @NotBlank
+    //    @NotBlank
     private String description;
 }
