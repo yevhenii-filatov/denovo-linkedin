@@ -2,6 +2,9 @@ package com.dataox.linkedinscraper.parser.parsers;
 
 import com.dataox.linkedinscraper.parser.LinkedinParser;
 import com.dataox.linkedinscraper.parser.dto.LinkedinExperience;
+import com.dataox.linkedinscraper.parser.service.TimeConverter;
+import com.dataox.linkedinscraper.parser.service.mappers.LinkedinJobTypeMapper;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -21,7 +24,11 @@ import static org.apache.commons.lang3.StringUtils.*;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class LinkedinExperienceParser implements LinkedinParser<List<LinkedinExperience>, String> {
+
+    private final TimeConverter timeConverter;
+    private final LinkedinJobTypeMapper mapper;
 
     @Override
     public List<LinkedinExperience> parse(String source) {
@@ -59,7 +66,8 @@ public class LinkedinExperienceParser implements LinkedinParser<List<LinkedinExp
                     LinkedinExperience experience = getLinkedinExperience(innerElement, time);
                     experience.setCompanyName(parseCompanyName(element));
                     experience.setCompanyProfileUrl(parseCompanyProfileUrl(element));
-                    experience.setJobType(parseJobTypeForMultiplePositions(element));
+                    String jobType = parseJobTypeForMultiplePositions(element);
+                    setJobTypeIfPresent(experience, jobType);
                     return experience;
                 });
     }
@@ -73,7 +81,8 @@ public class LinkedinExperienceParser implements LinkedinParser<List<LinkedinExp
 
         experience.setUpdatedAt(time);
         experience.setItemSource(experienceElement.html());
-        experience.setJobType(parseJobType(experienceElement));
+        String jobType = parseJobType(experienceElement);
+        setJobTypeIfPresent(experience, jobType);
         experience.setCompanyName(parseCompanyName(experienceElement));
         experience.setCompanyProfileUrl(parseCompanyProfileUrl(experienceElement));
         experience.setPosition(parsePosition(experienceElement));
@@ -82,6 +91,10 @@ public class LinkedinExperienceParser implements LinkedinParser<List<LinkedinExp
         if (isNoneBlank(dateRange)) {
             experience.setDateStarted(getDateStarted(dateRange));
             experience.setDateFinished(getDateFinished(dateRange));
+            experience.setDateStartedTimestamp(timeConverter.toLocalDate(experience.getDateStarted()));
+            if (!experience.getDateFinished().equals("Present")) {
+                experience.setDateFinishedTimestamp(timeConverter.toLocalDate(experience.getDateFinished()));
+            }
             experience.setTotalDuration(parseTotalDuration(experienceElement));
         }
 
@@ -89,6 +102,12 @@ public class LinkedinExperienceParser implements LinkedinParser<List<LinkedinExp
         experience.setDescription(parseDescription(experienceElement));
 
         return experience;
+    }
+
+    private void setJobTypeIfPresent(LinkedinExperience experience, String jobType) {
+        if (isNoneBlank(jobType)) {
+            experience.setLinkedinJobType(mapper.map(jobType));
+        }
     }
 
     private String parseJobType(Element experienceElement) {

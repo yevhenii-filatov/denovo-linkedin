@@ -64,7 +64,7 @@ public class RecommendationsScraper implements Scraper<List<RecommendationsSourc
     }
 
     private String scrapeTab(WebDriver webDriver, By receivedRecommendationsTab) {
-        WebDriverWait wait = new WebDriverWait(webDriver, 45);
+        WebDriverWait wait = new WebDriverWait(webDriver, 120);
         Actions actions = new Actions(webDriver);
         openRecommendationsTab(webDriver, actions, receivedRecommendationsTab);
         openAllRecommendations(webDriver, wait, actions);

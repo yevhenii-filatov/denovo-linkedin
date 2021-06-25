@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 /**
@@ -21,7 +22,7 @@ import java.util.stream.Collectors;
 public abstract class AbstractSearchResultParser<T> implements SearchResultParser<T> {
 
     @Override
-    public Collection<SearchResult> parse(T container, String queryUrl) {
+    public Collection<SearchResult> parse(T container, String queryUrl, int searchStep) {
         if (Objects.isNull(container)) {
             log.warn("EMPTY SOURCES FOR QUERY: {}", queryUrl);
             return null;
@@ -31,8 +32,12 @@ public abstract class AbstractSearchResultParser<T> implements SearchResultParse
             log.info("NO SEARCH RESULTS FOR QUERY {}", queryUrl);
             return Collections.emptyList();
         }
+        AtomicInteger position = new AtomicInteger(1);
         return searchResultsElements.stream()
                 .map(this::parseOne)
+                .filter(searchResult -> searchResult.getUrl().matches("https://www\\.linkedin\\.com/in/(\\w+-?)+(\\d+)?/?"))
+                .peek(searchResult -> searchResult.setSearchPosition(position.getAndIncrement()))
+                .peek(searchResult -> searchResult.setSearchStep(searchStep))
                 .collect(Collectors.toCollection(LinkedList::new));
     }
 

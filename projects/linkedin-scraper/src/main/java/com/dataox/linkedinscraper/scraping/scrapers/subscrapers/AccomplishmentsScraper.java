@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static com.dataox.CommonUtils.randomLong;
 import static com.dataox.CommonUtils.randomSleep;
 import static com.dataox.WebDriverUtils.*;
 import static java.util.Objects.isNull;

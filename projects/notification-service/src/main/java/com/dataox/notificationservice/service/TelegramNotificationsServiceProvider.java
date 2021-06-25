@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Objects;
+
 @Slf4j
 @RequiredArgsConstructor
 @Service("Telegram-notifications")
@@ -17,6 +19,10 @@ public class TelegramNotificationsServiceProvider implements NotificationsServic
 
     @Override
     public void send(String message) {
+
+        if (Objects.isNull(message)) message = "empty";
+        if (message.isEmpty()) message = "empty";
+
         NotificationsProperties.Telegram telegram = notificationsProperties.getTelegram();
         try {
             restTemplate.getForObject(REQUEST_URL, String.class,

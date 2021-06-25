@@ -1,36 +1,38 @@
 package com.dataox.linkedinscraper.parser.dto;
 
+import com.dataox.linkedinscraper.parser.dto.types.LinkedinInterestType;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.time.Instant;
 
 @Data
+@EqualsAndHashCode(exclude = {"updatedAt", "itemSource", "numberOfFollowers"})
+@ToString(exclude = {"updatedAt", "itemSource", "numberOfFollowers"})
 @NoArgsConstructor
 public class LinkedinInterest {
 
-    @NotNull
+    //    @NotNull
     private Instant updatedAt;
 
-    @NotBlank
+    //    @NotBlank
     private String itemSource;
 
-    @NotBlank
-    @Max(100)
+    //    @NotBlank
+//    @Max(100)
     private String name;
 
-    @NotNull
-    private String type;
+    //    @NotNull
+    private LinkedinInterestType linkedinInterestType;
 
-    @NotBlank
+    //    @NotBlank
     private String profileUrl;
 
     private String headline;
 
-    @NotBlank
-    @Max(50)
+    //    @NotBlank
+//    @Max(50)
     private String numberOfFollowers;
 }

@@ -3,6 +3,8 @@ package com.dataox.linkedinscraper.parser.parsers;
 import com.dataox.linkedinscraper.dto.sources.RecommendationsSource;
 import com.dataox.linkedinscraper.parser.LinkedinParser;
 import com.dataox.linkedinscraper.parser.dto.LinkedinRecommendation;
+import com.dataox.linkedinscraper.parser.dto.types.LinkedinRecommendationType;
+import com.dataox.linkedinscraper.parser.service.mappers.LinkedinRecommendationTypeMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.util.DigestUtils;
 
@@ -21,8 +23,8 @@ class LinkedinRecommendationParserTest {
     @Test
     void shouldParse() throws IOException {
         String source = loadResource(RECOMMENDATION_SOURCE);
-        RecommendationsSource typeSource = new RecommendationsSource("Given", source);
-        LinkedinParser<List<LinkedinRecommendation>, List<RecommendationsSource>> parser = new LinkedinRecommendationParser();
+        RecommendationsSource typeSource = new RecommendationsSource("GIVEN", source);
+        LinkedinParser<List<LinkedinRecommendation>, List<RecommendationsSource>> parser = new LinkedinRecommendationParser(new LinkedinRecommendationTypeMapper());
 
         List<LinkedinRecommendation> recommendations = parser.parse(Collections.singletonList(typeSource));
 
@@ -32,16 +34,16 @@ class LinkedinRecommendationParserTest {
 
         LinkedinRecommendation expected = new LinkedinRecommendation();
         expected.setUpdatedAt(actual.getUpdatedAt());
-        expected.setType("Given");
+        expected.setLinkedinRecommendationType(LinkedinRecommendationType.GIVEN);
         expected.setPersonFullName("Dmitry Stril");
         expected.setPersonProfileUrl("https://www.linkedin.com/in/dmitrystril/");
         expected.setPersonHeadline("Software Developer");
         expected.setPersonExtraInfo("May 6, 2019, Alexander was senior to Dmitry but didn’t manage directly");
         expected.setDescription(
                 "I have worked with Dmitry more than 2 years and can say he is very responsible, " +
-                "honest and clever. His code is high quality and he saw any obstacles in advance. Besides working on " +
-                "projects he talked to our clients directly and they were excited to work with him. " +
-                "Very recommend to work with Dmitry and if you want to know more information please contact me."
+                        "honest and clever. His code is high quality and he saw any obstacles in advance. Besides working on " +
+                        "projects he talked to our clients directly and they were excited to work with him. " +
+                        "Very recommend to work with Dmitry and if you want to know more information please contact me."
         );
         expected.setItemSource("md5:d116d0bddecf386a86a8bf3a90a08f09");
 

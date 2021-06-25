@@ -4,8 +4,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.time.Instant;
 
 @Data
@@ -19,36 +17,52 @@ public class LinkedinLicenseCertification {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
+    //    @NotNull
     @Column(name = "updated_at")
     private Instant updatedAt;
 
-    @NotBlank
-    @Column(name = "item_source")
+    //    @NotBlank
+    @Column(name = "item_source", columnDefinition = "TEXT")
     private String itemSource;
 
-    @NotBlank
-    @Column(name = "name")
+    //    @NotBlank
+    @Column(name = "name", columnDefinition = "TEXT")
     private String name;
 
-    @NotBlank
-    @Column(name = "issuer")
+    //    @NotBlank
+    @Column(name = "issuer", columnDefinition = "TEXT")
     private String issuer;
 
-    @Column(name = "issuer_profile_url")
+    @Column(name = "issuer_profile_url", columnDefinition = "TEXT")
     private String issuerProfileUrl;
 
-    @Column(name = "issued_date")
+    @Column(name = "issued_date", columnDefinition = "TEXT")
     private String issuedDate;
 
-    @Column(name = "expiration_date")
+    @Column(name = "expiration_date", columnDefinition = "TEXT")
     private String expirationDate;
 
-    @Column(name = "credential_id")
+    @Column(name = "credential_id", columnDefinition = "TEXT")
     private String credentialId;
 
-    @NotNull
+    //    @NotNull
     @ManyToOne
     @JoinColumn(name = "linkedin_profile_id", referencedColumnName = "id")
     private LinkedinProfile linkedinProfile;
+
+    @Override
+    public String toString() {
+        return "LinkedinLicenseCertification{" +
+                "id=" + id +
+                ", updatedAt=" + updatedAt +
+                ", itemSource='" + itemSource + '\'' +
+                ", name='" + name + '\'' +
+                ", issuer='" + issuer + '\'' +
+                ", issuerProfileUrl='" + issuerProfileUrl + '\'' +
+                ", issuedDate='" + issuedDate + '\'' +
+                ", expirationDate='" + expirationDate + '\'' +
+                ", credentialId='" + credentialId + '\'' +
+                ", linkedinProfile_id=" + linkedinProfile.getId() +
+                '}';
+    }
 }

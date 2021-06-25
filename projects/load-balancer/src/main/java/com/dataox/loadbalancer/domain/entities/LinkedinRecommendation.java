@@ -5,8 +5,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.time.Instant;
 
 @Data
@@ -20,37 +18,57 @@ public class LinkedinRecommendation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
+    //    @NotNull
     @Column(name = "updated_at")
     private Instant updatedAt;
 
-    @NotNull
+    //    @NotBlank
+    @Column(name = "item_source", columnDefinition = "TEXT")
+    private String itemSource;
+
+    //    @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "type")
     private LinkedinRecommendationType linkedinRecommendationType;
 
-    @NotBlank
-    @Column(name = "person_full_name")
+    //    @NotBlank
+    @Column(name = "person_full_name", columnDefinition = "TEXT")
     private String personFullName;
 
-    @NotBlank
-    @Column(name = "person_profile_url")
+    //    @NotBlank
+    @Column(name = "person_profile_url", columnDefinition = "TEXT")
     private String personProfileUrl;
 
-    @NotBlank
-    @Column(name = "person_headline")
+    //    @NotBlank
+    @Column(name = "person_headline", columnDefinition = "TEXT")
     private String personHeadline;
 
-    @NotBlank
-    @Column(name = "person_extra_info")
+    //    @NotBlank
+    @Column(name = "person_extra_info", columnDefinition = "TEXT")
     private String personExtraInfo;
 
-    @NotBlank
-    @Column(name = "description")
+    //    @NotBlank
+    @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
-    @NotNull
+    //@NotNull
     @ManyToOne
     @JoinColumn(name = "linkedin_profile_id", referencedColumnName = "id")
     private LinkedinProfile linkedinProfile;
+
+    @Override
+    public String toString() {
+        return "LinkedinRecommendation{" +
+                "id=" + id +
+                ", updatedAt=" + updatedAt +
+                ", itemSource='" + itemSource + '\'' +
+                ", linkedinRecommendationType=" + linkedinRecommendationType +
+                ", personFullName='" + personFullName + '\'' +
+                ", personProfileUrl='" + personProfileUrl + '\'' +
+                ", personHeadline='" + personHeadline + '\'' +
+                ", personExtraInfo='" + personExtraInfo + '\'' +
+                ", description='" + description + '\'' +
+                ", linkedinProfile_id=" + linkedinProfile.getId() +
+                '}';
+    }
 }

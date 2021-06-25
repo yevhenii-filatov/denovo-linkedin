@@ -42,7 +42,7 @@ public class ImageReader {
         }
     }
 
-    public byte[] getAllImagesAsZip()  {
+    public byte[] getAllImagesAsZip() {
         log.info("Started creating zip with all images");
         File dir = new File(imagesDirectoryPath);
         File[] imagesArray = dir.listFiles();

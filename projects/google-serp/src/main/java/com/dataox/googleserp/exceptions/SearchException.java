@@ -8,4 +8,12 @@ public class SearchException extends RuntimeException {
     public SearchException(String message) {
         super(message);
     }
+
+    public static SearchException create(Exception e) {
+        String exceptionClass = e.getClass().getName();
+        String exceptionMessage = e.getMessage();
+        String errorMessage = String.format("SEARCH FAILED%nERROR TYPE: %s%nMESSAGE: %s%n", exceptionClass, exceptionMessage);
+        return new SearchException(errorMessage);
+    }
 }
+

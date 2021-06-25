@@ -1,25 +1,34 @@
 app:
   chromedriver:
-    path: [PATH]
+    path: [ PATH TO CHROMADRIVER ]
     headless: false
   captcha:
     anti-captcha:
-      token: [TOKEN]
+      token: [ TOKEN ]
   scraper:
-    activities-amount: 50
+    activities-amount: [ AMOUNT ] #default - 50
   linkedin:
-    profile-login: [LOGIN]
-    profile-password: [PASSWORD]
+    profile-login: [ LOGIN ]
+    profile-password: [ PASSWORD ]
+  notifications:
+    telegram:
+      bot-token: [ TOKEN ]
+      chat-id: [ ID ]
+    slack:
+      slack-token: [ TOKEN ]
+      notifications-channel: [ CHANNEL_NAME ]
 
 spring:
   application:
-    name: [NAME]
+    name: [ NAME ]
   rabbitmq:
-    username: [USERNAME]
-    password: [PASSWORD]
+    host: [ HOST ]
+    port: [ PORT ]
+    username: [ USERNAME ]
+    password: [ PASSWORD ]
     listener:
       simple:
-        prefetch: 1
-        acknowledge-mode: none
+        prefetch: [ INT ] #default - 0
+        acknowledge-mode: [ MODE ] #default - auto
     template:
-      default-receive-queue: [QUEUE_NAME]
+      default-receive-queue: [ QUEUE ]

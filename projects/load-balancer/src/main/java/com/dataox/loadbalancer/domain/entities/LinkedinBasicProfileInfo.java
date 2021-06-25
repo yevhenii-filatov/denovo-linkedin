@@ -1,12 +1,10 @@
 package com.dataox.loadbalancer.domain.entities;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import java.time.Instant;
 
 @Data
@@ -20,37 +18,54 @@ public class LinkedinBasicProfileInfo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
+    //    @NotNull
     @Column(name = "updated_at")
     private Instant updatedAt;
 
-    @NotBlank
-    @Column(name = "header_section_source")
+    //    @NotBlank
+    @Column(name = "header_section_source", columnDefinition = "TEXT")
     private String headerSectionSource;
 
-    @Column(name = "about_section_source")
+    @Column(name = "about_section_source", columnDefinition = "TEXT")
     private String aboutSectionSource;
 
-    @NotBlank
-    @Column(name = "full_name")
+    //    @NotBlank
+    @Column(name = "full_name", columnDefinition = "TEXT")
     private String fullName;
 
-    @NotBlank
-    @Column(name = "number_of_connections")
+    //    @NotBlank
+    @Column(name = "number_of_connections", columnDefinition = "TEXT")
     private String numberOfConnections;
 
-    @NotEmpty
-    @Column(name = "location")
+    //    @NotEmpty
+    @Column(name = "location", columnDefinition = "TEXT")
     private String location;
 
-    @Column(name = "cached_image_url")
+    @Column(name = "cached_image_url", columnDefinition = "TEXT")
     private String cachedImageUrl;
 
-    @Column(name = "about")
+    @Column(name = "about", columnDefinition = "TEXT")
     private String about;
 
-    @NotNull
+    //    @NotNull
+    @EqualsAndHashCode.Exclude
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "linkedin_profile_id",referencedColumnName = "id")
+    @JoinColumn(name = "linkedin_profile_id", referencedColumnName = "id")
     private LinkedinProfile linkedinProfile;
+
+    @Override
+    public String toString() {
+        return "LinkedinBasicProfileInfo{" +
+                "id=" + id +
+                ", updatedAt=" + updatedAt +
+                ", headerSectionSource='" + headerSectionSource + '\'' +
+                ", aboutSectionSource='" + aboutSectionSource + '\'' +
+                ", fullName='" + fullName + '\'' +
+                ", numberOfConnections='" + numberOfConnections + '\'' +
+                ", location='" + location + '\'' +
+                ", cachedImageUrl='" + cachedImageUrl + '\'' +
+                ", about='" + about + '\'' +
+                ", linkedinProfile_id=" + linkedinProfile.getId() +
+                '}';
+    }
 }

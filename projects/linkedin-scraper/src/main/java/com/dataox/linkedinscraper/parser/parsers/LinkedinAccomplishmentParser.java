@@ -2,7 +2,9 @@ package com.dataox.linkedinscraper.parser.parsers;
 
 import com.dataox.linkedinscraper.parser.LinkedinParser;
 import com.dataox.linkedinscraper.parser.dto.LinkedinAccomplishment;
+import com.dataox.linkedinscraper.parser.service.mappers.LinkedinAccomplishmentTypeMapper;
 import com.dataox.linkedinscraper.parser.utils.ParsingUtils;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -17,8 +19,11 @@ import java.util.stream.Stream;
 import static com.dataox.jsouputils.JsoupUtils.text;
 
 @Slf4j
+@RequiredArgsConstructor
 @Service
 public class LinkedinAccomplishmentParser implements LinkedinParser<List<LinkedinAccomplishment>, List<String>> {
+
+    private final LinkedinAccomplishmentTypeMapper mapper;
 
     @Override
     public List<LinkedinAccomplishment> parse(List<String> source) {
@@ -47,7 +52,7 @@ public class LinkedinAccomplishmentParser implements LinkedinParser<List<Linkedi
 
         accomplishment.setUpdatedAt(time);
         accomplishment.setItemSource(accomplishmentElement.html());
-        accomplishment.setType(type);
+        accomplishment.setLinkedinAccomplishmentType(mapper.map(type));
         accomplishment.setTitle(parseTitle(accomplishmentElement));
         accomplishment.setDescription(parseDescription(accomplishmentElement));
 

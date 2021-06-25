@@ -1,33 +1,34 @@
 package com.dataox.linkedinscraper.parser.dto;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.time.Instant;
 
 @Data
+@EqualsAndHashCode(exclude = {"updatedAt", "itemSource"})
+@ToString(exclude = {"updatedAt", "itemSource"})
 @NoArgsConstructor
 public class LinkedinEndorsement {
 
-    @NotNull
+    //    @NotNull
     private Instant updatedAt;
 
-    @NotBlank
+    //    @NotBlank
     private String itemSource;
 
-    @NotBlank
-    @Max(100)
+    //    @NotBlank
+//    @Max(100)
     private String endorserFullName;
 
     private String endorserHeadline;
 
-    @NotBlank
-    @Max(10)
+    //    @NotBlank
+//    @Max(10)
     private String endorserConnectionDegree;
 
-    @NotBlank
+    //    @NotBlank
     private String endorserProfileUrl;
 }

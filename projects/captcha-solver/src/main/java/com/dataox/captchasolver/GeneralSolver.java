@@ -24,9 +24,9 @@ public class GeneralSolver implements CaptchaSolver {
         CaptchaType type = captchaTypeDetector.detect(pageDocument);
         if (type == CaptchaType.NONE) {
             return;
-        } else if ( type == CaptchaType.FUNCAPTCHA) {
+        } else if (type == CaptchaType.FUNCAPTCHA) {
             arkoselabsFunCaptchaSolver.solve(webDriver);
-        } else  {
+        } else {
             googleRecaptchaSolver.solve(webDriver);
         }
     }

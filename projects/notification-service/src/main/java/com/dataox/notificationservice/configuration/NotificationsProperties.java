@@ -22,4 +22,5 @@ public class NotificationsProperties {
         private String slackToken;
         private String notificationsChannel;
     }
+
 }

@@ -14,7 +14,7 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 @Entity
-@Table(name = "search_metadata")
+@Table(name = "google_search_metadata")
 public class SearchMetadata {
     @Id
     @Column(name = "id")
@@ -22,13 +22,13 @@ public class SearchMetadata {
     private Long id;
 
     @NotNull
-    @Column(name = "search_page_source")
+    @Column(name = "search_page_source", columnDefinition = "MEDIUMTEXT")
     private String searchPageSource;
 
     @NotNull
-    @Column(name = "query_url")
+    @Column(name = "query_url", columnDefinition = "varchar(1000)")
     private String queryUrl;
 
-    @OneToOne(mappedBy = "searchMetadata")
+    @OneToOne(mappedBy = "searchMetadata", cascade = CascadeType.ALL)
     private InitialData initialData;
 }

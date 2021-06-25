@@ -31,7 +31,7 @@ public class HeaderSectionScraper implements Scraper<String> {
 
     @Override
     public String scrape(WebDriver webDriver) {
-        WebDriverWait wait = new WebDriverWait(webDriver, 30);
+        WebDriverWait wait = new WebDriverWait(webDriver, 120);
         wait.until(ExpectedConditions.presenceOfElementLocated(HEADER_SELECTOR));
         WebElement headerSection = findWebElementBy(webDriver, HEADER_SELECTOR)
                 .orElseThrow(() -> ElementNotFoundException.create("Header section"));
@@ -48,7 +48,7 @@ public class HeaderSectionScraper implements Scraper<String> {
         }
         log.info("Scraping profile photo");
         Actions actions = new Actions(webDriver);
-        WebDriverWait wait = new WebDriverWait(webDriver, 15);
+        WebDriverWait wait = new WebDriverWait(webDriver, 120);
         clickOnElement(croppedProfilePhoto, actions);
         wait.until(ExpectedConditions.presenceOfElementLocated(FULL_PROFILE_PHOTO));
         WebElement fullProfilePhoto = findWebElementBy(webDriver, FULL_PROFILE_PHOTO)

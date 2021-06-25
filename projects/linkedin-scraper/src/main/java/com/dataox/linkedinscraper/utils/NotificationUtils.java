@@ -10,7 +10,7 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class NotificationUtils {
 
-    public static String createExceptionMessage(Exception e, String profileUrl,String applicationName) {
+    public static String createExceptionMessage(Exception e, String profileUrl, String applicationName) {
         return String.format("Scraper name: %s%nException occurred while scraping profile %s%nException name: %s%nException message: %s",
                 applicationName,
                 profileUrl,

@@ -1,5 +1,6 @@
 package com.dataox;
 
+import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -15,8 +16,9 @@ import static com.dataox.WebDriverUtils.ScrollingDirection.*;
  * @author Yevhenii Filatov
  * @since 11/26/20
  */
-
+@Slf4j
 public final class WebDriverUtils {
+
     private WebDriverUtils() {
         throw new UnsupportedOperationException("utility class");
     }
@@ -128,7 +130,11 @@ public final class WebDriverUtils {
 
     public static Long getScrollY(WebDriver webDriver) {
         JavascriptExecutor js = (JavascriptExecutor) webDriver;
-        return (Long) js.executeScript("return scrollY");
+        if (js.executeScript("return scrollY").getClass().equals(Long.class)) {
+            return (Long) js.executeScript("return scrollY");
+        }
+        Double scrollY = (Double) js.executeScript("return scrollY");
+        return doubleToLong(scrollY);
     }
 
     public static void scrollToTheBottomOfElement(WebDriver webDriver, WebElement scrollingElement, int scrollStop) {
@@ -145,7 +151,17 @@ public final class WebDriverUtils {
 
     public static Long getCurrentScrollYInElement(WebDriver webDriver, WebElement scrollingElement) {
         JavascriptExecutor js = (JavascriptExecutor) webDriver;
-        return (Long) js.executeScript("return arguments[0].scrollTop", scrollingElement);
+        if (js.executeScript("return arguments[0].scrollTop", scrollingElement).getClass().equals(Long.class)) {
+            return (Long) js.executeScript("return arguments[0].scrollTop", scrollingElement);
+        }
+        Double scrollY = (Double) js.executeScript("return arguments[0].scrollTop", scrollingElement);
+        return doubleToLong(scrollY);
+    }
+
+    public static Long doubleToLong(Double doubleValue) {
+        String[] splitValues = doubleValue.toString().split("\\.");
+        Long longValue = Long.parseLong(splitValues[0]);
+        return longValue;
     }
 
     public static String getElementHtml(WebElement webElement) {

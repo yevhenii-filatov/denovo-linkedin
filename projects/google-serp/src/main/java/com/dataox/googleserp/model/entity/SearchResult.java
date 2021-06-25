@@ -17,28 +17,35 @@ import java.time.Instant;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "search_result")
+@Table(name = "google_search_result")
 public class SearchResult {
+
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @Column(name = "collected_at")
     private Instant collectedAt;
-
     @Column(name = "title")
     private String title;
-
     @NotNull
     @Column(name = "url")
     private String url;
-
     @Column(name = "description")
     private String description;
-
     @NotNull
-    @ManyToOne
+    @Column(name = "search_position")
+    private int searchPosition;
+    @NotNull
+    @Column(name = "search_step")
+    private int searchStep;
+    @NotNull
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "initial_data_record_id", nullable = false)
     private InitialData initialDataRecord;
+
+    @PrePersist
+    private void setCollectedAt() {
+        this.collectedAt = Instant.now();
+    }
 }

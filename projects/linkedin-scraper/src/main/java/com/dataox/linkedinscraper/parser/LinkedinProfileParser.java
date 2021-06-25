@@ -2,16 +2,16 @@ package com.dataox.linkedinscraper.parser;
 
 import com.dataox.linkedinscraper.dto.CollectedProfileSourcesDTO;
 import com.dataox.linkedinscraper.dto.sources.SkillsSource;
+import com.dataox.linkedinscraper.exceptions.linkedin.LinkedinParsingException;
 import com.dataox.linkedinscraper.parser.dto.LinkedinProfile;
 import com.dataox.linkedinscraper.parser.dto.LinkedinSkill;
-import com.dataox.linkedinscraper.exceptions.linkedin.LinkedinParsingException;
 import com.dataox.linkedinscraper.parser.parsers.*;
+import com.dataox.linkedinscraper.parser.service.validator.ParsingValidator;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
 
 import static org.apache.commons.collections4.ListUtils.union;
@@ -32,12 +32,12 @@ public class LinkedinProfileParser implements LinkedinParser<LinkedinProfile, Co
     LinkedinRecommendationParser recommendationParser;
     LinkedinVolunteerExperienceParser volunteerExperienceParser;
     LinkedinAccomplishmentParser accomplishmentParser;
+    ParsingValidator parsingValidator;
 
     @Override
     public LinkedinProfile parse(CollectedProfileSourcesDTO source) {
         try {
             LinkedinProfile linkedinProfile = new LinkedinProfile();
-
             linkedinProfile.setProfileUrl(source.getProfileUrl());
             linkedinProfile.setLinkedinActivities(activityParser.parse(source.getActivitiesSources()));
             linkedinProfile.setLinkedinBasicProfileInfo(basicProfileInfoParser.parse(getBasicProfileSource(source)));
@@ -49,6 +49,9 @@ public class LinkedinProfileParser implements LinkedinParser<LinkedinProfile, Co
             linkedinProfile.setLinkedinRecommendations(recommendationParser.parse(source.getRecommendationsSources()));
             linkedinProfile.setLinkedinVolunteerExperiences(volunteerExperienceParser.parse(source.getVolunteersSource()));
             linkedinProfile.setLinkedinAccomplishments(accomplishmentParser.parse(source.getAccomplishmentsSources()));
+
+            parsingValidator.validate(linkedinProfile);
+
             return linkedinProfile;
         } catch (Exception e) {
             throw new LinkedinParsingException(e);
@@ -58,9 +61,11 @@ public class LinkedinProfileParser implements LinkedinParser<LinkedinProfile, Co
     private List<String> getBasicProfileSource(CollectedProfileSourcesDTO source) {
         String headerSectionSource = source.getHeaderSectionSource();
         String aboutSectionSource = source.getAboutSectionSource();
+        String photoUrl = source.getProfilePhotoUrl();
+
         return isNotBlank(aboutSectionSource)
-                ? List.of(headerSectionSource, aboutSectionSource)
-                : Collections.singletonList(headerSectionSource);
+                ? List.of(headerSectionSource, photoUrl, aboutSectionSource)
+                : List.of(headerSectionSource, photoUrl);
     }
 
     private List<LinkedinSkill> getAllLinkedinSkills(CollectedProfileSourcesDTO source) {

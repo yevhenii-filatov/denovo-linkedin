@@ -3,6 +3,8 @@ package com.dataox.linkedinscraper.parser.parsers;
 import com.dataox.linkedinscraper.dto.sources.InterestsSource;
 import com.dataox.linkedinscraper.parser.LinkedinParser;
 import com.dataox.linkedinscraper.parser.dto.LinkedinInterest;
+import com.dataox.linkedinscraper.parser.service.mappers.LinkedinInterestTypeMapper;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -17,10 +19,14 @@ import java.util.stream.Stream;
 import static com.dataox.jsouputils.JsoupUtils.absUrlFromHref;
 import static com.dataox.jsouputils.JsoupUtils.text;
 import static com.dataox.linkedinscraper.parser.utils.ParsingUtils.toElement;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 @Service
+@RequiredArgsConstructor
 @Slf4j
 public class LinkedinInterestParser implements LinkedinParser<List<LinkedinInterest>, List<InterestsSource>> {
+
+    private final LinkedinInterestTypeMapper mapper;
 
     @Override
     public List<LinkedinInterest> parse(List<InterestsSource> source) {
@@ -54,7 +60,7 @@ public class LinkedinInterestParser implements LinkedinParser<List<LinkedinInter
 
         interest.setUpdatedAt(time);
         interest.setItemSource(interestsElement.html());
-        interest.setType(type);
+        interest.setLinkedinInterestType(mapper.map(type));
         interest.setName(parseName(interestsElement));
         interest.setProfileUrl(parseProfileUrl(interestsElement));
         interest.setHeadline(parseHeadline(interestsElement));
@@ -68,7 +74,10 @@ public class LinkedinInterestParser implements LinkedinParser<List<LinkedinInter
     }
 
     private String parseProfileUrl(Element interestsElement) {
-        return absUrlFromHref(interestsElement.selectFirst("a[data-control-name*=interests]"));
+        String url = absUrlFromHref(interestsElement.selectFirst("a[data-control-name*=interests]"));
+        return isNotBlank(url)
+                ? url
+                : interestsElement.attr("href");
     }
 
     private String parseHeadline(Element interestsElement) {

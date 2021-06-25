@@ -46,7 +46,7 @@ public class SkillsWithEndorsementsScraper implements Scraper<List<SkillsSource>
     @Override
     public List<SkillsSource> scrape(WebDriver webDriver) {
         Actions actions = new Actions(webDriver);
-        WebDriverWait wait = new WebDriverWait(webDriver, 30);
+        WebDriverWait wait = new WebDriverWait(webDriver, 120);
         findWebElementBy(webDriver, SHOW_MORE_SKILLS)
                 .ifPresent(webElement -> scrollToAndClickOnElement(webDriver, actions, webElement));
         List<WebElement> skillsWithEndorsements = webDriver.findElements(SKILLS_WITH_ENDORSEMENTS);

@@ -3,10 +3,8 @@ package com.dataox.captchasolver;
 import com.dataox.captchasolver.configuration.CaptchaProperties;
 import com.dataox.captchasolver.dto.CreateCaptchaTaskRequest;
 import com.dataox.captchasolver.dto.CreateCaptchaTaskResponse;
-import com.dataox.captchasolver.dto.GetCaptchaTaskResultRequest;
 import com.dataox.captchasolver.dto.GetCaptchaTaskResultResponse;
 import com.dataox.captchasolver.exeptions.CaptchaSolvingException;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -14,11 +12,7 @@ import org.openqa.selenium.WebElement;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Objects;
-
-import static com.dataox.CommonUtils.sleepFor;
 import static com.dataox.WebDriverUtils.*;
-import static com.google.common.base.Ascii.equalsIgnoreCase;
 
 /**
  * @author Yevhenii Filatov

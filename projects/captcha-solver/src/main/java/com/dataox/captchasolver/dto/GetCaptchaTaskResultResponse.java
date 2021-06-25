@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import java.sql.Timestamp;
-import java.time.Instant;
 
 /**
  * @author Yevhenii Filatov
