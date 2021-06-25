@@ -23,7 +23,7 @@ class LinkedinInterestParserTest {
     @Test
     void shouldParse() throws IOException {
         InterestsSource source = new InterestsSource("Companies", loadResource(COMPANIES_SOURCE));
-        LinkedinParser<List<LinkedinInterest>, List<InterestsSource>> parser = new LinkedinInterestParser(new LinkedinInterestTypeMapper());
+        LinkedinParser<List<LinkedinInterest>, List<InterestsSource> > parser = new LinkedinInterestParser(new LinkedinInterestTypeMapper());
 
         List<LinkedinInterest> interests = parser.parse(Collections.singletonList(source));
 
