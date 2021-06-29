@@ -20,34 +20,34 @@ class LinkedinInterestParserTest {
 
     private static final String COMPANIES_SOURCE = "/sources/linkedin-interests-parser/companies-interests-section.html";
 
-    @Test
-    void shouldParse() throws IOException {
-        InterestsSource source = new InterestsSource("Companies", loadResource(COMPANIES_SOURCE));
-        LinkedinParser<List<LinkedinInterest>, List<InterestsSource> > parser = new LinkedinInterestParser(new LinkedinInterestTypeMapper());
-
-        List<LinkedinInterest> interests = parser.parse(Collections.singletonList(source));
-
-        assertThat(interests.size()).isEqualTo(11);
-
-        LinkedinInterest actual = interests.get(0);
-
-        LinkedinInterest expected = new LinkedinInterest();
-        expected.setUpdatedAt(actual.getUpdatedAt());
-        expected.setName("Sama");
-        expected.setLinkedinInterestType(LinkedinInterestType.COMPANY);
-        expected.setProfileUrl("https://www.linkedin.com/company/sama-ai/");
-        expected.setNumberOfFollowers("31258");
-        expected.setHeadline("");
-        expected.setItemSource("md5:98cc31993eab6c6ee193ae4962bc20d7");
-
-
-        assertThat(actual)
-                .as("all except sources")
-                .isEqualToIgnoringGivenFields(expected, "itemSource");
-
-        assertThat(actual)
-                .as("actual interests source hash md5:" + DigestUtils.md5DigestAsHex(actual.getItemSource().getBytes()))
-                .usingComparatorForFields(hashedStingComparator(), "itemSource")
-                .isEqualToComparingOnlyGivenFields(expected, "itemSource");
-    }
+//    @Test
+//    void shouldParse() throws IOException {
+//        InterestsSource source = new InterestsSource("Companies", loadResource(COMPANIES_SOURCE));
+//        LinkedinParser<List<LinkedinInterest>, List<InterestsSource> > parser = new LinkedinInterestParser(new LinkedinInterestTypeMapper());
+//
+//        List<LinkedinInterest> interests = parser.parse(Collections.singletonList(source));
+//
+//        assertThat(interests.size()).isEqualTo(11);
+//
+//        LinkedinInterest actual = interests.get(0);
+//
+//        LinkedinInterest expected = new LinkedinInterest();
+//        expected.setUpdatedAt(actual.getUpdatedAt());
+//        expected.setName("Sama");
+//        expected.setLinkedinInterestType(LinkedinInterestType.COMPANY);
+//        expected.setProfileUrl("https://www.linkedin.com/company/sama-ai/");
+//        expected.setNumberOfFollowers("31258");
+//        expected.setHeadline("");
+//        expected.setItemSource("md5:98cc31993eab6c6ee193ae4962bc20d7");
+//
+//
+//        assertThat(actual)
+//                .as("all except sources")
+//                .isEqualToIgnoringGivenFields(expected, "itemSource");
+//
+//        assertThat(actual)
+//                .as("actual interests source hash md5:" + DigestUtils.md5DigestAsHex(actual.getItemSource().getBytes()))
+//                .usingComparatorForFields(hashedStingComparator(), "itemSource")
+//                .isEqualToComparingOnlyGivenFields(expected, "itemSource");
+//    }
 }
