@@ -9,14 +9,17 @@ public enum LinkedinAccomplishmentType {
     LANGUAGES("Languages"),
     LANGUAGE("Language"),
     PATENTS("Patents"),
+    PATENT("Patent"),
     PROJECTS("Projects"),
     PROJECT("Project"),
     HONORS_AND_AWARDS("Honors & Awards"),
     HONOR_AWARD("Honor & Award"),
     TEST_SCORES("Test scores"),
+    TEST_SCORE("Test score"),
     ORGANIZATIONS("Organizations"),
-    COURSES("Courses");
-
+    ORGANIZATION("Organization"),
+    COURSES("Courses"),
+    COURSE("Course");
 
     private final String type;
 
