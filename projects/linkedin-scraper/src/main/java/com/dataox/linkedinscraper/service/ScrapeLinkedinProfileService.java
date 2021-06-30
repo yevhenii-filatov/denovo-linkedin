@@ -52,7 +52,7 @@ public class ScrapeLinkedinProfileService {
     private final NotificationsService notificationsService;
     private final ApplicationContext applicationContext;
     @Getter
-    private final boolean isWorking = true;
+    private boolean isWorking = true;
 
     private static NotScrapedLinkedinProfile createReusableNotScrapedProfile(LinkedinProfileToScrapeDTO profile) {
         return new NotScrapedLinkedinProfile(profile, StringUtils.EMPTY, true);
@@ -73,7 +73,7 @@ public class ScrapeLinkedinProfileService {
             }
         } catch (LinkedinException e) {
             addTheRestOfProfilesToNotScrapedList(currentProfileToScrape, linkedinProfilesToScrape, notScraped);
-//            this.isWorking = false; // commented to make it work all the time.
+            this.isWorking = false; // commented to make it work all the time.
 
             notificationsService.sendAll("LinkedinScraper: LinkedinException at ScrapeLinkedinProfileService: scrapeService has stopped working.");
             notificationsService.sendInternal(ExceptionUtils.getStackTrace(e));

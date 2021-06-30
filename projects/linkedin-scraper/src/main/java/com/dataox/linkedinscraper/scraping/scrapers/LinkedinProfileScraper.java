@@ -77,13 +77,15 @@ public class LinkedinProfileScraper {
 
             ImageCredentials imageCredentials = new ImageCredentials(profileSourcesDTO.getProfilePhotoUrl(), Long.toString(profile.getDenovoId()));
 
-            Request request = new Request.Builder()
-                    .url("http://localhost:8084/api/v1/image/save")
-                    .method("POST", RequestBody.create(MediaType.get("application/json"), objectMapper.writeValueAsString(imageCredentials)))
-                    .addHeader("Content-Type", "application/json")
-                    .addHeader("Authorization", "Bearer " + queryProperties.getToken())
-                    .build();
-            okHttpTemplate.request(request);
+            if (!imageCredentials.getUrl().equals("")) {
+                Request request = new Request.Builder()
+                        .url("http://localhost:8084/api/v1/image/save")
+                        .method("POST", RequestBody.create(MediaType.get("application/json"), objectMapper.writeValueAsString(imageCredentials)))
+                        .addHeader("Content-Type", "application/json")
+                        .addHeader("Authorization", "Bearer " + queryProperties.getToken())
+                        .build();
+                okHttpTemplate.request(request);
+            }
 
             return profileSourcesDTO;
         } catch (Exception e) {
