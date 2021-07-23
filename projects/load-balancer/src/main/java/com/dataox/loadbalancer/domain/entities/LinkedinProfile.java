@@ -5,8 +5,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,21 +20,21 @@ public class LinkedinProfile {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
+    //    @NotNull
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "search_result_id", referencedColumnName = "id")
     private SearchResult searchResult;
 
-    @NotNull
+    //    @NotNull
     @Column(name = "created_at", updatable = false)
     private Instant createdAt;
 
-    @NotNull
+    //    @NotNull
     @Column(name = "updated_at")
     private Instant updatedAt;
 
-    @NotBlank
-    @Column(name = "profile_url")
+    //    @NotBlank
+    @Column(name = "profile_url", columnDefinition = "TEXT")
     private String profileUrl;
 
     @OneToOne(mappedBy = "linkedinProfile", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
@@ -68,4 +66,15 @@ public class LinkedinProfile {
 
     @OneToMany(mappedBy = "linkedinProfile", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<LinkedinAccomplishment> linkedinAccomplishments = new ArrayList<>();
+
+    @PrePersist
+    private void setCreationDate() {
+        this.createdAt = Instant.now();
+        this.updatedAt = Instant.now();
+    }
+
+    @PreUpdate
+    private void setUpdatedDate() {
+        this.updatedAt = Instant.now();
+    }
 }

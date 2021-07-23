@@ -4,7 +4,7 @@ import com.dataox.linkedinscraper.parser.LinkedinParser;
 import com.dataox.linkedinscraper.parser.dto.LinkedinComment;
 import com.dataox.linkedinscraper.parser.dto.LinkedinPost;
 import com.dataox.linkedinscraper.parser.exceptions.EmptySourceException;
-import com.dataox.linkedinscraper.parser.utils.TimeConverter;
+import com.dataox.linkedinscraper.parser.service.TimeConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.nodes.Element;
@@ -42,7 +42,6 @@ public class LinkedinPostParser implements LinkedinParser<LinkedinPost, String> 
         }
 
         Instant time = Instant.now();
-
         Element postElement = toElement(source);
 
         return getLinkedinPost(time, postElement);
@@ -58,7 +57,9 @@ public class LinkedinPostParser implements LinkedinParser<LinkedinPost, String> 
         String relativePublicationDate = parseRelativePublicationDate(postElement);
         if (isNotBlank(relativePublicationDate)) {
             post.setRelativePublicationDate(relativePublicationDate);
-            post.setAbsolutePublicationDate(getAbsolutePublicationDate(post.getRelativePublicationDate()));
+            if (isNotBlank(getDigits(relativePublicationDate))) {
+                post.setAbsolutePublicationDate(getAbsolutePublicationDate(post.getRelativePublicationDate()));
+            }
         }
 
         post.setAuthorProfileName(parseAuthorName(postElement));
@@ -73,7 +74,7 @@ public class LinkedinPostParser implements LinkedinParser<LinkedinPost, String> 
             setComments(postElement, post);
         }
 
-        handleDoubleContent(postElement, post);
+        handleTwoPostContents(postElement, post);
 
         return post;
     }
@@ -116,7 +117,7 @@ public class LinkedinPostParser implements LinkedinParser<LinkedinPost, String> 
                 ? text(postElement.select(CONNECTION_DEGREE_SELECTOR).last())
                 : text(postElement.selectFirst(CONNECTION_DEGREE_SELECTOR));
 
-        return substringAfter(connectionDegree, "•");
+        return normalizeSpace(substringAfter(connectionDegree, "•"));
     }
 
     private String parseAuthorHeadline(Element postElement) {
@@ -167,17 +168,21 @@ public class LinkedinPostParser implements LinkedinParser<LinkedinPost, String> 
         return nonNull(postElement.selectFirst(".feed-shared-update-v2__comments-container"));
     }
 
-    private void handleDoubleContent(Element postElement, LinkedinPost post) {
+    private void handleTwoPostContents(Element postElement, LinkedinPost post) {
         String mainContent = text(postElement.selectFirst(CONTENT_SELECTOR));
 
-        if (isShared(postElement) && isNoneBlank(mainContent)) {
-            String originContent = "\nOriginal post: " + post.getContent();
+        if (isShared(postElement) && postElement.select(CONTENT_SELECTOR).size() == 2) {
+            String originContent = "\n!zxz9119origpstehh8!: " + post.getContent();
             String bothContents = mainContent.concat(originContent);
-            post.setContent(bothContents);
-            post.setAuthorProfileUrl(absUrlFromHref(postElement.selectFirst(SHARED_URL_SELECTOR)));
-            post.setAuthorHeadline(text(postElement.selectFirst(AUTHOR_HEADLINE_SELECTOR)));
-            post.setAuthorConnectionDegree(text(postElement.selectFirst(CONNECTION_DEGREE_SELECTOR)));
-            post.setAuthorProfileName(text(postElement.selectFirst(AUTHOR_NAME_SELECTOR)));
+            setMainPost(postElement, post, bothContents);
         }
+    }
+
+    private void setMainPost(Element postElement, LinkedinPost post, String bothContents) {
+        post.setContent(bothContents);
+        post.setAuthorProfileUrl(absUrlFromHref(postElement.selectFirst(SHARED_URL_SELECTOR)));
+        post.setAuthorHeadline(text(postElement.selectFirst(AUTHOR_HEADLINE_SELECTOR)));
+        post.setAuthorConnectionDegree(text(postElement.selectFirst(CONNECTION_DEGREE_SELECTOR)));
+        post.setAuthorProfileName(text(postElement.selectFirst(AUTHOR_NAME_SELECTOR)));
     }
 }

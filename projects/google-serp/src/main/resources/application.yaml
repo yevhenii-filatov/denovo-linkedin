@@ -1,30 +1,34 @@
 spring:
   datasource:
-    url: jdbc:postgresql://[HOST]:5493/denovo_linkedin
-    username: dataox
-    password: pdHMf3kN
+    url: jdbc:postgresql://localhost:5432/linkedin_denovo_localhost
+    username: root
+    password: postgres
     driver-class-name: org.postgresql.Driver
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-      ddl-auto: none
+      ddl-auto:  update
+
 
 app:
   search:
-    tasks-timeout:
+    tasks-timeout: 10
     retry-attempts: 10
     concurrency-restriction: 100
     user-agent: 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36'
     required-results-count: 5
   notifications:
     telegram:
-      bot-token: [ BOT_TOKEN ]
-      chat-id: [ CHAT_ID ]
-      enabled: true
+      bot-token: 1708054968:AAEsZvyJUth4UI4EzjlkaKtw7uRQCIYFJ50
+      chat-id: -1001493548628
+    slack:
+      slack-token: xoxb-1073218083651-1071671941189-NHmVi0hNMcQckY8RC2EQ0sCm
+      notifications-channel: li_results_notifications
+
   proxy:
     operia:
-      key: [ OPERIA_KEY ]
-  scheduling:
-    enabled: false
-    search:
-      not.searched.data: "0 * * * * *"
+      key: 9ea06d8cd1351366
+  service:
+    choose-best-endpoint-url: http://localhost:8084/choose
+server:
+  port: 8085

@@ -2,35 +2,35 @@ package com.dataox.googleserp.service.run;
 
 import com.dataox.googleserp.model.entity.InitialData;
 import com.dataox.googleserp.model.entity.SearchResult;
-import com.dataox.googleserp.model.search.SearchQuery;
 import com.dataox.googleserp.repository.InitialDataRepository;
 import com.dataox.googleserp.service.search.GoogleSearchProvider;
 import com.dataox.googleserp.util.BeanUtils;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.transaction.Transactional;
 import java.time.Instant;
 import java.util.Collection;
 import java.util.Objects;
-
-import static com.dataox.googleserp.util.GoogleSearchParameters.prepareParameter;
+import java.util.Optional;
 
 /**
  * @author Yevhenii Filatov
  * @since 12/24/20
  */
-
+@Slf4j
 @RequiredArgsConstructor
 public class SearchProfileWithGoogleTask implements Runnable {
     private final InitialData initialData;
+    private final int searchStep;
 
     @Override
     @Transactional
     public void run() {
         GoogleSearchProvider searchProvider = BeanUtils.getBean(GoogleSearchProvider.class);
         InitialDataRepository initialDataRepository = BeanUtils.getBean(InitialDataRepository.class);
-        SearchQuery query = prepareQuery();
-        Collection<SearchResult> results = searchProvider.search(query, initialData);
+        Collection<SearchResult> results = searchProvider.search(initialData, searchStep);
+        Long denovoId = initialData.getDenovoId();
         if (Objects.isNull(results)) {
             return;
         }
@@ -40,15 +40,8 @@ public class SearchProfileWithGoogleTask implements Runnable {
         initialData.getSearchResults().clear();
         initialData.getSearchResults().addAll(results);
         initialData.setUpdatedAt(Instant.now());
+        Optional<InitialData> initialDataOptional = initialDataRepository.findByDenovoId(denovoId);
+        initialDataOptional.ifPresent(initialDataRepository::delete);
         initialDataRepository.save(initialData);
-    }
-
-    private SearchQuery prepareQuery() {
-        String firmName = initialData.getFirmName();
-        return SearchQuery.fromQueryParameters(
-                prepareParameter("site", "linkedin.com/in"),
-                prepareParameter("intitle", initialData.getLastName()),
-                prepareParameter("intext", firmName)
-        );
     }
 }

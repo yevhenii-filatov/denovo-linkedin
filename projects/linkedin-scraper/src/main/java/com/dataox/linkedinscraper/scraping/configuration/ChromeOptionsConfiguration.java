@@ -1,15 +1,12 @@
 package com.dataox.linkedinscraper.scraping.configuration;
 
 import com.dataox.linkedinscraper.scraping.configuration.property.ChromedriverProperties;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeDriverService;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.Collections;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author Dmitriy Lysko
@@ -27,6 +24,7 @@ public class ChromeOptionsConfiguration {
     @Bean
     public ChromeOptions options() {
         ChromeOptions options = new ChromeOptions();
+        options.setExperimentalOption("prefs", Collections.singletonMap("intl.accept_languages", "en,en_US"));
         options.setExperimentalOption("excludeSwitches", Collections.singletonList("enable-automation"));
         options.addArguments("--window-size=1920,1080");
         options.addArguments("--no-sandbox");

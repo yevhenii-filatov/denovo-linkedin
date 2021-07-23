@@ -3,39 +3,42 @@ package com.dataox.linkedinscraper.parser.dto;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.time.Instant;
 
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@ToString(onlyExplicitlyIncluded = true)
 public class LinkedinComment {
 
+    @ToString.Include
     private String url;
 
-    @NotBlank
+    //    @NotBlank
     private String itemSource;
 
-    @NotBlank
+    //    @NotBlank
     @EqualsAndHashCode.Include
+    @ToString.Include
     private String content;
 
-    @NotBlank
-    @Max(20)
+    //    @NotBlank
+//    @Max(20)
     private String relativePublicationDate;
 
-    @NotNull
+    @ToString.Include
+//    @NotNull
     private Instant collectedDate;
 
-    @NotNull
+    @ToString.Include
+//    @NotNull
     private Instant absolutePublicationDate;
 
-    @EqualsAndHashCode.Include
+    //    @EqualsAndHashCode.Include
     private int numberOfReactions;
 
-    @EqualsAndHashCode.Include
+    //    @EqualsAndHashCode.Include
     private int numberOfReplies;
 }

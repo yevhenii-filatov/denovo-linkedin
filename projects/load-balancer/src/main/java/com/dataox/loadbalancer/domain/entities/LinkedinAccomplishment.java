@@ -5,8 +5,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.time.Instant;
 
 @Data
@@ -20,29 +18,41 @@ public class LinkedinAccomplishment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
+    //    @NotNull
     @Column(name = "updated_at")
     private Instant updatedAt;
 
-    @NotBlank
-    @Column(name = "item_source")
+    //    @NotBlank
+    @Column(name = "item_source", columnDefinition = "TEXT")
     private String itemSource;
 
-    @NotBlank
-    @Column(name = "title")
+    //    @NotBlank
+    @Column(name = "title", columnDefinition = "TEXT")
     private String title;
 
-    @NotBlank
-    @Column(name = "description")
+    @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
-    @NotNull
+    //    @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "type")
     private LinkedinAccomplishmentType linkedinAccomplishmentType;
 
-    @NotNull
+    //    @NotNull
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "linkedin_profile_id",referencedColumnName = "id")
+    @JoinColumn(name = "linkedin_profile_id", referencedColumnName = "id")
     private LinkedinProfile linkedinProfile;
+
+    @Override
+    public String toString() {
+        return "LinkedinAccomplishment{" +
+                "id=" + id +
+                ", updatedAt=" + updatedAt +
+                ", itemSource='" + itemSource + '\'' +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", linkedinAccomplishmentType=" + linkedinAccomplishmentType +
+                ", linkedinProfile_id=" + linkedinProfile.getId() +
+                '}';
+    }
 }

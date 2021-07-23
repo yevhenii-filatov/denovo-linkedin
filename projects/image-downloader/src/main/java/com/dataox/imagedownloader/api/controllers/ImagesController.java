@@ -9,7 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1/image")
+@RequestMapping("/v1/image")
 @RequiredArgsConstructor
 public class ImagesController {
     private final ImageService imageService;
@@ -26,7 +26,7 @@ public class ImagesController {
     }
 
     @GetMapping(value = "/get/one/{imageName}")
-    public HttpEntity<byte[]> getOneImage(@PathVariable String imageName) {
+    public HttpEntity<byte[]> getOneImage(@PathVariable("imageName") String imageName) {
         return imageService.getOneImage(imageName);
     }
 

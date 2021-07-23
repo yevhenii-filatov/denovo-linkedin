@@ -7,5 +7,6 @@ public enum LinkedinActivityType {
     REPLIED_TO_COMMENT,
     JOB_UPDATE,
     CUSTOM_POST,
-    LIKED_COMMENT
+    LIKED_COMMENT,
+    FINDS_THIS_INSIGHTFUL
 }

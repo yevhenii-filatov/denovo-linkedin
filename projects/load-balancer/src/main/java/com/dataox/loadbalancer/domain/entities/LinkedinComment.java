@@ -4,8 +4,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.time.Instant;
 
 @Data
@@ -19,26 +17,26 @@ public class LinkedinComment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "url")
+    @Column(name = "url", columnDefinition = "TEXT")
     private String url;
 
-    @NotBlank
-    @Column(name = "item_source")
+    //    @NotBlank
+    @Column(name = "item_source", columnDefinition = "TEXT")
     private String itemSource;
 
-    @NotBlank
-    @Column(name = "content")
+    //    @NotBlank
+    @Column(name = "content", columnDefinition = "TEXT")
     private String content;
 
-    @NotBlank
-    @Column(name = "relative_publication_date")
+    //    @NotBlank
+    @Column(name = "relative_publication_date", columnDefinition = "TEXT")
     private String relativePublicationDate;
 
-    @NotNull
+    //    @NotNull
     @Column(name = "collected_date")
     private Instant collectedDate;
 
-    @NotNull
+    //    @NotNull
     @Column(name = "absolute_publication_date")
     private Instant absolutePublicationDate;
 
@@ -48,7 +46,7 @@ public class LinkedinComment {
     @Column(name = "number_of_replies")
     private int numberOfReplies;
 
-    @NotNull
+    //    @NotNull
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "linkedin_post_id", referencedColumnName = "id")
     private LinkedinPost linkedinPost;

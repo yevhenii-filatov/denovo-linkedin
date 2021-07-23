@@ -23,10 +23,10 @@ public class ImageService {
 
     public HttpEntity<byte[]> getOneImage(String imageName) {
         byte[] imageBytes = getOneImageAsBytes(imageName);
-        return convertToHttpEntity(imageName, imageBytes, MediaType.IMAGE_PNG);
+        return convertToHttpEntity(imageName.concat(".png"), imageBytes, MediaType.IMAGE_PNG);
     }
 
-    public HttpEntity<byte[]> getAllImageAsZip()   {
+    public HttpEntity<byte[]> getAllImageAsZip() {
         byte[] allImagesAsZip = imageReader.getAllImagesAsZip();
         return convertToHttpEntity("AllImages.zip", allImagesAsZip, MediaType.MULTIPART_FORM_DATA);
     }

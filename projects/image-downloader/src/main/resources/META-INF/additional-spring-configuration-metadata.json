@@ -4,5 +4,6 @@
       "name": "images.directory.path",
       "type": "java.lang.String",
       "description": "Path for saving images."
-  }
-] }
+    }
+  ]
+}

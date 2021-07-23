@@ -4,7 +4,6 @@ package com.dataox.captchasolver.detector;
 import org.jsoup.nodes.Document;
 import org.springframework.stereotype.Service;
 
-
 import java.util.Objects;
 
 /**
