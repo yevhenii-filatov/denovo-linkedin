@@ -5,6 +5,8 @@ import com.dataox.captchasolver.dto.CreateCaptchaTaskRequest;
 import com.dataox.captchasolver.dto.CreateCaptchaTaskResponse;
 import com.dataox.captchasolver.dto.GetCaptchaTaskResultResponse;
 import com.dataox.captchasolver.exeptions.CaptchaSolvingException;
+import com.dataox.notificationservice.configuration.NotificationsProperties;
+import com.dataox.notificationservice.service.NotificationsService;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -25,8 +27,8 @@ public class ArkoselabsFunCaptchaSolver extends AbstractCaptchaSolver {
     private final RestTemplate restTemplate;
     private final CaptchaProperties captchaProperties;
 
-    public ArkoselabsFunCaptchaSolver(CaptchaProperties captchaProperties, RestTemplate restTemplate) {
-        super(captchaProperties, restTemplate);
+    public ArkoselabsFunCaptchaSolver(CaptchaProperties captchaProperties, RestTemplate restTemplate, NotificationsService notificationsService) {
+        super(captchaProperties, restTemplate, notificationsService);
         this.captchaProperties = captchaProperties;
         this.restTemplate = restTemplate;
     }

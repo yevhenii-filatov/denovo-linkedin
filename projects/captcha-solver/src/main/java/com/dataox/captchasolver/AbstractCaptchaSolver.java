@@ -5,6 +5,7 @@ import com.dataox.captchasolver.dto.CreateCaptchaTaskResponse;
 import com.dataox.captchasolver.dto.GetCaptchaTaskResultRequest;
 import com.dataox.captchasolver.dto.GetCaptchaTaskResultResponse;
 import com.dataox.captchasolver.exeptions.CaptchaSolvingException;
+import com.dataox.notificationservice.service.NotificationsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.WebDriver;
@@ -22,6 +23,7 @@ public abstract class AbstractCaptchaSolver implements CaptchaSolver {
     private static final String GET_TASK_RESULT_API_URL = "https://api.anti-captcha.com/getTaskResult";
     private final CaptchaProperties captchaProperties;
     private final RestTemplate restTemplate;
+    private final NotificationsService notificationsService;
 
     private boolean responseHasErrors(GetCaptchaTaskResultResponse taskResult) {
         return taskResult.getErrorId() != 0;
@@ -45,6 +47,7 @@ public abstract class AbstractCaptchaSolver implements CaptchaSolver {
         CreateCaptchaTaskResponse createTaskResponse = Objects.requireNonNull(createCaptchaTask(websiteUrl, captchaSiteKey));
         Long taskId = createTaskResponse.getTaskId();
         log.info("Recaptcha solving task #{} was successfully created.", taskId);
+        notificationsService.sendInternal("LinkedinScraper: solving captcha #" + taskId);
         GetCaptchaTaskResultResponse taskResult;
         do {
             taskResult = Objects.requireNonNull(getTaskResult(createTaskResponse.getTaskId()));

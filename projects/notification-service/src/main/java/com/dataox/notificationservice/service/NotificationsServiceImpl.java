@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+
 public class NotificationsServiceImpl implements NotificationsService {
     private final TelegramNotificationsServiceProvider telegramNotificationsServiceProvider;
     private final SlackNotificationsServiceProvider slackNotificationsServiceProvider;
@@ -25,3 +26,4 @@ public class NotificationsServiceImpl implements NotificationsService {
         slackNotificationsServiceProvider.send(message);
     }
 }
+
